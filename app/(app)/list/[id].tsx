@@ -118,6 +118,10 @@ export default function ListDetailScreen() {
     });
   };
 
+  const handleSelectEmoji = (itemId: string) => {
+    router.push(`/(app)/select-emoji/${listId}/${itemId}`);
+  };
+
   const handleAddUrl = (itemId: string) => {
     router.push(`/(app)/add-url/${listId}/${itemId}`);
   };
@@ -176,15 +180,24 @@ export default function ListDetailScreen() {
           <View style={styles.itemContent}>
             {/* emoji图标 */}
             {item.emoji ? (
-              <Text style={styles.emojiIcon}>{item.emoji}</Text>
+              <TouchableOpacity 
+                onPress={() => handleSelectEmoji(item.id)}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
+                <Text style={styles.emojiIcon}>{item.emoji}</Text>
+              </TouchableOpacity>
             ) : (
-              <View style={styles.defaultIconContainer}>
+              <TouchableOpacity 
+                style={styles.defaultIconContainer}
+                onPress={() => handleSelectEmoji(item.id)}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              >
                 <Image 
                   source={require('@/assets/images/item_icon.png')}
                   style={styles.defaultIcon}
                   resizeMode="contain"
                 />
-              </View>
+              </TouchableOpacity>
             )}
             
             {/* 文字 */}
@@ -462,8 +475,8 @@ const styles = StyleSheet.create({
   },
   
   defaultIcon: {
-    width: 16,
-    height: 16,
+    width: 24,
+    height: 24,
   },
   
   itemText: {
