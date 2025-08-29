@@ -126,18 +126,20 @@ export default function ListsScreen() {
             </View>
           }
         />
-        <EmptyState
-          title="You have not added any shopping lists"
-          subtitle="Tap the button below to create one now"
-          icon={<Image source={require('@/assets/images/empty.png')} style={styles.emptyImage} resizeMode="contain" />}
-          action={
-            <Button
-              title="+ Create"
-              onPress={handleCreateList}
-              fullWidth
-            />
-          }
-        />
+        <View style={styles.emptyContainer}>
+          <EmptyState
+            title="You have not added any shopping lists"
+            subtitle="Tap the button below to create one now"
+            icon={<Image source={require('@/assets/images/empty.png')} style={styles.emptyImage} resizeMode="contain" />}
+            action={
+              <Button
+                title="+ Create"
+                onPress={handleCreateList}
+                fullWidth
+              />
+            }
+          />
+        </View>
       </SafeAreaView>
     );
   }
@@ -186,6 +188,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  
+  emptyContainer: {
+    flex: 1,
   },
   
   listContainer: {

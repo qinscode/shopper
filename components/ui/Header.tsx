@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }, style]}>
+    <View style={[styles.container, style]}>
       <View style={styles.content}>
         <View style={styles.leftSection}>
           {showBackButton && onBackPress && (
