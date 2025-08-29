@@ -1,50 +1,132 @@
-# Welcome to your Expo app 👋
+# Shopper - Shopping List App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A lightweight React Native mobile app built with Expo for creating and managing shopping lists.
 
-## Get started
+## Features
 
-1. Install dependencies
+### ✅ Core Features (Implemented)
+- **Onboarding Flow**: 3-screen introduction with app overview
+- **Shopping List Management**: Create, view, and manage multiple lists
+- **Item Management**: Add, complete, and delete shopping list items
+- **Item Attachments**: Add URLs and images to items
+- **Progress Tracking**: Visual progress indicators showing completed/total items
+- **Search & Suggestions**: Suggested items and custom item entry
+- **Swipe to Delete**: Intuitive swipe gestures for item deletion
+- **Dark Theme**: Modern dark UI with teal-green primary color
+- **Persistent Storage**: Data saved locally with AsyncStorage
 
+### 🎨 Design Features
+- **Dark Theme**: Near-black background with high-contrast text
+- **Primary Color**: Teal-green (#20B2A6) for CTAs and accents
+- **Modern UI**: Rounded corners, shadows, and smooth animations
+- **Responsive Layout**: Works on different screen sizes
+- **Empty States**: Helpful illustrations and guidance
+
+### 📱 User Journey
+1. **Splash Screen** → **Onboarding** → **Lists Overview**
+2. **Create New List** → **Add Items** → **Manage Items**
+3. **Attach URLs/Images** → **Mark Complete** → **Share Lists**
+
+## Tech Stack
+
+- **Framework**: React Native with Expo
+- **Navigation**: Expo Router (file-based routing)
+- **State Management**: React Context + useReducer
+- **Storage**: AsyncStorage for persistence
+- **UI Components**: Custom component library
+- **Icons**: Ionicons
+- **Gestures**: React Native Gesture Handler
+- **Image Handling**: Expo Image Picker
+- **Additional**: React Native SVG, PagerView
+
+## Project Structure
+
+```
+app/
+├── (app)/                    # Main app screens
+├── (onboarding)/            # Onboarding flow
+├── index.tsx                # Splash screen
+└── _layout.tsx              # Root layout
+
+components/ui/               # Reusable UI components
+├── Button.tsx
+├── Input.tsx
+├── Header.tsx
+├── ProgressChip.tsx
+├── ListItem.tsx
+├── Checkbox.tsx
+└── EmptyState.tsx
+
+constants/                   # Design tokens
+├── Colors.ts
+├── Typography.ts
+└── Layout.ts
+
+context/
+└── AppContext.tsx          # Global state management
+
+types/
+└── index.ts               # TypeScript interfaces
+```
+
+## Getting Started
+
+1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. Start the app
-
+2. **Start the development server**:
    ```bash
-   npx expo start
+   npm start
    ```
 
-In the output, you'll find options to open the app in a
+3. **Run on device**:
+   - Scan QR code with Expo Go app (iOS/Android)
+   - Or use simulators: `npm run ios` / `npm run android`
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Design Specification
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The app follows a detailed design specification located in `docs/design_spec.md` which includes:
+- Complete visual language and color system
+- Typography and spacing guidelines
+- Component specifications
+- User flow documentation
+- Copy and content guidelines
 
-## Get a fresh project
+## Development Status
 
-When you're ready, run:
+✅ **Completed Tasks**:
+- Project foundation and dependencies setup
+- Base components and theme system
+- Splash screen and onboarding flow
+- Core shopping list management features
+- Item adding and management functionality
+- Item attachment features (URL and image)
+- Lists overview and operations
+- Swipe-to-delete with gesture handling
 
-```bash
-npm run reset-project
-```
+🚧 **In Progress**:
+- UI polish and interaction improvements
+- Performance optimizations
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Architecture Decisions
 
-## Learn more
+- **File-based Routing**: Using Expo Router for intuitive navigation structure
+- **Context + Reducer**: Lightweight state management suitable for app scope
+- **Component Library**: Custom UI components for consistent design system
+- **AsyncStorage**: Simple local persistence without external dependencies
+- **TypeScript**: Full type safety throughout the application
 
-To learn more about developing your project with Expo, look at the following resources:
+## Future Enhancements
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- Search functionality for lists and items
+- List sharing capabilities
+- Barcode scanning for items
+- Quantity tracking
+- Multiple themes support
+- Collaboration features
 
-## Join the community
+---
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Built with ❤️ using React Native and Expo
