@@ -1,6 +1,7 @@
 export { Button } from './Button';
 export { Input } from './Input';
 export { Header } from './Header';
+export { DetailHeader } from './DetailHeader';
 export { ProgressChip } from './ProgressChip';
 export { ListItem } from './ListItem';
 export { Checkbox } from './Checkbox';

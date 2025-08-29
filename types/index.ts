@@ -4,6 +4,7 @@ export interface ShoppingItem {
   isCompleted: boolean;
   url?: string;
   imageUri?: string;
+  emoji?: string; // 自定义emoji图标
   category?: string;
   brand?: string;
   notes?: string;

@@ -93,7 +93,7 @@ export default function ListsScreen() {
               <ProgressChip
                 completed={completedCount}
                 total={totalCount}
-                size={36}
+                variant="large"
               />
             </View>
           </TouchableOpacity>
@@ -124,7 +124,7 @@ export default function ListsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <Header
-          title="Your shopping Lists"
+          title="Shopper"
           leftComponent={
             <View style={styles.headerActions}>
               <TouchableOpacity
@@ -201,23 +201,12 @@ export default function ListsScreen() {
           </View>
         }
         rightComponent={
-          <View style={styles.headerActions}>
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={() => {
-                HapticFeedback.light();
-                router.push('/(app)/my-items');
-              }}
-            >
-              <Ionicons name="library-outline" size={24} color={Colors.text} />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.headerButton}
-              onPress={handleToggleSearch}
-            >
-              <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={handleToggleSearch}
+          >
+            <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
+          </TouchableOpacity>
         }
       />
       
@@ -292,21 +281,22 @@ const styles = StyleSheet.create({
   },
   
   listContainer: {
-    padding: Spacing.screenPadding,
+    padding: 24, // 24pt页面左右安全间距
     paddingBottom: 100, // Space for FAB
   },
   
   listCard: {
     backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.md,
+    borderRadius: 20, // 20-22pt卡片圆角
+    marginBottom: 16, // 16pt卡片垂直间距
     ...Shadows.medium,
   },
   
   listCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: Spacing.md,
+    padding: 20, // 减少内边距，从24pt到20pt
+    paddingBottom: 12, // 减少底部间距
   },
   
   listCardLeft: {
@@ -314,38 +304,39 @@ const styles = StyleSheet.create({
   },
   
   listCardRight: {
-    marginLeft: Spacing.md,
+    marginLeft: 16,
   },
   
   listTitle: {
     ...Typography.textStyles.subtitle,
     color: Colors.text,
-    marginBottom: Spacing.xs,
+    marginBottom: 8,
+    fontWeight: Typography.fontWeight.semibold,
   },
   
   listPreview: {
-    ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
+    fontSize: 15, // 15-16pt预览文案字号
+    color: '#B5B5B5', // Figma指定的预览文案颜色
+    lineHeight: 20,
   },
   
   listActions: {
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
+    flexDirection: 'row', // 横排
+    paddingHorizontal: 24,
+    paddingTop: 8, // 减少顶部间距
+    paddingBottom: 16,
   },
   
   actionButton: {
-    flexDirection: 'row',
+    flexDirection: 'row', // 图标+文字横排
     alignItems: 'center',
-    marginRight: Spacing.lg,
+    marginRight: 24,
   },
   
   actionText: {
-    ...Typography.textStyles.caption,
+    fontSize: 12, // 12-13pt文字大小
     color: Colors.textSecondary,
-    marginLeft: Spacing.xs,
+    marginLeft: 8,
   },
   
   fab: {

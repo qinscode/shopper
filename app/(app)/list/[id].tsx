@@ -4,7 +4,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import { Header, EmptyState, Button, ListItem, ProgressChip, Checkbox } from '@/components/ui';
+import { DetailHeader, EmptyState, Button, Checkbox } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
@@ -22,9 +22,10 @@ export default function ListDetailScreen() {
   if (!list) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header
+        <DetailHeader
           title="List Not Found"
-          showBackButton
+          completed={0}
+          total={0}
           onBackPress={() => router.back()}
         />
         <EmptyState
@@ -65,10 +66,6 @@ export default function ListDetailScreen() {
 
   const handleAddUrl = (itemId: string) => {
     router.push(`/(app)/add-url/${listId}/${itemId}`);
-  };
-
-  const handleAddImage = (itemId: string) => {
-    router.push(`/(app)/add-image/${listId}/${itemId}`);
   };
 
   const handleArchiveList = () => {
@@ -135,83 +132,98 @@ export default function ListDetailScreen() {
     </TouchableOpacity>
   );
 
-  const renderItem = ({ item }: { item: ShoppingItem }) => (
-    <Swipeable
-      renderRightActions={() => renderRightActions(item.id, item.name)}
-      rightThreshold={40}
-    >
-      <View style={styles.itemContainer}>
-        <ListItem
-          title={item.name}
-          isCompleted={item.isCompleted}
-          hasUrl={!!item.url}
-          hasImage={!!item.imageUri}
-          leftComponent={
-            <Checkbox
-              checked={item.isCompleted}
-              onToggle={() => handleToggleItem(item.id)}
-            />
-          }
-          style={styles.listItem}
-        />
-        
-        <View style={styles.itemActions}>
-          <TouchableOpacity
-            style={styles.actionButton}
+  const renderItem = ({ item }: { item: ShoppingItem }) => {
+    const hasUrl = !!item.url;
+    
+    return (
+      <Swipeable
+        renderRightActions={() => renderRightActions(item.id, item.name)}
+        rightThreshold={40}
+      >
+        <TouchableOpacity 
+          style={styles.itemContainer}
+          onPress={() => handleToggleItem(item.id)}
+          activeOpacity={0.7}
+        >
+          {/* 左侧链接图标 - 点击进入修改链接页面 */}
+          <TouchableOpacity 
+            style={styles.itemLeftIcons}
             onPress={() => handleAddUrl(item.id)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <Ionicons name="link-outline" size={20} color={Colors.textSecondary} />
+            <Ionicons 
+              name="link-outline" 
+              size={18} 
+              color={hasUrl ? Colors.primary : "#585858"} 
+            />
           </TouchableOpacity>
           
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => handleAddImage(item.id)}
-          >
-            <Ionicons name="image-outline" size={20} color={Colors.textSecondary} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Swipeable>
-  );
+          {/* 中间emoji和文字 */}
+          <View style={styles.itemContent}>
+            {/* emoji图标 */}
+            {item.emoji ? (
+              <Text style={styles.emojiIcon}>{item.emoji}</Text>
+            ) : (
+              <View style={styles.defaultIconContainer}>
+                <Ionicons 
+                  name="apps" 
+                  size={16} 
+                  color="#585858" 
+                />
+              </View>
+            )}
+            
+            {/* 文字 */}
+            <Text 
+              style={[
+                styles.itemText,
+                item.isCompleted && styles.completedText
+              ]}
+              numberOfLines={1}
+            >
+              {item.name}
+            </Text>
+          </View>
+          
+          {/* 右侧勾选 */}
+          <Checkbox
+            checked={item.isCompleted}
+            onToggle={() => handleToggleItem(item.id)}
+          />
+        </TouchableOpacity>
+      </Swipeable>
+    );
+  };
 
   if (list.items.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
-        <Header
+        <DetailHeader
           title={list.name}
-          showBackButton
+          completed={completedCount}
+          total={totalCount}
           onBackPress={() => router.back()}
-          rightComponent={
-            <View style={styles.headerActions}>
-              <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => {
-                  Alert.alert(
-                    'List Options',
-                    'Choose an action for this list',
-                    [
-                      {
-                        text: 'Archive List',
-                        onPress: handleArchiveList
-                      },
-                      {
-                        text: 'Delete List',
-                        style: 'destructive',
-                        onPress: handleDeleteList
-                      },
-                      {
-                        text: 'Cancel',
-                        style: 'cancel'
-                      }
-                    ]
-                  );
-                }}
-              >
-                <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
-              </TouchableOpacity>
-              <ProgressChip completed={completedCount} total={totalCount} />
-            </View>
-          }
+          onMenuPress={() => {
+            Alert.alert(
+              'List Options',
+              'Choose an action for this list',
+              [
+                {
+                  text: 'Archive List',
+                  onPress: handleArchiveList
+                },
+                {
+                  text: 'Delete List',
+                  style: 'destructive',
+                  onPress: handleDeleteList
+                },
+                {
+                  text: 'Cancel',
+                  style: 'cancel'
+                }
+              ]
+            );
+          }}
         />
         <EmptyState
           title="Your list is empty"
@@ -231,41 +243,32 @@ export default function ListDetailScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header
+      <DetailHeader
         title={list.name}
-        showBackButton
+        completed={completedCount}
+        total={totalCount}
         onBackPress={() => router.back()}
-        rightComponent={
-          <View style={styles.headerActions}>
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={() => {
-                Alert.alert(
-                  'List Options',
-                  'Choose an action for this list',
-                  [
-                    {
-                      text: 'Archive List',
-                      onPress: handleArchiveList
-                    },
-                    {
-                      text: 'Delete List',
-                      style: 'destructive',
-                      onPress: handleDeleteList
-                    },
-                    {
-                      text: 'Cancel',
-                      style: 'cancel'
-                    }
-                  ]
-                );
-              }}
-            >
-              <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
-            </TouchableOpacity>
-            <ProgressChip completed={completedCount} total={totalCount} />
-          </View>
-        }
+        onMenuPress={() => {
+          Alert.alert(
+            'List Options',
+            'Choose an action for this list',
+            [
+              {
+                text: 'Archive List',
+                onPress: handleArchiveList
+              },
+              {
+                text: 'Delete List',
+                style: 'destructive',
+                onPress: handleDeleteList
+              },
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              }
+            ]
+          );
+        }}
       />
       
       <View style={styles.content}>
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
   
   content: {
     flex: 1,
-    padding: Spacing.screenPadding,
+    padding: 24, // 24pt页面左右安全间距
   },
   
   shareSection: {
@@ -309,8 +312,10 @@ const styles = StyleSheet.create({
   },
   
   shareLabel: {
-    ...Typography.textStyles.subtitle,
+    fontSize: 17, // 17pt小节标题
+    fontWeight: Typography.fontWeight.semibold,
     color: Colors.text,
+    opacity: 0.7, // #FFF 70%
   },
   
   listContainer: {
@@ -319,29 +324,52 @@ const styles = StyleSheet.create({
   },
   
   itemContainer: {
-    marginBottom: Spacing.sm,
-    backgroundColor: Colors.surface,
-    borderRadius: 12,
-  },
-  
-  listItem: {
-    marginVertical: 0,
-    backgroundColor: 'transparent',
-  },
-  
-  itemActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    backgroundColor: Colors.surface,
+    borderRadius: 20, // 20-22pt卡片圆角
+    marginBottom: 16, // 16pt卡片间距
+    paddingHorizontal: 16, // 水平16pt
+    paddingVertical: 14, // 垂直14pt
   },
   
-  actionButton: {
-    padding: Spacing.sm,
-    marginLeft: Spacing.sm,
+  itemLeftIcons: {
+    width: 36, // 固定宽度
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingRight: 12, // 右侧间距
+  },
+  
+  itemContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  
+  emojiIcon: {
+    fontSize: 18,
+    lineHeight: 20,
+    marginRight: 12,
+  },
+  
+  defaultIconContainer: {
+    width: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    marginRight: 12,
+  },
+  
+  itemText: {
+    flex: 1,
+    fontSize: 17, // 17pt名称字号
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.text,
+  },
+  
+  completedText: {
+    opacity: 0.5, // 完成态降低透明度
   },
   
   deleteAction: {
@@ -350,8 +378,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 80,
     height: '100%',
-    borderRadius: 12,
-    marginBottom: Spacing.sm,
+    borderRadius: 20, // 匹配item圆角
+    marginBottom: 16,
   },
   
   deleteText: {
@@ -371,14 +399,5 @@ const styles = StyleSheet.create({
   emptyImage: {
     width: 180,
     height: 120,
-  },
-  
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  
-  headerButton: {
-    marginRight: Spacing.md,
   },
 });

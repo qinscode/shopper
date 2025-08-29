@@ -14,7 +14,7 @@ interface CheckboxProps {
 export const Checkbox: React.FC<CheckboxProps> = ({
   checked,
   onToggle,
-  size = 24,
+  size = 26, // 稍微增大默认尺寸
   style,
 }) => {
   const handleToggle = () => {
@@ -44,8 +44,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
       {checked && (
         <Ionicons
           name="checkmark"
-          size={size * 0.6}
-          color={Colors.text}
+          size={size * 0.5}
+          color="#2ECC71" // Figma规格的绿色
         />
       )}
     </TouchableOpacity>
@@ -56,16 +56,16 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
+    borderWidth: 3, // 3pt线宽
   },
   
   unchecked: {
     backgroundColor: 'transparent',
-    borderColor: Colors.inactive,
+    borderColor: '#585858', // Figma规格：灰线 #585858
   },
   
   checked: {
-    backgroundColor: Colors.success,
-    borderColor: Colors.success,
+    backgroundColor: 'transparent', // 保持透明，只显示绿色勾选
+    borderColor: '#2ECC71', // 绿色边框
   },
 });

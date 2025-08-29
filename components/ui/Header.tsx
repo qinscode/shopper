@@ -12,6 +12,7 @@ interface HeaderProps {
   onBackPress?: () => void;
   leftComponent?: React.ReactNode;
   rightComponent?: React.ReactNode;
+  titleAlign?: 'center' | 'left'; // 新增标题对齐方式
   style?: ViewStyle;
 }
 
@@ -21,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   onBackPress,
   leftComponent,
   rightComponent,
+  titleAlign = 'center',
   style,
 }) => {
   const insets = useSafeAreaInsets();
@@ -37,8 +39,8 @@ export const Header: React.FC<HeaderProps> = ({
           {!showBackButton && leftComponent}
         </View>
         
-        <View style={styles.centerSection}>
-          <Text style={styles.title} numberOfLines={1}>
+        <View style={titleAlign === 'left' ? styles.centerSectionLeft : styles.centerSection}>
+          <Text style={[styles.title, titleAlign === 'left' && styles.titleLeft]} numberOfLines={1}>
             {title}
           </Text>
         </View>
@@ -74,6 +76,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   
+  centerSectionLeft: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  
   rightSection: {
     minWidth: 44,
     alignItems: 'flex-end',
@@ -92,5 +99,9 @@ const styles = StyleSheet.create({
     ...Typography.textStyles.title,
     color: Colors.text,
     textAlign: 'center',
+  },
+  
+  titleLeft: {
+    textAlign: 'left',
   },
 });
