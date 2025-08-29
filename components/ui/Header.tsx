@@ -10,6 +10,7 @@ interface HeaderProps {
   title: string;
   showBackButton?: boolean;
   onBackPress?: () => void;
+  leftComponent?: React.ReactNode;
   rightComponent?: React.ReactNode;
   style?: ViewStyle;
 }
@@ -18,6 +19,7 @@ export const Header: React.FC<HeaderProps> = ({
   title,
   showBackButton = false,
   onBackPress,
+  leftComponent,
   rightComponent,
   style,
 }) => {
@@ -32,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Ionicons name="chevron-back" size={24} color={Colors.text} />
             </TouchableOpacity>
           )}
+          {!showBackButton && leftComponent}
         </View>
         
         <View style={styles.centerSection}>
@@ -61,8 +64,9 @@ const styles = StyleSheet.create({
   },
   
   leftSection: {
-    width: 44,
+    minWidth: 44,
     alignItems: 'flex-start',
+    justifyContent: 'center',
   },
   
   centerSection: {
@@ -71,8 +75,9 @@ const styles = StyleSheet.create({
   },
   
   rightSection: {
-    width: 44,
+    minWidth: 44,
     alignItems: 'flex-end',
+    justifyContent: 'center',
   },
   
   backButton: {

@@ -332,6 +332,8 @@ interface AppContextValue {
   dispatch: React.Dispatch<Action>;
   getList: (id: string) => ShoppingList | undefined;
   getVisibleLists: () => ShoppingList[];
+  getArchivedLists: () => ShoppingList[];
+  getDeletedLists: () => ShoppingList[];
   getCustomItem: (id: string) => CustomItem | undefined;
   getCustomItemsByCategory: (categoryId?: string) => CustomItem[];
   getMostUsedCustomItems: (limit?: number) => CustomItem[];
@@ -359,6 +361,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
               ...list,
               createdAt: new Date(list.createdAt),
               updatedAt: new Date(list.updatedAt),
+              deletedAt: list.deletedAt ? new Date(list.deletedAt) : undefined,
               items: list.items?.map((item: any) => ({
                 ...item,
                 createdAt: new Date(item.createdAt),
@@ -444,6 +447,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     dispatch,
     getList,
     getVisibleLists,
+    getArchivedLists,
+    getDeletedLists,
     getCustomItem,
     getCustomItemsByCategory,
     getMostUsedCustomItems,

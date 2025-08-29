@@ -125,24 +125,35 @@ export default function ListsScreen() {
       <SafeAreaView style={styles.container}>
         <Header
           title="Your shopping Lists"
-          rightComponent={
+          leftComponent={
             <View style={styles.headerActions}>
               <TouchableOpacity
                 style={styles.headerButton}
                 onPress={() => {
                   HapticFeedback.light();
-                  router.push('/(app)/my-items');
+                  router.push('/(app)/archived-lists');
                 }}
               >
-                <Ionicons name="library-outline" size={24} color={Colors.text} />
+                <Ionicons name="archive-outline" size={24} color={Colors.text} />
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.headerButton}
-                onPress={handleToggleSearch}
+                onPress={() => {
+                  HapticFeedback.light();
+                  router.push('/(app)/trash');
+                }}
               >
-                <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
+                <Ionicons name="trash-outline" size={24} color={Colors.text} />
               </TouchableOpacity>
             </View>
+          }
+          rightComponent={
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleToggleSearch}
+            >
+              <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
+            </TouchableOpacity>
           }
         />
         <View style={styles.emptyContainer}>
@@ -166,7 +177,29 @@ export default function ListsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <Header
-        title="Your shopping Lists"
+        title="Shopper"
+        leftComponent={
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={styles.headerButton}
+              onPress={() => {
+                HapticFeedback.light();
+                router.push('/(app)/archived-lists');
+              }}
+            >
+              <Ionicons name="archive-outline" size={24} color={Colors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.headerButton}
+              onPress={() => {
+                HapticFeedback.light();
+                router.push('/(app)/trash');
+              }}
+            >
+              <Ionicons name="trash-outline" size={24} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
+        }
         rightComponent={
           <View style={styles.headerActions}>
             <TouchableOpacity

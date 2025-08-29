@@ -71,6 +71,47 @@ export default function ListDetailScreen() {
     router.push(`/(app)/add-image/${listId}/${itemId}`);
   };
 
+  const handleArchiveList = () => {
+    Alert.alert(
+      'Archive List',
+      `Are you sure you want to archive "${list.name}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Archive',
+          onPress: () => {
+            dispatch({
+              type: 'ARCHIVE_LIST',
+              payload: { id: listId }
+            });
+            router.back();
+          }
+        }
+      ]
+    );
+  };
+
+  const handleDeleteList = () => {
+    Alert.alert(
+      'Delete List',
+      `Are you sure you want to delete "${list.name}"? You can restore it from the trash later.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            dispatch({
+              type: 'DELETE_LIST',
+              payload: { id: listId }
+            });
+            router.back();
+          }
+        }
+      ]
+    );
+  };
+
   const renderRightActions = (itemId: string, itemName: string) => (
     <TouchableOpacity
       style={styles.deleteAction}
@@ -141,7 +182,35 @@ export default function ListDetailScreen() {
           showBackButton
           onBackPress={() => router.back()}
           rightComponent={
-            <ProgressChip completed={completedCount} total={totalCount} />
+            <View style={styles.headerActions}>
+              <TouchableOpacity
+                style={styles.headerButton}
+                onPress={() => {
+                  Alert.alert(
+                    'List Options',
+                    'Choose an action for this list',
+                    [
+                      {
+                        text: 'Archive List',
+                        onPress: handleArchiveList
+                      },
+                      {
+                        text: 'Delete List',
+                        style: 'destructive',
+                        onPress: handleDeleteList
+                      },
+                      {
+                        text: 'Cancel',
+                        style: 'cancel'
+                      }
+                    ]
+                  );
+                }}
+              >
+                <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
+              </TouchableOpacity>
+              <ProgressChip completed={completedCount} total={totalCount} />
+            </View>
           }
         />
         <EmptyState
@@ -167,7 +236,35 @@ export default function ListDetailScreen() {
         showBackButton
         onBackPress={() => router.back()}
         rightComponent={
-          <ProgressChip completed={completedCount} total={totalCount} />
+          <View style={styles.headerActions}>
+            <TouchableOpacity
+              style={styles.headerButton}
+              onPress={() => {
+                Alert.alert(
+                  'List Options',
+                  'Choose an action for this list',
+                  [
+                    {
+                      text: 'Archive List',
+                      onPress: handleArchiveList
+                    },
+                    {
+                      text: 'Delete List',
+                      style: 'destructive',
+                      onPress: handleDeleteList
+                    },
+                    {
+                      text: 'Cancel',
+                      style: 'cancel'
+                    }
+                  ]
+                );
+              }}
+            >
+              <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
+            </TouchableOpacity>
+            <ProgressChip completed={completedCount} total={totalCount} />
+          </View>
         }
       />
       
@@ -274,5 +371,14 @@ const styles = StyleSheet.create({
   emptyImage: {
     width: 180,
     height: 120,
+  },
+  
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  
+  headerButton: {
+    marginRight: Spacing.md,
   },
 });
