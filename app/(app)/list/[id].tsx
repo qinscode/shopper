@@ -123,25 +123,27 @@ export default function ListDetailScreen() {
   };
 
   const renderRightActions = (itemId: string, itemName: string) => (
-    <TouchableOpacity
-      style={styles.deleteAction}
-      onPress={() => {
-        Alert.alert(
-          'Delete Item',
-          `Are you sure you want to delete "${itemName}"?`,
-          [
-            { text: 'Cancel', style: 'cancel' },
-            {
-              text: 'Delete',
-              style: 'destructive',
-              onPress: () => handleDeleteItem(itemId)
-            }
-          ]
-        );
-      }}
-    >
-      <Ionicons name="trash-outline" size={20} color={Colors.text} />
-    </TouchableOpacity>
+    <View style={styles.rightActionsContainer}>
+      <TouchableOpacity
+        style={styles.deleteAction}
+        onPress={() => {
+          Alert.alert(
+            'Delete Item',
+            `Are you sure you want to delete "${itemName}"?`,
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Delete',
+                style: 'destructive',
+                onPress: () => handleDeleteItem(itemId)
+              }
+            ]
+          );
+        }}
+      >
+        <Ionicons name="trash-outline" size={20} color={Colors.text} />
+      </TouchableOpacity>
+    </View>
   );
 
   const renderItem = ({ item }: { item: ShoppingItem }) => {
@@ -475,14 +477,21 @@ const styles = StyleSheet.create({
     opacity: 0.5, // 完成态降低透明度
   },
   
+  rightActionsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 14, // 与itemContainer完全相同的paddingVertical
+    marginBottom: 16, // 与itemContainer完全相同的marginBottom
+  },
+  
   deleteAction: {
     backgroundColor: Colors.error,
     justifyContent: 'center',
     alignItems: 'center',
     width: 60,
-    flex: 1, // 使用flex: 1来填满可用高度
+    height: 46, // 计算出的纯内容高度（不含padding）
     borderRadius: 20,
-    marginBottom: 16,
+    marginLeft: 8,
   },
   
   hint: {
