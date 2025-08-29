@@ -184,7 +184,10 @@ export default function ListDetailScreen() {
                 onPress={() => handleSelectEmoji(item.id)}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Text style={styles.emojiIcon}>{item.emoji}</Text>
+                <Text style={[
+                  styles.emojiIcon,
+                  item.isCompleted && styles.completedEmoji
+                ]}>{item.emoji}</Text>
               </TouchableOpacity>
             ) : (
               <TouchableOpacity 
@@ -463,6 +466,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 20,
     marginRight: 12,
+  },
+  
+  completedEmoji: {
+    opacity: 0.5, // 完成态降低透明度，与completedText一致
   },
   
   defaultIconContainer: {

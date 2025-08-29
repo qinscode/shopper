@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -50,6 +50,41 @@ export default function ListsScreen() {
   const handleHideList = (listId: string) => {
     HapticFeedback.light();
     dispatch({ type: 'HIDE_LIST', payload: { id: listId } });
+  };
+
+  const handleArchiveList = (listId: string, listName: string) => {
+    HapticFeedback.medium();
+    Alert.alert(
+      'Archive List',
+      `Are you sure you want to archive "${listName}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Archive',
+          onPress: () => {
+            dispatch({ type: 'ARCHIVE_LIST', payload: { id: listId } });
+          }
+        }
+      ]
+    );
+  };
+
+  const handleDeleteList = (listId: string, listName: string) => {
+    HapticFeedback.medium();
+    Alert.alert(
+      'Delete List',
+      `Are you sure you want to delete "${listName}"? You can restore it from the trash later.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            dispatch({ type: 'DELETE_LIST', payload: { id: listId } });
+          }
+        }
+      ]
+    );
   };
 
   const getListPreview = (list: ShoppingList): string => {
