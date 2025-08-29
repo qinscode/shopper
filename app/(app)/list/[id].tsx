@@ -4,12 +4,13 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
-import { DetailHeader, EmptyState, Button, Checkbox } from '@/components/ui';
+import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
 import { useApp } from '@/context/AppContext';
 import { ShoppingItem } from '@/types';
+import { Stack } from 'expo-router';
 
 export default function ListDetailScreen() {
   const router = useRouter();
@@ -19,32 +20,85 @@ export default function ListDetailScreen() {
   const { getList, dispatch } = useApp();
   const list = getList(listId);
 
+  const completedCount = list ? list.items.filter(item => item.isCompleted).length : 0;
+  const totalCount = list ? list.items.length : 0;
+
+  const handleArchiveList = () => {
+    Alert.alert(
+      'Archive List',
+      `Are you sure you want to archive "${list?.name}"?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Archive',
+          onPress: () => {
+            dispatch({
+              type: 'ARCHIVE_LIST',
+              payload: { id: listId }
+            });
+            router.back();
+          }
+        }
+      ]
+    );
+  };
+
+  const handleDeleteList = () => {
+    Alert.alert(
+      'Delete List',
+      `Are you sure you want to delete "${list?.name}"? You can restore it from the trash later.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            dispatch({
+              type: 'DELETE_LIST',
+              payload: { id: listId }
+            });
+            router.back();
+          }
+        }
+      ]
+    );
+  };
+
   if (!list) {
     return (
-      <SafeAreaView style={styles.container}>
-        <DetailHeader
-          title="List Not Found"
-          completed={0}
-          total={0}
-          onBackPress={() => router.back()}
+      <>
+        <Stack.Screen 
+          options={{
+            headerShown: false
+          }}
         />
-        <EmptyState
-          title="List not found"
-          subtitle="This list may have been deleted"
-          action={
-            <Button
-              title="Go Back"
-              onPress={() => router.back()}
-              fullWidth
-            />
-          }
-        />
-      </SafeAreaView>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.customHeader}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="chevron-back" size={24} color={Colors.text} />
+            </TouchableOpacity>
+            
+            <Text style={styles.headerTitle} numberOfLines={1}>
+              List Not Found
+            </Text>
+            
+            <View style={styles.headerRight} />
+          </View>
+          <EmptyState
+            title="List not found"
+            subtitle="This list may have been deleted"
+            action={
+              <Button
+                title="Go Back"
+                onPress={() => router.back()}
+                fullWidth
+              />
+            }
+          />
+        </SafeAreaView>
+      </>
     );
   }
-
-  const completedCount = list.items.filter(item => item.isCompleted).length;
-  const totalCount = list.items.length;
 
   const handleAddItem = () => {
     router.push(`/(app)/add-items/${listId}`);
@@ -68,47 +122,6 @@ export default function ListDetailScreen() {
     router.push(`/(app)/add-url/${listId}/${itemId}`);
   };
 
-  const handleArchiveList = () => {
-    Alert.alert(
-      'Archive List',
-      `Are you sure you want to archive "${list.name}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Archive',
-          onPress: () => {
-            dispatch({
-              type: 'ARCHIVE_LIST',
-              payload: { id: listId }
-            });
-            router.back();
-          }
-        }
-      ]
-    );
-  };
-
-  const handleDeleteList = () => {
-    Alert.alert(
-      'Delete List',
-      `Are you sure you want to delete "${list.name}"? You can restore it from the trash later.`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            dispatch({
-              type: 'DELETE_LIST',
-              payload: { id: listId }
-            });
-            router.back();
-          }
-        }
-      ]
-    );
-  };
-
   const renderRightActions = (itemId: string, itemName: string) => (
     <TouchableOpacity
       style={styles.deleteAction}
@@ -127,8 +140,7 @@ export default function ListDetailScreen() {
         );
       }}
     >
-      <Ionicons name="trash-outline" size={24} color={Colors.text} />
-      <Text style={styles.deleteText}>Delete</Text>
+      <Ionicons name="trash-outline" size={20} color={Colors.text} />
     </TouchableOpacity>
   );
 
@@ -197,102 +209,150 @@ export default function ListDetailScreen() {
 
   if (list.items.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
-        <DetailHeader
-          title={list.name}
-          completed={completedCount}
-          total={totalCount}
-          onBackPress={() => router.back()}
-          onMenuPress={() => {
-            Alert.alert(
-              'List Options',
-              'Choose an action for this list',
-              [
-                {
-                  text: 'Archive List',
-                  onPress: handleArchiveList
-                },
-                {
-                  text: 'Delete List',
-                  style: 'destructive',
-                  onPress: handleDeleteList
-                },
-                {
-                  text: 'Cancel',
-                  style: 'cancel'
-                }
-              ]
-            );
+      <>
+        <Stack.Screen 
+          options={{
+            headerShown: false
           }}
         />
-        <EmptyState
-          title="Your list is empty"
-          subtitle="Click the button below to add an item now"
-          icon={<Image source={require('@/assets/images/item_in_list_empty.png')} style={styles.emptyImage} resizeMode="contain" />}
-          action={
-            <Button
-              title="+ Add Item"
-              onPress={handleAddItem}
-              fullWidth
-            />
-          }
-        />
-      </SafeAreaView>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.customHeader}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+              <Ionicons name="chevron-back" size={24} color={Colors.text} />
+            </TouchableOpacity>
+            
+            <Text style={styles.headerTitle} numberOfLines={1}>
+              {list.name}
+            </Text>
+            
+            <View style={styles.headerRight}>
+              <ProgressChip
+                completed={completedCount}
+                total={totalCount}
+                size={44}
+                variant="small"
+              />
+              <TouchableOpacity 
+                style={styles.menuButton}
+                onPress={() => {
+                  Alert.alert(
+                    'List Options',
+                    'Choose an action for this list',
+                    [
+                      {
+                        text: 'Archive List',
+                        onPress: handleArchiveList
+                      },
+                      {
+                        text: 'Delete List',
+                        style: 'destructive',
+                        onPress: handleDeleteList
+                      },
+                      {
+                        text: 'Cancel',
+                        style: 'cancel'
+                      }
+                    ]
+                  );
+                }}
+              >
+                <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <EmptyState
+            title="Your list is empty"
+            subtitle="Click the button below to add an item now"
+            icon={<Image source={require('@/assets/images/item_in_list_empty.png')} style={styles.emptyImage} resizeMode="contain" />}
+            action={
+              <Button
+                title="+ Add Item"
+                onPress={handleAddItem}
+                fullWidth
+              />
+            }
+          />
+        </SafeAreaView>
+      </>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <DetailHeader
-        title={list.name}
-        completed={completedCount}
-        total={totalCount}
-        onBackPress={() => router.back()}
-        onMenuPress={() => {
-          Alert.alert(
-            'List Options',
-            'Choose an action for this list',
-            [
-              {
-                text: 'Archive List',
-                onPress: handleArchiveList
-              },
-              {
-                text: 'Delete List',
-                style: 'destructive',
-                onPress: handleDeleteList
-              },
-              {
-                text: 'Cancel',
-                style: 'cancel'
-              }
-            ]
-          );
+    <>
+      <Stack.Screen 
+        options={{
+          headerShown: false
         }}
       />
-      
-      <View style={styles.content}>
-        <View style={styles.shareSection}>
-          <Text style={styles.shareLabel}>Share this list</Text>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.customHeader}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+            <Ionicons name="chevron-back" size={24} color={Colors.text} />
+          </TouchableOpacity>
+          
+          <Text style={styles.headerTitle} numberOfLines={1}>
+            {list.name}
+          </Text>
+          
+          <View style={styles.headerRight}>
+            <ProgressChip
+              completed={completedCount}
+              total={totalCount}
+              size={44}
+              variant="small"
+            />
+            <TouchableOpacity 
+              style={styles.menuButton}
+              onPress={() => {
+                Alert.alert(
+                  'List Options',
+                  'Choose an action for this list',
+                  [
+                    {
+                      text: 'Archive List',
+                      onPress: handleArchiveList
+                    },
+                    {
+                      text: 'Delete List',
+                      style: 'destructive',
+                      onPress: handleDeleteList
+                    },
+                    {
+                      text: 'Cancel',
+                      style: 'cancel'
+                    }
+                  ]
+                );
+              }}
+            >
+              <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
         </View>
         
-        <FlatList
-          data={list.items}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-        />
-        
-        <Text style={styles.hint}>swipe left on any item to delete it</Text>
-        
-        <Button
-          title="+ Add Item"
-          onPress={handleAddItem}
-          fullWidth
-        />
-      </View>
-    </SafeAreaView>
+        <View style={styles.content}>
+          <View style={styles.shareSection}>
+            <Text style={styles.shareLabel}>Share this list</Text>
+          </View>
+          
+          <FlatList
+            data={list.items}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+          />
+          
+          <Text style={styles.hint}>swipe left on any item to delete it</Text>
+          
+          <Button
+            title="+ Add Item"
+            onPress={handleAddItem}
+            fullWidth
+          />
+        </View>
+      </SafeAreaView>
+    </>
   );
 }
 
@@ -300,6 +360,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  
+  customHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 56,
+    paddingHorizontal: 24,
+    backgroundColor: Colors.background,
+  },
+  
+  backButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -12,
+  },
+  
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.text,
+    flex: 1,
+    marginLeft: 12,
+    marginRight: 16,
+  },
+  
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  
+  menuButton: {
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
   
   content: {
@@ -381,17 +479,10 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.error,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 80,
-    height: '100%',
-    borderRadius: 20, // 匹配item圆角
+    width: 60,
+    flex: 1, // 使用flex: 1来填满可用高度
+    borderRadius: 20,
     marginBottom: 16,
-  },
-  
-  deleteText: {
-    ...Typography.textStyles.caption,
-    color: Colors.text,
-    marginTop: Spacing.xs,
-    fontWeight: Typography.fontWeight.semibold,
   },
   
   hint: {
