@@ -165,10 +165,10 @@ export default function ListDetailScreen() {
               <Text style={styles.emojiIcon}>{item.emoji}</Text>
             ) : (
               <View style={styles.defaultIconContainer}>
-                <Ionicons 
-                  name="apps" 
-                  size={16} 
-                  color="#585858" 
+                <Image 
+                  source={require('@/assets/images/item_icon.png')}
+                  style={styles.defaultIcon}
+                  resizeMode="contain"
                 />
               </View>
             )}
@@ -359,6 +359,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'transparent',
     marginRight: 12,
+  },
+  
+  defaultIcon: {
+    width: 16,
+    height: 16,
   },
   
   itemText: {
