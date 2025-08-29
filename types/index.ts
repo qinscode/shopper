@@ -42,6 +42,9 @@ export interface ShoppingList {
   createdAt: Date;
   updatedAt: Date;
   isHidden?: boolean;
+  isArchived?: boolean;
+  isDeleted?: boolean;
+  deletedAt?: Date;
 }
 
 export interface AppState {

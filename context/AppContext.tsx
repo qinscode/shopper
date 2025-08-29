@@ -10,6 +10,9 @@ type Action =
   | { type: 'DELETE_LIST'; payload: { id: string } }
   | { type: 'DUPLICATE_LIST'; payload: { id: string } }
   | { type: 'HIDE_LIST'; payload: { id: string } }
+  | { type: 'ARCHIVE_LIST'; payload: { id: string } }
+  | { type: 'RESTORE_LIST'; payload: { id: string } }
+  | { type: 'PERMANENTLY_DELETE_LIST'; payload: { id: string } }
   | { type: 'ADD_ITEM'; payload: { listId: string; name: string; customItemId?: string } }
   | { type: 'UPDATE_ITEM'; payload: { listId: string; itemId: string; updates: Partial<ShoppingItem> } }
   | { type: 'DELETE_ITEM'; payload: { listId: string; itemId: string } }
@@ -76,6 +79,47 @@ function appReducer(state: AppState, action: Action): AppState {
       };
 
     case 'DELETE_LIST':
+      return {
+        ...state,
+        lists: state.lists.map((list) =>
+          list.id === action.payload.id
+            ? { 
+                ...list, 
+                isDeleted: true, 
+                deletedAt: new Date(), 
+                updatedAt: new Date() 
+              }
+            : list
+        ),
+      };
+
+    case 'ARCHIVE_LIST':
+      return {
+        ...state,
+        lists: state.lists.map((list) =>
+          list.id === action.payload.id
+            ? { ...list, isArchived: true, updatedAt: new Date() }
+            : list
+        ),
+      };
+
+    case 'RESTORE_LIST':
+      return {
+        ...state,
+        lists: state.lists.map((list) =>
+          list.id === action.payload.id
+            ? { 
+                ...list, 
+                isDeleted: false, 
+                isArchived: false,
+                deletedAt: undefined, 
+                updatedAt: new Date() 
+              }
+            : list
+        ),
+      };
+
+    case 'PERMANENTLY_DELETE_LIST':
       return {
         ...state,
         lists: state.lists.filter((list) => list.id !== action.payload.id),
@@ -362,7 +406,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const getVisibleLists = (): ShoppingList[] => {
-    return state.lists.filter((list) => !list.isHidden);
+    return state.lists.filter((list) => !list.isHidden && !list.isArchived && !list.isDeleted);
+  };
+
+  const getArchivedLists = (): ShoppingList[] => {
+    return state.lists.filter((list) => list.isArchived && !list.isDeleted);
+  };
+
+  const getDeletedLists = (): ShoppingList[] => {
+    return state.lists.filter((list) => list.isDeleted);
   };
 
   const getCustomItem = (id: string): CustomItem | undefined => {

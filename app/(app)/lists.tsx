@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { Header, EmptyState, Button, ListItem, ProgressChip, FloatingActionButton, FadeInListItem } from '@/components/ui';
+import { Header, EmptyState, Button, ListItem, ProgressChip, FloatingActionButton, FadeInListItem, Input } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
@@ -12,13 +12,29 @@ import { ShoppingList } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
 
 export default function ListsScreen() {
+  const [searchText, setSearchText] = useState('');
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const router = useRouter();
   const { getVisibleLists, dispatch } = useApp();
-  const lists = getVisibleLists();
+  const allLists = getVisibleLists();
+  
+  // Filter lists based on search text
+  const filteredLists = searchText.trim() === '' ? allLists : allLists.filter(list =>
+    list.name.toLowerCase().includes(searchText.toLowerCase()) ||
+    list.items.some(item => item.name.toLowerCase().includes(searchText.toLowerCase()))
+  );
 
   const handleCreateList = () => {
     HapticFeedback.light();
     router.push('/(app)/create-list');
+  };
+
+  const handleToggleSearch = () => {
+    HapticFeedback.light();
+    setIsSearchVisible(!isSearchVisible);
+    if (isSearchVisible) {
+      setSearchText('');
+    }
   };
 
   const handleOpenList = (listId: string) => {
@@ -104,7 +120,7 @@ export default function ListsScreen() {
     );
   };
 
-  if (lists.length === 0) {
+  if (allLists.length === 0) {
     return (
       <SafeAreaView style={styles.container}>
         <Header
@@ -120,8 +136,11 @@ export default function ListsScreen() {
               >
                 <Ionicons name="library-outline" size={24} color={Colors.text} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.headerButton}>
-                <Ionicons name="search" size={24} color={Colors.text} />
+              <TouchableOpacity 
+                style={styles.headerButton}
+                onPress={handleToggleSearch}
+              >
+                <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
               </TouchableOpacity>
             </View>
           }
@@ -159,20 +178,59 @@ export default function ListsScreen() {
             >
               <Ionicons name="library-outline" size={24} color={Colors.text} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton}>
-              <Ionicons name="search" size={24} color={Colors.text} />
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleToggleSearch}
+            >
+              <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
             </TouchableOpacity>
           </View>
         }
       />
       
-      <FlatList
-        data={lists}
-        renderItem={renderListItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-      />
+      {isSearchVisible && (
+        <View style={styles.searchContainer}>
+          <Input
+            value={searchText}
+            onChangeText={setSearchText}
+            placeholder="Search lists or items..."
+            autoFocus
+            leftIcon={<Ionicons name="search" size={20} color={Colors.textSecondary} />}
+            rightIcon={
+              searchText.length > 0 ? (
+                <TouchableOpacity onPress={() => setSearchText('')}>
+                  <Ionicons name="close-circle" size={20} color={Colors.textSecondary} />
+                </TouchableOpacity>
+              ) : undefined
+            }
+          />
+        </View>
+      )}
+      
+      {filteredLists.length === 0 && searchText.trim() !== '' ? (
+        <View style={styles.emptyContainer}>
+          <EmptyState
+            title="No results found"
+            subtitle={`No lists or items match "${searchText}"`}
+            icon={<Ionicons name="search-outline" size={48} color={Colors.textTertiary} />}
+            action={
+              <Button
+                title="Clear Search"
+                onPress={() => setSearchText('')}
+                fullWidth
+              />
+            }
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={filteredLists}
+          renderItem={renderListItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
       
       <View style={styles.fab}>
         <FloatingActionButton
@@ -192,6 +250,12 @@ const styles = StyleSheet.create({
   
   emptyContainer: {
     flex: 1,
+  },
+  
+  searchContainer: {
+    paddingHorizontal: Spacing.screenPadding,
+    paddingVertical: Spacing.md,
+    backgroundColor: Colors.background,
   },
   
   listContainer: {
