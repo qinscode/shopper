@@ -9,6 +9,7 @@ import {
   FlatList,
   TextInput,
   Alert,
+  useWindowDimensions,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -113,6 +114,17 @@ export default function SelectEmojiScreen() {
 
   const [customInput, setCustomInput] = useState('')
 
+  const { width } = useWindowDimensions()
+  const CONTENT_PADDING = Spacing.lg
+  const ITEM_MARGIN = Spacing.sm
+  const MIN_ITEM_SIZE = 48
+  const gridWidth = width - CONTENT_PADDING * 2
+  const numColumns = Math.max(
+    3,
+    Math.floor(gridWidth / (MIN_ITEM_SIZE + ITEM_MARGIN * 2))
+  )
+  const emojiSize = gridWidth / numColumns - ITEM_MARGIN * 2
+
   // 处理自定义输入的逻辑
   const processCustomInput = (input: string): string => {
     if (!input.trim()) {
@@ -169,6 +181,11 @@ export default function SelectEmojiScreen() {
     <TouchableOpacity
       style={[
         styles.emojiButton,
+        {
+          width: emojiSize,
+          height: emojiSize,
+          margin: ITEM_MARGIN,
+        },
         item?.emoji === emoji && styles.selectedEmoji,
       ]}
       onPress={() => handleSelectEmoji(emoji)}
@@ -242,7 +259,8 @@ export default function SelectEmojiScreen() {
             data={EMOJI_DATA}
             renderItem={renderEmojiItem}
             keyExtractor={item => item}
-            numColumns={6}
+            numColumns={numColumns}
+            key={numColumns}
             contentContainerStyle={styles.emojiGrid}
             showsVerticalScrollIndicator={false}
           />
@@ -361,9 +379,6 @@ const styles = StyleSheet.create({
   },
 
   emojiButton: {
-    width: 48,
-    height: 48,
-    margin: 8,
     borderRadius: 12,
     backgroundColor: Colors.surface,
     justifyContent: 'center',
