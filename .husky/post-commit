@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 检查最近的commit是否包含tag
+LATEST_TAG=$(git describe --tags --exact-match HEAD 2>/dev/null)
+
+if [ -n "$LATEST_TAG" ]; then
+    echo "检测到新的tag: $LATEST_TAG"
+    
+    # 移除tag前缀（如v1.0.0 -> 1.0.0）
+    VERSION=${LATEST_TAG#v}
+    
+    # 检查当前package.json中的版本
+    CURRENT_VERSION=$(node -p "require('./package.json').version")
+    
+    if [ "$VERSION" != "$CURRENT_VERSION" ]; then
+        echo "更新package.json版本从 $CURRENT_VERSION 到 $VERSION"
+        
+        # 使用node.js更新package.json
+        node -e "
+            const fs = require('fs');
+            const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            packageJson.version = '$VERSION';
+            fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2) + '\n');
+        "
+        
+        # 将修改后的package.json添加到git并提交
+        git add package.json
+        git commit -m "chore: update version to $VERSION"
+        
+        echo "版本号已自动更新到 $VERSION"
+    else
+        echo "package.json版本号已经是最新的: $VERSION"
+    fi
+else
+    echo "当前commit没有关联的tag，跳过版本更新"
+fi 
