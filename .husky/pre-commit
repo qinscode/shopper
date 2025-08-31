@@ -1,1 +1,13 @@
+#!/usr/bin/env sh
+
+# 检查是否有格式化问题
+echo "🔍 Checking code formatting..."
+if ! npm run format:check > /dev/null 2>&1; then
+  echo "⚠️  Found formatting issues, auto-fixing..."
+  npm run format
+  echo "✅ Code formatting fixed"
+fi
+
+# 运行 lint-staged 处理暂存文件
+echo "🧹 Running lint-staged on staged files..."
 npx lint-staged
