@@ -1,15 +1,15 @@
-name: Build Android APK
+name: EAS Build Android
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       version:
         description: 'Version number (e.g., 1.0.0)'
         required: false
         default: 'dev'
+  push:
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -25,18 +25,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Setup EAS CLI
-        uses: expo/expo-github-action@v8
-        with:
-          expo-version: latest
-          eas-version: latest
-          token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Setup Java
         uses: actions/setup-java@v4
