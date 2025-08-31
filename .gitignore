@@ -38,3 +38,7 @@ yarn-error.*
 
 app-example
 !/build-1756484393703.apk
+
+# Native folders (using Prebuild/CNG)
+/android
+/ios
