@@ -1,6 +1,6 @@
 // https://docs.expo.dev/guides/using-eslint/
-const { defineConfig } = require('eslint/config');
-const expoConfig = require('eslint-config-expo/flat');
+const { defineConfig } = require('eslint/config')
+const expoConfig = require('eslint-config-expo/flat')
 
 module.exports = defineConfig([
   expoConfig,
@@ -34,6 +34,9 @@ module.exports = defineConfig([
       'react-hooks/rules-of-hooks': 'error', // Hooks规则
       'react-hooks/exhaustive-deps': 'warn', // useEffect依赖项检查
 
+      // TypeScript 规则
+      '@typescript-eslint/no-unused-vars': 'off', // 关闭未使用变量警告
+
       // Import/Export 规则
       'import/order': [
         'warn',
@@ -66,4 +69,4 @@ module.exports = defineConfig([
       'no-multiple-empty-lines': 'off',
     },
   },
-]);
+])
