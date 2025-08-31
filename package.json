@@ -1,7 +1,7 @@
 {
   "name": "shopper",
   "main": "expo-router/entry",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
@@ -19,7 +19,9 @@
     "build:production": "NODE_ENV=production eas build --platform all --profile production",
     "build:android-apk": "NODE_ENV=production eas build --platform android --profile production",
     "build:android-aab": "NODE_ENV=production eas build --platform android --profile production-aab",
-    "preoptimize": "npm run optimize:images"
+    "preoptimize": "npm run optimize:images",
+    "version:update": "node scripts/update-version-from-tag.js",
+    "version:tag": "npm run version:update && git add package.json && git commit -m \"chore: update version from tag\""
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
