@@ -37,6 +37,11 @@ export default function ListsScreen() {
     }
   };
 
+  const handleShowSettings = () => {
+    HapticFeedback.light();
+    router.push('/(app)/settings');
+  };
+
   const handleOpenList = (listId: string) => {
     HapticFeedback.light();
     router.push(`/(app)/list/${listId}`);
@@ -45,11 +50,6 @@ export default function ListsScreen() {
   const handleDuplicateList = (listId: string) => {
     HapticFeedback.medium();
     dispatch({ type: 'DUPLICATE_LIST', payload: { id: listId } });
-  };
-
-  const handleHideList = (listId: string) => {
-    HapticFeedback.light();
-    dispatch({ type: 'HIDE_LIST', payload: { id: listId } });
   };
 
   const handleArchiveList = (listId: string, listName: string) => {
@@ -139,15 +139,23 @@ export default function ListsScreen() {
               onPress={() => handleDuplicateList(item.id)}
             >
               <Ionicons name="copy-outline" size={16} color={Colors.textSecondary} />
-              <Text style={styles.actionText}>Duplicate</Text>
+              <Text style={styles.actionText} numberOfLines={1}>Duplicate</Text>
             </TouchableOpacity>
             
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={() => handleHideList(item.id)}
+              onPress={() => handleArchiveList(item.id, item.name)}
             >
-              <Ionicons name="eye-off-outline" size={16} color={Colors.textSecondary} />
-              <Text style={styles.actionText}>Hide</Text>
+              <Ionicons name="archive-outline" size={16} color={Colors.textSecondary} />
+              <Text style={styles.actionText} numberOfLines={1}>Archive</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => handleDeleteList(item.id, item.name)}
+            >
+              <Ionicons name="trash-outline" size={16} color={Colors.textSecondary} />
+              <Text style={styles.actionText} numberOfLines={1}>Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -161,33 +169,19 @@ export default function ListsScreen() {
         <Header
           title="Shopper"
           leftComponent={
-            <View style={styles.headerActions}>
-              <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => {
-                  HapticFeedback.light();
-                  router.push('/(app)/archived-lists');
-                }}
-              >
-                <Ionicons name="archive-outline" size={24} color={Colors.text} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.headerButton}
-                onPress={() => {
-                  HapticFeedback.light();
-                  router.push('/(app)/trash');
-                }}
-              >
-                <Ionicons name="trash-outline" size={24} color={Colors.text} />
-              </TouchableOpacity>
-            </View>
-          }
-          rightComponent={
             <TouchableOpacity 
               style={styles.headerButton}
               onPress={handleToggleSearch}
             >
               <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
+            </TouchableOpacity>
+          }
+          rightComponent={
+            <TouchableOpacity 
+              style={styles.headerButton}
+              onPress={handleShowSettings}
+            >
+              <Ionicons name="settings-outline" size={24} color={Colors.text} />
             </TouchableOpacity>
           }
         />
@@ -214,33 +208,19 @@ export default function ListsScreen() {
       <Header
         title="Shopper"
         leftComponent={
-          <View style={styles.headerActions}>
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={() => {
-                HapticFeedback.light();
-                router.push('/(app)/archived-lists');
-              }}
-            >
-              <Ionicons name="archive-outline" size={24} color={Colors.text} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={() => {
-                HapticFeedback.light();
-                router.push('/(app)/trash');
-              }}
-            >
-              <Ionicons name="trash-outline" size={24} color={Colors.text} />
-            </TouchableOpacity>
-          </View>
-        }
-        rightComponent={
           <TouchableOpacity 
             style={styles.headerButton}
             onPress={handleToggleSearch}
           >
             <Ionicons name={isSearchVisible ? "close" : "search"} size={24} color={Colors.text} />
+          </TouchableOpacity>
+        }
+        rightComponent={
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={handleShowSettings}
+          >
+            <Ionicons name="settings-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         }
       />
@@ -357,21 +337,26 @@ const styles = StyleSheet.create({
   
   listActions: {
     flexDirection: 'row', // 横排
-    paddingHorizontal: 24,
+    paddingHorizontal: 20, // 减少水平padding
     paddingTop: 8, // 减少顶部间距
     paddingBottom: 16,
+    justifyContent: 'space-between', // 平均分布
   },
   
   actionButton: {
     flexDirection: 'row', // 图标+文字横排
     alignItems: 'center',
-    marginRight: 24,
+    flex: 1, // 平均占用空间
+    justifyContent: 'center', // 居中对齐
+    paddingHorizontal: 4, // 增加padding，因为现在只有3个按钮
+    maxWidth: 100, // 增加最大宽度
   },
   
   actionText: {
-    fontSize: 12, // 12-13pt文字大小
+    fontSize: 11, // 稍微减小字体以适应更多按钮
     color: Colors.textSecondary,
-    marginLeft: 8,
+    marginLeft: 6, // 减少左边距
+    flexShrink: 1, // 允许文字压缩
   },
   
   fab: {
@@ -383,11 +368,6 @@ const styles = StyleSheet.create({
   emptyImage: {
     width: 200,
     height: 150,
-  },
-  
-  headerActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   
   headerButton: {
