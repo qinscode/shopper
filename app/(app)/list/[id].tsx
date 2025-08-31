@@ -126,6 +126,10 @@ export default function ListDetailScreen() {
     router.push(`/(app)/add-url/${listId}/${itemId}`);
   };
 
+  const handleEditItem = (itemId: string) => {
+    router.push(`/(app)/edit-item/${listId}/${itemId}`);
+  };
+
   const renderRightActions = (itemId: string, itemName: string) => (
     <View style={styles.rightActionsContainer}>
       <TouchableOpacity
@@ -204,15 +208,22 @@ export default function ListDetailScreen() {
             )}
             
             {/* 文字 */}
-            <Text 
-              style={[
-                styles.itemText,
-                item.isCompleted && styles.completedText
-              ]}
-              numberOfLines={1}
+            <TouchableOpacity
+              style={styles.itemTextContainer}
+              onPress={() => handleToggleItem(item.id)}
+              onLongPress={() => handleEditItem(item.id)}
+              activeOpacity={0.7}
             >
-              {item.name}
-            </Text>
+              <Text 
+                style={[
+                  styles.itemText,
+                  item.isCompleted && styles.completedText
+                ]}
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
           </View>
           
           {/* 右侧勾选 */}
@@ -484,6 +495,10 @@ const styles = StyleSheet.create({
   defaultIcon: {
     width: 24,
     height: 24,
+  },
+  
+  itemTextContainer: {
+    flex: 1,
   },
   
   itemText: {
