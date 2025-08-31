@@ -8,6 +8,7 @@
     "scheme": "shopper",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "assetBundlePatterns": ["assets/images/**"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.fudong.shopper"
