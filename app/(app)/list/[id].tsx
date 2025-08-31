@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams , Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Swipeable } from 'react-native-gesture-handler';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,7 +10,6 @@ import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
 import { useApp } from '@/context/AppContext';
 import { ShoppingItem } from '@/types';
-import { Stack } from 'expo-router';
 
 export default function ListDetailScreen() {
   const router = useRouter();

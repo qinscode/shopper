@@ -105,7 +105,7 @@ export default function SelectEmojiScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.subtitle}>
-            Choose an emoji for "{item?.name}"
+            Choose an emoji for &#34;{item?.name}&#34;
           </Text>
           
           {/* 自定义输入区域 */}

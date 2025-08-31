@@ -271,8 +271,13 @@ export default function AddItemsScreen() {
             >
               <View style={styles.customItemContent}>
                 <Ionicons name="add-circle-outline" size={20} color={Colors.primary} />
-                <Text style={styles.customItemText}>Add "{searchText.trim()}"</Text>
+                <Text style={styles.customItemText}>Add &#34;{searchText.trim()}&#34;</Text>
               </View>
+
+
+
+
+
               <Text style={styles.addButtonText}>ADD</Text>
             </TouchableOpacity>
           )}
