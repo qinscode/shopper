@@ -104,11 +104,13 @@ export default function OnboardingScreen() {
       
       <View style={styles.footer}>
         <CarouselDots activeIndex={currentPage} total={onboardingData.length} />
-        <Button
-          title="Start using Shopper"
-          onPress={handleStartUsingShopper}
-          fullWidth
-        />
+        {currentPage === onboardingData.length - 1 && (
+          <Button
+            title="Start using Shopper"
+            onPress={handleStartUsingShopper}
+            fullWidth
+          />
+        )}
       </View>
     </SafeAreaView>
   );
@@ -173,6 +175,8 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: Spacing.screenPadding,
     paddingBottom: Spacing.xl,
+    minHeight: 120, // 确保footer有固定最小高度，避免布局跳动
+    justifyContent: 'flex-end',
   },
   
   dotsContainer: {
