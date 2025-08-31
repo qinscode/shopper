@@ -2,7 +2,15 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Header, Input, Button } from '@/components/ui';
@@ -20,7 +28,9 @@ export default function EditCustomItemScreen() {
   const [defaultImageUri, setDefaultImageUri] = useState('');
   const [notes, setNotes] = useState('');
   const [tags, setTags] = useState('');
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -39,9 +49,11 @@ export default function EditCustomItemScreen() {
       setDefaultImageUri(item.defaultImageUri || '');
       setNotes(item.notes || '');
       setTags(item.tags?.join(', ') || '');
-      
+
       // Find category ID
-      const categoryId = state.categories.find(c => c.name === item.category)?.id;
+      const categoryId = state.categories.find(
+        c => c.name === item.category
+      )?.id;
       setSelectedCategoryId(categoryId || null);
     } else {
       Alert.alert('Error', 'Item not found');
@@ -56,10 +68,15 @@ export default function EditCustomItemScreen() {
     }
 
     setLoading(true);
-    
+
     try {
-      const selectedCategory = state.categories.find(c => c.id === selectedCategoryId);
-      const tagsArray = tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+      const selectedCategory = state.categories.find(
+        c => c.id === selectedCategoryId
+      );
+      const tagsArray = tags
+        .split(',')
+        .map(tag => tag.trim())
+        .filter(tag => tag.length > 0);
 
       dispatch({
         type: 'UPDATE_CUSTOM_ITEM',
@@ -76,7 +93,7 @@ export default function EditCustomItemScreen() {
           },
         },
       });
-      
+
       HapticFeedback.success();
       router.back();
     } catch (error) {
@@ -88,31 +105,30 @@ export default function EditCustomItemScreen() {
   };
 
   const handleDelete = () => {
-    Alert.alert(
-      'Delete Item',
-      `Are you sure you want to delete "${name}"?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            dispatch({
-              type: 'DELETE_CUSTOM_ITEM',
-              payload: { id: itemId },
-            });
-            HapticFeedback.success();
-            router.back();
-          },
+    Alert.alert('Delete Item', `Are you sure you want to delete "${name}"?`, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => {
+          dispatch({
+            type: 'DELETE_CUSTOM_ITEM',
+            payload: { id: itemId },
+          });
+          HapticFeedback.success();
+          router.back();
         },
-      ],
-    );
+      },
+    ]);
   };
 
   const handlePickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Camera roll permissions are required to add images.');
+      Alert.alert(
+        'Permission needed',
+        'Camera roll permissions are required to add images.'
+      );
       return;
     }
 
@@ -132,7 +148,10 @@ export default function EditCustomItemScreen() {
   const handleTakePhoto = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Camera permissions are required to take photos.');
+      Alert.alert(
+        'Permission needed',
+        'Camera permissions are required to take photos.'
+      );
       return;
     }
 
@@ -168,20 +187,24 @@ export default function EditCustomItemScreen() {
             HapticFeedback.selection();
           }}
         >
-          <Ionicons 
-            name="close-circle-outline" 
-            size={20} 
-            color={selectedCategoryId === null ? Colors.text : Colors.textSecondary} 
+          <Ionicons
+            name="close-circle-outline"
+            size={20}
+            color={
+              selectedCategoryId === null ? Colors.text : Colors.textSecondary
+            }
           />
-          <Text style={[
-            styles.categoryOptionText,
-            selectedCategoryId === null && styles.selectedCategoryOptionText,
-          ]}>
+          <Text
+            style={[
+              styles.categoryOptionText,
+              selectedCategoryId === null && styles.selectedCategoryOptionText,
+            ]}
+          >
             None
           </Text>
         </TouchableOpacity>
 
-        {state.categories.map((cat) => (
+        {state.categories.map(cat => (
           <TouchableOpacity
             key={cat.id}
             style={[
@@ -195,16 +218,22 @@ export default function EditCustomItemScreen() {
               HapticFeedback.selection();
             }}
           >
-            <Ionicons 
-              name={cat.icon as any || 'folder-outline'} 
-              size={20} 
-              color={selectedCategoryId === cat.id ? Colors.text : cat.color} 
+            <Ionicons
+              name={(cat.icon as any) || 'folder-outline'}
+              size={20}
+              color={selectedCategoryId === cat.id ? Colors.text : cat.color}
             />
-            <Text style={[
-              styles.categoryOptionText,
-              selectedCategoryId === cat.id && styles.selectedCategoryOptionText,
-              { color: selectedCategoryId === cat.id ? Colors.text : cat.color },
-            ]}>
+            <Text
+              style={[
+                styles.categoryOptionText,
+                selectedCategoryId === cat.id &&
+                  styles.selectedCategoryOptionText,
+                {
+                  color:
+                    selectedCategoryId === cat.id ? Colors.text : cat.color,
+                },
+              ]}
+            >
               {cat.name}
             </Text>
           </TouchableOpacity>
@@ -216,32 +245,65 @@ export default function EditCustomItemScreen() {
   const renderImageSection = () => (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Default Image</Text>
-      
+
       {defaultImageUri ? (
         <View style={styles.imageContainer}>
-          <Image source={{ uri: defaultImageUri }} style={styles.previewImage} />
+          <Image
+            source={{ uri: defaultImageUri }}
+            style={styles.previewImage}
+          />
           <View style={styles.imageActions}>
-            <TouchableOpacity style={styles.imageActionButton} onPress={handlePickImage}>
-              <Ionicons name="images-outline" size={20} color={Colors.primary} />
+            <TouchableOpacity
+              style={styles.imageActionButton}
+              onPress={handlePickImage}
+            >
+              <Ionicons
+                name="images-outline"
+                size={20}
+                color={Colors.primary}
+              />
               <Text style={styles.imageActionText}>Change</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.imageActionButton} onPress={handleRemoveImage}>
+            <TouchableOpacity
+              style={styles.imageActionButton}
+              onPress={handleRemoveImage}
+            >
               <Ionicons name="trash-outline" size={20} color={Colors.error} />
-              <Text style={[styles.imageActionText, { color: Colors.error }]}>Remove</Text>
+              <Text style={[styles.imageActionText, { color: Colors.error }]}>
+                Remove
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       ) : (
         <View style={styles.imagePlaceholder}>
-          <Ionicons name="image-outline" size={48} color={Colors.textSecondary} />
+          <Ionicons
+            name="image-outline"
+            size={48}
+            color={Colors.textSecondary}
+          />
           <Text style={styles.imagePlaceholderText}>No image selected</Text>
           <View style={styles.imageActions}>
-            <TouchableOpacity style={styles.imageActionButton} onPress={handlePickImage}>
-              <Ionicons name="images-outline" size={20} color={Colors.primary} />
+            <TouchableOpacity
+              style={styles.imageActionButton}
+              onPress={handlePickImage}
+            >
+              <Ionicons
+                name="images-outline"
+                size={20}
+                color={Colors.primary}
+              />
               <Text style={styles.imageActionText}>Gallery</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.imageActionButton} onPress={handleTakePhoto}>
-              <Ionicons name="camera-outline" size={20} color={Colors.primary} />
+            <TouchableOpacity
+              style={styles.imageActionButton}
+              onPress={handleTakePhoto}
+            >
+              <Ionicons
+                name="camera-outline"
+                size={20}
+                color={Colors.primary}
+              />
               <Text style={styles.imageActionText}>Camera</Text>
             </TouchableOpacity>
           </View>
@@ -262,7 +324,7 @@ export default function EditCustomItemScreen() {
           </TouchableOpacity>
         }
       />
-      
+
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <Input
@@ -326,7 +388,7 @@ export default function EditCustomItemScreen() {
             loading={loading}
             fullWidth
           />
-          
+
           <Button
             title="Delete Item"
             onPress={handleDelete}
@@ -346,29 +408,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
   },
-  
+
   section: {
     marginBottom: Spacing.lg,
   },
-  
+
   sectionTitle: {
     ...Typography.textStyles.subtitle,
     color: Colors.text,
     marginBottom: Spacing.md,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   categoryGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: Spacing.sm,
   },
-  
+
   categoryOption: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -379,27 +441,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  
+
   selectedCategoryOption: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
-  
+
   categoryOptionText: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     marginLeft: Spacing.sm,
   },
-  
+
   selectedCategoryOptionText: {
     color: Colors.text,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   imageContainer: {
     alignItems: 'center',
   },
-  
+
   imagePlaceholder: {
     backgroundColor: Colors.surface,
     borderRadius: BorderRadius.md,
@@ -409,26 +471,26 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     borderStyle: 'dashed',
   },
-  
+
   imagePlaceholderText: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     marginTop: Spacing.sm,
     marginBottom: Spacing.lg,
   },
-  
+
   previewImage: {
     width: 120,
     height: 120,
     borderRadius: BorderRadius.md,
     marginBottom: Spacing.lg,
   },
-  
+
   imageActions: {
     flexDirection: 'row',
     gap: Spacing.md,
   },
-  
+
   imageActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -439,19 +501,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  
+
   imageActionText: {
     ...Typography.textStyles.body,
     color: Colors.primary,
     marginLeft: Spacing.sm,
   },
-  
+
   buttonContainer: {
     marginTop: Spacing.xl,
     marginBottom: Spacing.xxl,
     gap: Spacing.md,
   },
-  
+
   deleteButton: {
     borderColor: Colors.error,
   },

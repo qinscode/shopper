@@ -2,7 +2,14 @@ import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Header, Button } from '@/components/ui';
@@ -15,11 +22,11 @@ export default function AddImageScreen() {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const router = useRouter();
   const { params } = useLocalSearchParams();
-  
+
   // Extract listId and itemId from params array
   const listId = Array.isArray(params) ? params[0] : '';
   const itemId = Array.isArray(params) ? params[1] : '';
-  
+
   const { getList, dispatch } = useApp();
   const list = getList(listId);
   const item = list?.items.find(item => item.id === itemId);
@@ -102,7 +109,7 @@ export default function AddImageScreen() {
         showBackButton
         onBackPress={handleCancel}
       />
-      
+
       <View style={styles.content}>
         <View style={styles.imageContainer}>
           {selectedImage ? (
@@ -117,30 +124,44 @@ export default function AddImageScreen() {
             </View>
           ) : (
             <View style={styles.imagePlaceholder}>
-              <Ionicons name="image-outline" size={80} color={Colors.textSecondary} />
+              <Ionicons
+                name="image-outline"
+                size={80}
+                color={Colors.textSecondary}
+              />
               <Text style={styles.placeholderText}>No image selected</Text>
-              
+
               <View style={styles.imageButtons}>
                 <TouchableOpacity
                   style={styles.imageActionButton}
                   onPress={handlePickImage}
                 >
-                  <Ionicons name="images-outline" size={24} color={Colors.primary} />
-                  <Text style={styles.imageActionText}>Choose from Library</Text>
+                  <Ionicons
+                    name="images-outline"
+                    size={24}
+                    color={Colors.primary}
+                  />
+                  <Text style={styles.imageActionText}>
+                    Choose from Library
+                  </Text>
                 </TouchableOpacity>
-                
+
                 <TouchableOpacity
                   style={styles.imageActionButton}
                   onPress={handleTakePhoto}
                 >
-                  <Ionicons name="camera-outline" size={24} color={Colors.primary} />
+                  <Ionicons
+                    name="camera-outline"
+                    size={24}
+                    color={Colors.primary}
+                  />
                   <Text style={styles.imageActionText}>Take Photo</Text>
                 </TouchableOpacity>
               </View>
             </View>
           )}
         </View>
-        
+
         <View style={styles.buttonContainer}>
           <View style={styles.buttonRow}>
             <Button
@@ -167,19 +188,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
     justifyContent: 'space-between',
   },
-  
+
   imageContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  
+
   imagePlaceholder: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -190,18 +211,18 @@ const styles = StyleSheet.create({
     minHeight: 300,
     ...Shadows.medium,
   },
-  
+
   placeholderText: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     marginTop: Spacing.md,
     marginBottom: Spacing.xl,
   },
-  
+
   imageButtons: {
     gap: Spacing.md,
   },
-  
+
   imageActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -210,46 +231,46 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     minWidth: 200,
   },
-  
+
   imageActionText: {
     ...Typography.textStyles.body,
     color: Colors.primary,
     marginLeft: Spacing.sm,
   },
-  
+
   imagePreview: {
     alignItems: 'center',
     width: '100%',
   },
-  
+
   image: {
     width: 300,
     height: 300,
     borderRadius: BorderRadius.lg,
     marginBottom: Spacing.lg,
   },
-  
+
   changeImageButton: {
     backgroundColor: Colors.surface,
     borderRadius: BorderRadius.md,
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.lg,
   },
-  
+
   changeImageText: {
     ...Typography.textStyles.body,
     color: Colors.primary,
   },
-  
+
   buttonContainer: {
     paddingBottom: Spacing.xl,
   },
-  
+
   buttonRow: {
     flexDirection: 'row',
     gap: Spacing.md,
   },
-  
+
   button: {
     flex: 1,
   },

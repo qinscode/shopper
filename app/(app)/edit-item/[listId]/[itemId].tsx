@@ -15,42 +15,42 @@ export default function EditItemScreen() {
   const router = useRouter();
   const { listId, itemId } = useLocalSearchParams();
   const { getList, dispatch } = useApp();
-  
+
   const listIdStr = typeof listId === 'string' ? listId : listId?.[0] || '';
   const itemIdStr = typeof itemId === 'string' ? itemId : itemId?.[0] || '';
-  
+
   const list = getList(listIdStr);
   const item = list?.items.find(item => item.id === itemIdStr);
-  
+
   const [itemName, setItemName] = useState(item?.name || '');
-  
+
   useEffect(() => {
     if (item) {
       setItemName(item.name);
     }
   }, [item]);
-  
+
   const handleSave = () => {
     const trimmedName = itemName.trim();
-    
+
     if (!trimmedName) {
       Alert.alert('Error', 'Item name cannot be empty');
       return;
     }
-    
+
     if (!item) {
       Alert.alert('Error', 'Item not found');
       return;
     }
-    
+
     if (trimmedName === item.name) {
       // No changes, just go back
       router.back();
       return;
     }
-    
+
     HapticFeedback.light();
-    
+
     dispatch({
       type: 'UPDATE_ITEM',
       payload: {
@@ -59,15 +59,15 @@ export default function EditItemScreen() {
         updates: { name: trimmedName },
       },
     });
-    
+
     router.back();
   };
-  
+
   const handleCancel = () => {
     HapticFeedback.light();
     router.back();
   };
-  
+
   if (!item || !list) {
     return (
       <SafeAreaView style={styles.container}>
@@ -75,34 +75,30 @@ export default function EditItemScreen() {
           <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
             <Ionicons name="chevron-back" size={24} color={Colors.text} />
           </TouchableOpacity>
-          
+
           <Text style={styles.headerTitle}>Item Not Found</Text>
-          
+
           <View style={styles.headerRight} />
         </View>
         <View style={styles.content}>
-          <Button
-            title="Go Back"
-            onPress={handleCancel}
-            fullWidth
-          />
+          <Button title="Go Back" onPress={handleCancel} fullWidth />
         </View>
       </SafeAreaView>
     );
   }
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
           <Ionicons name="chevron-back" size={24} color={Colors.text} />
         </TouchableOpacity>
-        
+
         <Text style={styles.headerTitle}>Edit Item</Text>
-        
+
         <View style={styles.headerRight} />
       </View>
-      
+
       <View style={styles.content}>
         <View style={styles.inputContainer}>
           <Input
@@ -114,7 +110,7 @@ export default function EditItemScreen() {
             maxLength={100}
           />
         </View>
-        
+
         <View style={styles.buttonContainer}>
           <Button
             title="Cancel"
@@ -140,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -148,7 +144,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     backgroundColor: Colors.background,
   },
-  
+
   backButton: {
     width: 44,
     height: 44,
@@ -156,7 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: -12,
   },
-  
+
   headerTitle: {
     fontSize: 24,
     fontWeight: Typography.fontWeight.semibold,
@@ -165,27 +161,27 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     textAlign: 'center',
   },
-  
+
   headerRight: {
     width: 44,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
   },
-  
+
   inputContainer: {
     marginBottom: Spacing.xl,
   },
-  
+
   buttonContainer: {
     flexDirection: 'row',
     gap: Spacing.md,
     marginTop: 'auto',
     paddingBottom: Spacing.lg,
   },
-  
+
   button: {
     flex: 1,
   },

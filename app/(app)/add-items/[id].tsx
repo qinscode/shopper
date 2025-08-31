@@ -1,7 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Keyboard, Image } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+  Keyboard,
+  Image,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Header, Input, Button } from '@/components/ui';
@@ -15,26 +24,31 @@ import { HapticFeedback } from '@/utils/haptics';
 export default function AddItemsScreen() {
   const [searchText, setSearchText] = useState('');
   const [recentlyAdded, setRecentlyAdded] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<'suggestions' | 'custom'>('suggestions');
+  const [activeTab, setActiveTab] = useState<'suggestions' | 'custom'>(
+    'suggestions'
+  );
   const inputRef = useRef<TextInput>(null);
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const listId = typeof id === 'string' ? id : id?.[0] || '';
-  
+
   const { dispatch, getList, state, getMostUsedCustomItems } = useApp();
   const list = getList(listId);
 
   // Filter out items that are already in the list
-  const existingItemNames = list?.items.map(item => item.name.toLowerCase()) || [];
-  
-  const filteredSuggestions = SUGGESTED_ITEMS.filter(item =>
-    item.toLowerCase().includes(searchText.toLowerCase()) &&
-    !existingItemNames.includes(item.toLowerCase()),
+  const existingItemNames =
+    list?.items.map(item => item.name.toLowerCase()) || [];
+
+  const filteredSuggestions = SUGGESTED_ITEMS.filter(
+    item =>
+      item.toLowerCase().includes(searchText.toLowerCase()) &&
+      !existingItemNames.includes(item.toLowerCase())
   ).slice(0, 10); // Limit to 10 suggestions
 
-  const filteredCustomItems = state.customItems.filter(item =>
-    item.name.toLowerCase().includes(searchText.toLowerCase()) &&
-    !existingItemNames.includes(item.name.toLowerCase()),
+  const filteredCustomItems = state.customItems.filter(
+    item =>
+      item.name.toLowerCase().includes(searchText.toLowerCase()) &&
+      !existingItemNames.includes(item.name.toLowerCase())
   );
 
   const handleAddItem = (itemName: string, customItemId?: string) => {
@@ -54,15 +68,15 @@ export default function AddItemsScreen() {
         payload: { id: customItemId },
       });
     }
-    
+
     HapticFeedback.success();
-    
+
     // Add to recently added list
     setRecentlyAdded(prev => {
       const updated = [itemName, ...prev.filter(name => name !== itemName)];
       return updated.slice(0, 5); // Keep only last 5 items
     });
-    
+
     // Clear search text if it matches the added item
     if (searchText.toLowerCase() === itemName.toLowerCase()) {
       setSearchText('');
@@ -76,7 +90,10 @@ export default function AddItemsScreen() {
 
   const handleAddCustomItem = () => {
     const trimmedText = searchText.trim();
-    if (trimmedText.length > 0 && !existingItemNames.includes(trimmedText.toLowerCase())) {
+    if (
+      trimmedText.length > 0 &&
+      !existingItemNames.includes(trimmedText.toLowerCase())
+    ) {
       handleAddItem(trimmedText);
     }
   };
@@ -90,11 +107,16 @@ export default function AddItemsScreen() {
           HapticFeedback.selection();
         }}
       >
-        <Text style={[styles.tabText, activeTab === 'suggestions' && styles.activeTabText]}>
+        <Text
+          style={[
+            styles.tabText,
+            activeTab === 'suggestions' && styles.activeTabText,
+          ]}
+        >
           Suggestions ({filteredSuggestions.length})
         </Text>
       </TouchableOpacity>
-      
+
       <TouchableOpacity
         style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
         onPress={() => {
@@ -102,16 +124,27 @@ export default function AddItemsScreen() {
           HapticFeedback.selection();
         }}
       >
-        <Text style={[styles.tabText, activeTab === 'custom' && styles.activeTabText]}>
+        <Text
+          style={[
+            styles.tabText,
+            activeTab === 'custom' && styles.activeTabText,
+          ]}
+        >
           My Items ({filteredCustomItems.length})
         </Text>
       </TouchableOpacity>
     </View>
   );
 
-  const renderSuggestionItem = ({ item, index }: { item: string; index: number }) => {
+  const renderSuggestionItem = ({
+    item,
+    index,
+  }: {
+    item: string;
+    index: number;
+  }) => {
     const isAlreadyInList = existingItemNames.includes(item.toLowerCase());
-    
+
     return (
       <TouchableOpacity
         style={[styles.suggestionItem, isAlreadyInList && styles.disabledItem]}
@@ -120,14 +153,23 @@ export default function AddItemsScreen() {
         activeOpacity={0.7}
       >
         <View style={styles.suggestionContent}>
-          <Text style={[styles.suggestionText, isAlreadyInList && styles.disabledText]}>
+          <Text
+            style={[
+              styles.suggestionText,
+              isAlreadyInList && styles.disabledText,
+            ]}
+          >
             {item}
           </Text>
           {isAlreadyInList && (
-            <Ionicons name="checkmark-circle" size={16} color={Colors.success} />
+            <Ionicons
+              name="checkmark-circle"
+              size={16}
+              color={Colors.success}
+            />
           )}
         </View>
-        
+
         {!isAlreadyInList && (
           <TouchableOpacity
             style={styles.addButton}
@@ -140,9 +182,15 @@ export default function AddItemsScreen() {
     );
   };
 
-  const renderCustomItem = ({ item, index }: { item: CustomItem; index: number }) => {
+  const renderCustomItem = ({
+    item,
+    index,
+  }: {
+    item: CustomItem;
+    index: number;
+  }) => {
     const isAlreadyInList = existingItemNames.includes(item.name.toLowerCase());
-    
+
     return (
       <TouchableOpacity
         style={[styles.customItem, isAlreadyInList && styles.disabledItem]}
@@ -153,18 +201,31 @@ export default function AddItemsScreen() {
         <View style={styles.customItemContent}>
           <View style={styles.customItemLeft}>
             {item.defaultImageUri ? (
-              <Image source={{ uri: item.defaultImageUri }} style={styles.customItemImage} />
+              <Image
+                source={{ uri: item.defaultImageUri }}
+                style={styles.customItemImage}
+              />
             ) : (
-              <View style={[styles.customItemPlaceholder, { backgroundColor: item.color || Colors.primary }]}>
+              <View
+                style={[
+                  styles.customItemPlaceholder,
+                  { backgroundColor: item.color || Colors.primary },
+                ]}
+              >
                 <Text style={styles.customItemInitial}>
                   {item.name.charAt(0).toUpperCase()}
                 </Text>
               </View>
             )}
           </View>
-          
+
           <View style={styles.customItemInfo}>
-            <Text style={[styles.customItemName, isAlreadyInList && styles.disabledText]}>
+            <Text
+              style={[
+                styles.customItemName,
+                isAlreadyInList && styles.disabledText,
+              ]}
+            >
               {item.name}
             </Text>
             {item.brand && (
@@ -172,28 +233,45 @@ export default function AddItemsScreen() {
             )}
             {item.category && (
               <View style={styles.customItemCategory}>
-                <View style={[
-                  styles.categoryDot, 
-                  { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary },
-                ]} />
+                <View
+                  style={[
+                    styles.categoryDot,
+                    {
+                      backgroundColor:
+                        state.categories.find(c => c.name === item.category)
+                          ?.color || Colors.primary,
+                    },
+                  ]}
+                />
                 <Text style={styles.categoryText}>{item.category}</Text>
               </View>
             )}
             {item.usageCount > 0 && (
-              <Text style={styles.usageCount}>Used {item.usageCount} times</Text>
+              <Text style={styles.usageCount}>
+                Used {item.usageCount} times
+              </Text>
             )}
           </View>
-          
+
           <View style={styles.customItemRight}>
             {item.defaultUrl && (
-              <Ionicons name="link" size={14} color={Colors.textSecondary} style={styles.attachment} />
+              <Ionicons
+                name="link"
+                size={14}
+                color={Colors.textSecondary}
+                style={styles.attachment}
+              />
             )}
             {isAlreadyInList && (
-              <Ionicons name="checkmark-circle" size={20} color={Colors.success} />
+              <Ionicons
+                name="checkmark-circle"
+                size={20}
+                color={Colors.success}
+              />
             )}
           </View>
         </View>
-        
+
         {!isAlreadyInList && (
           <TouchableOpacity
             style={styles.addButton}
@@ -224,12 +302,18 @@ export default function AddItemsScreen() {
   );
 
   // Check if the current search text can be added as a custom item
-  const canAddCustomItem = searchText.trim().length > 0 && 
+  const canAddCustomItem =
+    searchText.trim().length > 0 &&
     !existingItemNames.includes(searchText.trim().toLowerCase()) &&
-    !filteredSuggestions.some(item => item.toLowerCase() === searchText.trim().toLowerCase()) &&
-    !filteredCustomItems.some(item => item.name.toLowerCase() === searchText.trim().toLowerCase());
+    !filteredSuggestions.some(
+      item => item.toLowerCase() === searchText.trim().toLowerCase()
+    ) &&
+    !filteredCustomItems.some(
+      item => item.name.toLowerCase() === searchText.trim().toLowerCase()
+    );
 
-  const currentItems = activeTab === 'suggestions' ? filteredSuggestions : filteredCustomItems;
+  const currentItems =
+    activeTab === 'suggestions' ? filteredSuggestions : filteredCustomItems;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -243,7 +327,7 @@ export default function AddItemsScreen() {
           </TouchableOpacity>
         }
       />
-      
+
       <View style={styles.content}>
         <View style={styles.searchContainer}>
           <Input
@@ -255,26 +339,37 @@ export default function AddItemsScreen() {
             returnKeyType="done"
             onSubmitEditing={handleAddCustomItem}
             style={styles.searchInput}
-            leftIcon={<Ionicons name="search" size={20} color={Colors.textSecondary} />}
+            leftIcon={
+              <Ionicons name="search" size={20} color={Colors.textSecondary} />
+            }
             rightIcon={
               searchText.length > 0 ? (
                 <TouchableOpacity onPress={() => setSearchText('')}>
-                  <Ionicons name="close-circle" size={20} color={Colors.textSecondary} />
+                  <Ionicons
+                    name="close-circle"
+                    size={20}
+                    color={Colors.textSecondary}
+                  />
                 </TouchableOpacity>
               ) : undefined
             }
           />
-          
+
           {canAddCustomItem && (
             <TouchableOpacity
               style={styles.customItemButton}
               onPress={handleAddCustomItem}
             >
               <View style={styles.customItemContent}>
-                <Ionicons name="add-circle-outline" size={20} color={Colors.primary} />
-                <Text style={styles.customItemText}>Add &#34;{searchText.trim()}&#34;</Text>
+                <Ionicons
+                  name="add-circle-outline"
+                  size={20}
+                  color={Colors.primary}
+                />
+                <Text style={styles.customItemText}>
+                  Add &#34;{searchText.trim()}&#34;
+                </Text>
               </View>
-
 
               <Text style={styles.addButtonText}>ADD</Text>
             </TouchableOpacity>
@@ -296,11 +391,15 @@ export default function AddItemsScreen() {
         )}
 
         {renderTabBar()}
-        
+
         <View style={styles.section}>
           {currentItems.length === 0 && searchText.length > 0 && (
             <View style={styles.noResultsContainer}>
-              <Ionicons name="search-outline" size={48} color={Colors.textTertiary} />
+              <Ionicons
+                name="search-outline"
+                size={48}
+                color={Colors.textTertiary}
+              />
               <Text style={styles.noResultsText}>No {activeTab} found</Text>
               {!canAddCustomItem && (
                 <Text style={styles.noResultsSubtext}>
@@ -309,7 +408,7 @@ export default function AddItemsScreen() {
               )}
             </View>
           )}
-          
+
           {activeTab === 'suggestions' ? (
             <FlatList<string>
               data={filteredSuggestions}
@@ -340,20 +439,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
   },
-  
+
   searchContainer: {
     marginBottom: Spacing.lg,
   },
-  
+
   searchInput: {
     marginBottom: Spacing.md,
   },
-  
+
   customItemButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -366,35 +465,35 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: Colors.primary,
   },
-  
+
   customItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-  
+
   customItemText: {
     ...Typography.textStyles.body,
     color: Colors.text,
     marginLeft: Spacing.sm,
     flex: 1,
   },
-  
+
   section: {
     marginBottom: Spacing.lg,
   },
-  
+
   sectionTitle: {
     ...Typography.textStyles.subtitle,
     color: Colors.text,
     marginBottom: Spacing.md,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   recentContainer: {
     paddingRight: Spacing.md,
   },
-  
+
   recentItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -405,13 +504,13 @@ const styles = StyleSheet.create({
     marginRight: Spacing.sm,
     ...Shadows.small,
   },
-  
+
   recentText: {
     ...Typography.textStyles.body,
     color: Colors.text,
     marginHorizontal: Spacing.sm,
   },
-  
+
   quickAddButton: {
     marginLeft: Spacing.xs,
   },
@@ -424,33 +523,33 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
     ...Shadows.small,
   },
-  
+
   tab: {
     flex: 1,
     alignItems: 'center',
     paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.sm,
   },
-  
+
   activeTab: {
     backgroundColor: Colors.primary,
   },
-  
+
   tabText: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     fontSize: 14,
   },
-  
+
   activeTabText: {
     color: Colors.text,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   suggestionsContainer: {
     paddingBottom: Spacing.xl,
   },
-  
+
   suggestionItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -468,17 +567,17 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
     ...Shadows.small,
   },
-  
+
   disabledItem: {
     opacity: 0.6,
   },
-  
+
   suggestionContent: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-  
+
   suggestionText: {
     ...Typography.textStyles.body,
     color: Colors.text,
@@ -559,11 +658,11 @@ const styles = StyleSheet.create({
   attachment: {
     marginBottom: Spacing.xs,
   },
-  
+
   disabledText: {
     color: Colors.textSecondary,
   },
-  
+
   addButton: {
     backgroundColor: Colors.primary,
     borderRadius: BorderRadius.sm,
@@ -571,31 +670,31 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     marginLeft: Spacing.md,
   },
-  
+
   addButtonText: {
     ...Typography.textStyles.caption,
     color: Colors.text,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   doneText: {
     ...Typography.textStyles.body,
     color: Colors.primary,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   noResultsContainer: {
     alignItems: 'center',
     paddingVertical: Spacing.xl,
   },
-  
+
   noResultsText: {
     ...Typography.textStyles.subtitle,
     color: Colors.textSecondary,
     marginTop: Spacing.md,
     textAlign: 'center',
   },
-  
+
   noResultsSubtext: {
     ...Typography.textStyles.caption,
     color: Colors.textTertiary,

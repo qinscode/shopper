@@ -12,11 +12,11 @@ export default function AddUrlScreen() {
   const [url, setUrl] = useState('');
   const router = useRouter();
   const { params } = useLocalSearchParams();
-  
+
   // Extract listId and itemId from params array
   const listId = Array.isArray(params) ? params[0] : '';
   const itemId = Array.isArray(params) ? params[1] : '';
-  
+
   const { getList, dispatch } = useApp();
   const list = getList(listId);
   const item = list?.items.find(item => item.id === itemId);
@@ -33,7 +33,9 @@ export default function AddUrlScreen() {
 
     // Basic URL validation
     if (!url.includes('http') && !url.includes('www')) {
-      const formattedUrl = url.startsWith('www') ? `https://${url}` : `https://${url}`;
+      const formattedUrl = url.startsWith('www')
+        ? `https://${url}`
+        : `https://${url}`;
       setUrl(formattedUrl);
     }
 
@@ -68,7 +70,7 @@ export default function AddUrlScreen() {
         showBackButton
         onBackPress={handleCancel}
       />
-      
+
       <View style={styles.content}>
         <Input
           value={url}
@@ -81,7 +83,7 @@ export default function AddUrlScreen() {
           returnKeyType="done"
           onSubmitEditing={handleSave}
         />
-        
+
         <View style={styles.buttonContainer}>
           <View style={styles.buttonRow}>
             <Button
@@ -90,11 +92,7 @@ export default function AddUrlScreen() {
               variant="secondary"
               style={styles.button}
             />
-            <Button
-              title="Save"
-              onPress={handleSave}
-              style={styles.button}
-            />
+            <Button title="Save" onPress={handleSave} style={styles.button} />
           </View>
         </View>
       </View>
@@ -107,22 +105,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
     justifyContent: 'space-between',
   },
-  
+
   buttonContainer: {
     paddingBottom: Spacing.xl,
   },
-  
+
   buttonRow: {
     flexDirection: 'row',
     gap: Spacing.md,
   },
-  
+
   button: {
     flex: 1,
   },
