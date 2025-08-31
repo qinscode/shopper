@@ -7,6 +7,8 @@ import {
   Image,
   Keyboard,
   Platform,
+  KeyboardAvoidingView,
+  ScrollView,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -69,50 +71,64 @@ export default function CreateListScreen() {
         onBackPress={handleCancel}
       />
 
-      <View style={styles.content}>
-        {!keyboardVisible && (
-          <View style={styles.illustrationContainer}>
-            <Image
-              source={require('@/assets/images/name_your_list.png')}
-              style={styles.illustration}
-              resizeMode="contain"
-            />
-          </View>
-        )}
-
-        <View
-          style={[
-            styles.formSection,
-            keyboardVisible && styles.formSectionExpanded,
-          ]}
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoidingView}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
-          <Input
-            value={listName}
-            onChangeText={setListName}
-            placeholder="Weekly Household Shopping"
-            autoFocus
-            returnKeyType="done"
-            onSubmitEditing={handleContinue}
-            style={styles.input}
-          />
-        </View>
+          <View style={styles.content}>
+            <View
+              style={[
+                styles.illustrationContainer,
+                keyboardVisible && styles.illustrationContainerCompact,
+              ]}
+            >
+              <Image
+                source={require('@/assets/images/name_your_list.png')}
+                style={[
+                  styles.illustration,
+                  keyboardVisible && styles.illustrationCompact,
+                ]}
+                resizeMode="contain"
+              />
+            </View>
 
-        <View style={styles.buttonContainer}>
-          <View style={styles.buttonRow}>
-            <Button
-              title="Cancel"
-              onPress={handleCancel}
-              variant="secondary"
-              style={styles.button}
-            />
-            <Button
-              title="Continue"
-              onPress={handleContinue}
-              style={styles.button}
-            />
+            <View style={styles.formSection}>
+              <Input
+                value={listName}
+                onChangeText={setListName}
+                placeholder="Weekly Household Shopping"
+                autoFocus
+                returnKeyType="done"
+                onSubmitEditing={handleContinue}
+                style={styles.input}
+              />
+            </View>
+
+            <View style={styles.buttonContainer}>
+              <View style={styles.buttonRow}>
+                <Button
+                  title="Cancel"
+                  onPress={handleCancel}
+                  variant="secondary"
+                  style={styles.button}
+                />
+                <Button
+                  title="Continue"
+                  onPress={handleContinue}
+                  style={styles.button}
+                />
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -123,15 +139,34 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
+    justifyContent: 'space-between',
+    minHeight: '100%',
   },
 
   illustrationContainer: {
     alignItems: 'center',
-    paddingTop: Spacing.xl,
-    paddingBottom: Spacing.lg,
+    paddingTop: Spacing.xl * 2,
+    paddingBottom: Spacing.xl,
+  },
+
+  illustrationContainerCompact: {
+    paddingTop: Spacing.lg,
+    paddingBottom: Spacing.md,
   },
 
   illustration: {
@@ -139,16 +174,13 @@ const styles = StyleSheet.create({
     height: 160,
   },
 
-  formSection: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingVertical: Spacing.lg,
+  illustrationCompact: {
+    width: 180,
+    height: 120,
   },
 
-  formSectionExpanded: {
-    flex: 2,
-    justifyContent: 'flex-start',
-    paddingTop: Spacing.xl,
+  formSection: {
+    paddingVertical: Spacing.lg,
   },
 
   input: {
@@ -157,6 +189,7 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     paddingBottom: Platform.OS === 'ios' ? Spacing.xl : Spacing.lg,
+    marginTop: 'auto',
   },
 
   buttonRow: {
