@@ -41,10 +41,13 @@ const darkColors = {
   shadow: 'rgba(0, 0, 0, 0.3)',
 }
 
-export const Colors = {
+const Colors = {
   light: lightColors,
   dark: darkColors,
   ...darkColors, // default for backward compatibility
 } as const
 
 export type ThemeColors = typeof lightColors
+
+export { Colors }
+export default Colors

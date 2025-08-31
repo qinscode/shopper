@@ -18,12 +18,12 @@ const customDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    background: Colors.dark.background,
-    card: Colors.dark.surface,
-    text: Colors.dark.text,
-    border: Colors.dark.border,
-    notification: Colors.dark.primary,
-    primary: Colors.dark.primary,
+    background: Colors.dark?.background ?? Colors.background,
+    card: Colors.dark?.surface ?? Colors.surface,
+    text: Colors.dark?.text ?? Colors.text,
+    border: Colors.dark?.border ?? Colors.border,
+    notification: Colors.dark?.primary ?? Colors.primary,
+    primary: Colors.dark?.primary ?? Colors.primary,
   },
 }
 
@@ -31,12 +31,12 @@ const customLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: Colors.light.background,
-    card: Colors.light.surface,
-    text: Colors.light.text,
-    border: Colors.light.border,
-    notification: Colors.light.primary,
-    primary: Colors.light.primary,
+    background: Colors.light?.background ?? Colors.background,
+    card: Colors.light?.surface ?? Colors.surface,
+    text: Colors.light?.text ?? Colors.text,
+    border: Colors.light?.border ?? Colors.border,
+    notification: Colors.light?.primary ?? Colors.primary,
+    primary: Colors.light?.primary ?? Colors.primary,
   },
 }
 
