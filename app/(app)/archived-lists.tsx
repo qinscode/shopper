@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui'
@@ -54,11 +54,11 @@ export default function ArchivedListsScreen() {
           <EmptyState
             title="No archived lists"
             subtitle="Lists you archive will appear here"
-            icon={
-              <Ionicons
-                name="archive-outline"
-                size={48}
-                color={Colors.textTertiary}
+            illustration={
+              <Image
+                source={require('@/assets/images/archived.png')}
+                style={styles.illustration}
+                resizeMode="contain"
               />
             }
             action={
@@ -97,6 +97,11 @@ const styles = StyleSheet.create({
 
   emptyContainer: {
     flex: 1,
+  },
+
+  illustration: {
+    width: 200,
+    height: 200,
   },
 
   listContainer: {

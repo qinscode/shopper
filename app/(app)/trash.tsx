@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -95,11 +96,11 @@ export default function TrashScreen() {
           <EmptyState
             title="Trash is empty"
             subtitle="Deleted lists will appear here for 30 days before being permanently removed"
-            icon={
-              <Ionicons
-                name="trash-outline"
-                size={48}
-                color={Colors.textTertiary}
+            illustration={
+              <Image
+                source={require('@/assets/images/trash.png')}
+                style={styles.illustration}
+                resizeMode="contain"
               />
             }
             action={
@@ -149,6 +150,11 @@ const styles = StyleSheet.create({
 
   emptyContainer: {
     flex: 1,
+  },
+
+  illustration: {
+    width: 200,
+    height: 200,
   },
 
   infoContainer: {

@@ -9,6 +9,7 @@ interface EmptyStateProps {
   title: string
   subtitle: string
   icon?: React.ReactNode
+  illustration?: React.ReactNode
   action?: React.ReactNode
   style?: ViewStyle
 }
@@ -17,12 +18,15 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   title,
   subtitle,
   icon,
+  illustration,
   action,
   style,
 }) => {
   return (
     <View style={[styles.container, style]}>
-      {icon && <View style={styles.iconContainer}>{icon}</View>}
+      {(icon || illustration) && (
+        <View style={styles.iconContainer}>{illustration || icon}</View>
+      )}
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
