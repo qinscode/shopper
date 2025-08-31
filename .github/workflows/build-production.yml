@@ -1,7 +1,7 @@
 name: EAS Build Production
 
 on:
-  # 手动触发
+  # Manual trigger
   workflow_dispatch:
     inputs:
       version:
@@ -18,7 +18,7 @@ on:
           - ios
           - all
 
-  # 当推送版本标签时自动触发 (如 v1.0.0)
+  # Auto trigger when pushing version tags (e.g., v1.0.0)
   push:
     tags:
       - 'v*'
@@ -58,17 +58,17 @@ jobs:
         id: version
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            # 从git tag提取版本号 (如 v1.0.0 -> 1.0.0)
+            # Extract version from git tag (e.g., v1.0.0 -> 1.0.0)
             VERSION=${GITHUB_REF#refs/tags/v}
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "is_release=true" >> $GITHUB_OUTPUT
           elif [[ "${{ github.event.inputs.version }}" != "" ]]; then
-            # 使用手动输入的版本号
+            # Use manually input version
             VERSION="${{ github.event.inputs.version }}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "is_release=false" >> $GITHUB_OUTPUT
           else
-            # 默认版本号
+            # Default version
             VERSION="production-$(date +'%Y%m%d')-${GITHUB_SHA:0:7}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
             echo "is_release=false" >> $GITHUB_OUTPUT
@@ -79,11 +79,11 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
 
-          # 更新app.json中的版本号
+          # Update version in app.json
           if command -v jq >/dev/null 2>&1; then
             jq --arg version "$VERSION" '.expo.version = $version' app.json > tmp.json && mv tmp.json app.json
             
-            # 更新Android versionCode (使用时间戳确保唯一性)
+            # Update Android versionCode (use timestamp for uniqueness)
             VERSION_CODE=$(date +%s)
             jq --arg versionCode "$VERSION_CODE" '.expo.android.versionCode = ($versionCode | tonumber)' app.json > tmp.json && mv tmp.json app.json
           else
@@ -102,7 +102,7 @@ jobs:
       - name: Download APK
         if: github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all'
         run: |
-          # 等待构建完成并下载APK
+          # Wait for build completion and download APK
           BUILD_URL=$(eas build:list --platform android --limit 1 --json | jq -r '.[0].artifacts.buildUrl')
           if [ "$BUILD_URL" != "null" ] && [ "$BUILD_URL" != "" ]; then
             curl -L "$BUILD_URL" -o "${{ steps.version.outputs.app_name }}.apk"
@@ -135,8 +135,8 @@ jobs:
             - Commit: ${{ github.sha }}
 
             **Download:**
-            - 📱 APK文件已附加到此release
-            - 🔗 也可在 [EAS Dashboard](https://expo.dev/) 查看构建详情
+            - 📱 APK file attached to this release
+            - 🔗 Also available in [EAS Dashboard](https://expo.dev/)
           files: ${{ steps.version.outputs.app_name }}.apk
           draft: false
           prerelease: false
