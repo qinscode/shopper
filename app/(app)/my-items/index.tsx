@@ -1,10 +1,22 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header, Input, FloatingActionButton, FadeInListItem, EmptyState } from '@/components/ui';
+import {
+  Header,
+  Input,
+  FloatingActionButton,
+  FadeInListItem,
+  EmptyState,
+} from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
 import { Typography } from '@/constants/Typography';
@@ -19,20 +31,26 @@ export default function MyItemsScreen() {
   const { state, getMostUsedCustomItems, getCustomItemsByCategory } = useApp();
 
   const filteredCustomItems = React.useMemo(() => {
-    let items = selectedCategory 
+    let items = selectedCategory
       ? getCustomItemsByCategory(selectedCategory)
       : state.customItems;
 
     if (searchText) {
-      items = items.filter(item =>
-        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.brand?.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.category?.toLowerCase().includes(searchText.toLowerCase()),
+      items = items.filter(
+        item =>
+          item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          item.brand?.toLowerCase().includes(searchText.toLowerCase()) ||
+          item.category?.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
     return items.sort((a, b) => b.usageCount - a.usageCount);
-  }, [searchText, selectedCategory, state.customItems, getCustomItemsByCategory]);
+  }, [
+    searchText,
+    selectedCategory,
+    state.customItems,
+    getCustomItemsByCategory,
+  ]);
 
   const handleCreateItem = () => {
     HapticFeedback.light();
@@ -68,7 +86,7 @@ export default function MyItemsScreen() {
         </Text>
       </TouchableOpacity>
 
-      {state.categories.map((category) => {
+      {state.categories.map(category => {
         const itemCount = getCustomItemsByCategory(category.id).length;
         return (
           <TouchableOpacity
@@ -81,14 +99,26 @@ export default function MyItemsScreen() {
             onPress={() => handleCategoryPress(category.id)}
           >
             <View style={styles.categoryChipContent}>
-              <Ionicons name={category.icon as any || 'folder-outline'} size={16} color={
-                selectedCategory === category.id ? Colors.text : category.color
-              } />
+              <Ionicons
+                name={(category.icon as any) || 'folder-outline'}
+                size={16}
+                color={
+                  selectedCategory === category.id
+                    ? Colors.text
+                    : category.color
+                }
+              />
               <Text
                 style={[
                   styles.categoryChipText,
-                  selectedCategory === category.id && styles.activeCategoryChipText,
-                  { color: selectedCategory === category.id ? Colors.text : category.color },
+                  selectedCategory === category.id &&
+                    styles.activeCategoryChipText,
+                  {
+                    color:
+                      selectedCategory === category.id
+                        ? Colors.text
+                        : category.color,
+                  },
                 ]}
               >
                 {category.name} ({itemCount})
@@ -100,7 +130,13 @@ export default function MyItemsScreen() {
     </View>
   );
 
-  const renderCustomItem = ({ item, index }: { item: CustomItem; index: number }) => (
+  const renderCustomItem = ({
+    item,
+    index,
+  }: {
+    item: CustomItem;
+    index: number;
+  }) => (
     <FadeInListItem delay={index * 50}>
       <TouchableOpacity
         style={styles.itemCard}
@@ -118,7 +154,7 @@ export default function MyItemsScreen() {
               </Text>
             )}
           </View>
-          
+
           <View style={styles.itemBadges}>
             {item.usageCount > 0 && (
               <View style={styles.usageBadge}>
@@ -130,10 +166,16 @@ export default function MyItemsScreen() {
 
         {item.category && (
           <View style={styles.itemCategory}>
-            <View style={[
-              styles.categoryDot, 
-              { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary },
-            ]} />
+            <View
+              style={[
+                styles.categoryDot,
+                {
+                  backgroundColor:
+                    state.categories.find(c => c.name === item.category)
+                      ?.color || Colors.primary,
+                },
+              ]}
+            />
             <Text style={styles.categoryText}>{item.category}</Text>
           </View>
         )}
@@ -147,10 +189,14 @@ export default function MyItemsScreen() {
               <Ionicons name="image" size={14} color={Colors.textSecondary} />
             )}
             {item.tags && item.tags.length > 0 && (
-              <Ionicons name="pricetag" size={14} color={Colors.textSecondary} />
+              <Ionicons
+                name="pricetag"
+                size={14}
+                color={Colors.textSecondary}
+              />
             )}
           </View>
-          
+
           {item.lastUsed && (
             <Text style={styles.lastUsedText}>
               Used {new Date(item.lastUsed).toLocaleDateString()}
@@ -169,32 +215,45 @@ export default function MyItemsScreen() {
           showBackButton
           onBackPress={() => router.back()}
           rightComponent={
-            <TouchableOpacity onPress={() => router.push('/(app)/my-items/categories')}>
-              <Ionicons name="folder-open-outline" size={24} color={Colors.text} />
+            <TouchableOpacity
+              onPress={() => router.push('/(app)/my-items/categories')}
+            >
+              <Ionicons
+                name="folder-open-outline"
+                size={24}
+                color={Colors.text}
+              />
             </TouchableOpacity>
           }
         />
         <EmptyState
           title="No custom items yet"
           subtitle="Create your own item templates with default settings, categories, and quick add shortcuts"
-          icon={<Ionicons name="library-outline" size={120} color={Colors.primary} />}
+          icon={
+            <Ionicons
+              name="library-outline"
+              size={120}
+              color={Colors.primary}
+            />
+          }
           action={
             <View style={styles.emptyActions}>
               <TouchableOpacity
                 style={styles.emptyActionButton}
                 onPress={() => router.push('/(app)/my-items/categories')}
               >
-                <Ionicons name="folder-open-outline" size={20} color={Colors.primary} />
+                <Ionicons
+                  name="folder-open-outline"
+                  size={20}
+                  color={Colors.primary}
+                />
                 <Text style={styles.emptyActionText}>Manage Categories</Text>
               </TouchableOpacity>
             </View>
           }
         />
         <View style={styles.fab}>
-          <FloatingActionButton
-            onPress={handleCreateItem}
-            icon="add"
-          />
+          <FloatingActionButton onPress={handleCreateItem} icon="add" />
         </View>
       </SafeAreaView>
     );
@@ -207,22 +266,34 @@ export default function MyItemsScreen() {
         showBackButton
         onBackPress={() => router.back()}
         rightComponent={
-          <TouchableOpacity onPress={() => router.push('/(app)/my-items/categories')}>
-            <Ionicons name="folder-open-outline" size={24} color={Colors.text} />
+          <TouchableOpacity
+            onPress={() => router.push('/(app)/my-items/categories')}
+          >
+            <Ionicons
+              name="folder-open-outline"
+              size={24}
+              color={Colors.text}
+            />
           </TouchableOpacity>
         }
       />
-      
+
       <View style={styles.content}>
         <Input
           value={searchText}
           onChangeText={setSearchText}
           placeholder="Search items..."
-          leftIcon={<Ionicons name="search" size={20} color={Colors.textSecondary} />}
+          leftIcon={
+            <Ionicons name="search" size={20} color={Colors.textSecondary} />
+          }
           rightIcon={
             searchText.length > 0 ? (
               <TouchableOpacity onPress={() => setSearchText('')}>
-                <Ionicons name="close-circle" size={20} color={Colors.textSecondary} />
+                <Ionicons
+                  name="close-circle"
+                  size={20}
+                  color={Colors.textSecondary}
+                />
               </TouchableOpacity>
             ) : undefined
           }
@@ -234,17 +305,14 @@ export default function MyItemsScreen() {
         <FlatList
           data={filteredCustomItems}
           renderItem={renderCustomItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           contentContainerStyle={styles.itemsList}
           showsVerticalScrollIndicator={false}
         />
       </View>
 
       <View style={styles.fab}>
-        <FloatingActionButton
-          onPress={handleCreateItem}
-          icon="add"
-        />
+        <FloatingActionButton onPress={handleCreateItem} icon="add" />
       </View>
     </SafeAreaView>
   );
@@ -255,22 +323,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
   },
-  
+
   searchInput: {
     marginBottom: Spacing.md,
   },
-  
+
   categoryFilter: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: Spacing.lg,
   },
-  
+
   categoryChip: {
     borderRadius: BorderRadius.pill,
     paddingHorizontal: Spacing.md,
@@ -281,32 +349,32 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     backgroundColor: Colors.surface,
   },
-  
+
   activeCategoryChip: {
     backgroundColor: Colors.primary,
     borderColor: Colors.primary,
   },
-  
+
   categoryChipContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   categoryChipText: {
     ...Typography.textStyles.caption,
     color: Colors.textSecondary,
     marginLeft: Spacing.xs,
   },
-  
+
   activeCategoryChipText: {
     color: Colors.text,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   itemsList: {
     paddingBottom: 100, // Space for FAB
   },
-  
+
   itemCard: {
     backgroundColor: Colors.surface,
     borderRadius: BorderRadius.md,
@@ -314,93 +382,93 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     ...Shadows.small,
   },
-  
+
   itemCardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: Spacing.sm,
   },
-  
+
   itemInfo: {
     flex: 1,
   },
-  
+
   itemName: {
     ...Typography.textStyles.subtitle,
     color: Colors.text,
     marginBottom: Spacing.xs,
   },
-  
+
   itemBrand: {
     ...Typography.textStyles.caption,
     color: Colors.textSecondary,
   },
-  
+
   itemBadges: {
     alignItems: 'flex-end',
   },
-  
+
   usageBadge: {
     backgroundColor: Colors.primary,
     borderRadius: BorderRadius.sm,
     paddingHorizontal: Spacing.sm,
     paddingVertical: 2,
   },
-  
+
   usageText: {
     ...Typography.textStyles.caption,
     color: Colors.text,
     fontSize: 10,
     fontWeight: Typography.fontWeight.bold,
   },
-  
+
   itemCategory: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: Spacing.sm,
   },
-  
+
   categoryDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
     marginRight: Spacing.sm,
   },
-  
+
   categoryText: {
     ...Typography.textStyles.caption,
     color: Colors.textSecondary,
   },
-  
+
   itemFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  
+
   itemAttachments: {
     flexDirection: 'row',
     gap: Spacing.sm,
   },
-  
+
   lastUsedText: {
     ...Typography.textStyles.caption,
     color: Colors.textTertiary,
     fontSize: 10,
   },
-  
+
   fab: {
     position: 'absolute',
     right: Spacing.screenPadding,
     bottom: Spacing.xl,
   },
-  
+
   emptyActions: {
     width: '100%',
     marginTop: Spacing.lg,
   },
-  
+
   emptyActionButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -410,7 +478,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     marginBottom: Spacing.md,
   },
-  
+
   emptyActionText: {
     ...Typography.textStyles.body,
     color: Colors.primary,

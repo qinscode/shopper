@@ -27,15 +27,15 @@ const OnboardingPage: React.FC<OnboardingPageProps> = ({
 }) => (
   <View style={styles.page}>
     <Text style={styles.title}>{title}</Text>
-    
+
     <View style={styles.imageContainer}>
-      <Image 
-        source={imageSource} 
+      <Image
+        source={imageSource}
         style={styles.illustration}
         resizeMode="contain"
       />
     </View>
-    
+
     <View style={styles.textContainer}>
       <Text style={styles.headline}>{headline}</Text>
       <Text style={styles.body}>{body}</Text>
@@ -96,13 +96,13 @@ export default function OnboardingScreen() {
       <PagerView
         style={styles.pager}
         initialPage={0}
-        onPageSelected={(e) => setCurrentPage(e.nativeEvent.position)}
+        onPageSelected={e => setCurrentPage(e.nativeEvent.position)}
       >
         {onboardingData.map((data, index) => (
           <OnboardingPage key={index} {...data} />
         ))}
       </PagerView>
-      
+
       <View style={styles.footer}>
         <CarouselDots activeIndex={currentPage} total={onboardingData.length} />
         {currentPage === onboardingData.length - 1 && (
@@ -122,18 +122,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   pager: {
     flex: 1,
   },
-  
+
   page: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: Spacing.screenPadding,
   },
-  
+
   title: {
     ...Typography.textStyles.largeTitle,
     color: Colors.text,
@@ -141,24 +141,24 @@ const styles = StyleSheet.create({
     top: Spacing.xl,
     fontWeight: Typography.fontWeight.bold,
   },
-  
+
   imageContainer: {
     alignItems: 'center',
     marginVertical: Spacing.xxxl,
     width: width * 0.8,
     height: width * 0.6,
   },
-  
+
   illustration: {
     width: '100%',
     height: '100%',
   },
-  
+
   textContainer: {
     alignItems: 'center',
     marginTop: Spacing.xl,
   },
-  
+
   headline: {
     ...Typography.textStyles.title,
     color: Colors.text,
@@ -166,38 +166,38 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   body: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     textAlign: 'center',
   },
-  
+
   footer: {
     paddingHorizontal: Spacing.screenPadding,
     paddingBottom: Spacing.xl,
     minHeight: 120, // 确保footer有固定最小高度，避免布局跳动
     justifyContent: 'flex-end',
   },
-  
+
   dotsContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.xl,
   },
-  
+
   dot: {
     width: 8,
     height: 8,
     borderRadius: 4,
     marginHorizontal: 4,
   },
-  
+
   activeDot: {
     backgroundColor: Colors.primary,
   },
-  
+
   inactiveDot: {
     backgroundColor: Colors.inactive,
   },

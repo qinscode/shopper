@@ -3,7 +3,6 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Layout';
 import { Typography } from '@/constants/Typography';
@@ -33,11 +32,11 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
         <TouchableOpacity onPress={onBackPress} style={styles.backButton}>
           <Ionicons name="chevron-back" size={24} color={Colors.text} />
         </TouchableOpacity>
-        
+
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        
+
         <View style={styles.rightSection}>
           <ProgressChip
             completed={completed}
@@ -47,7 +46,11 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
           />
           {onMenuPress && (
             <TouchableOpacity onPress={onMenuPress} style={styles.menuButton}>
-              <Ionicons name="ellipsis-horizontal" size={24} color={Colors.text} />
+              <Ionicons
+                name="ellipsis-horizontal"
+                size={24}
+                color={Colors.text}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -60,14 +63,14 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flexDirection: 'row',
     alignItems: 'center',
     height: 56, // 增加高度让标题更舒适
     paddingHorizontal: 24, // 24pt左右内边距
   },
-  
+
   backButton: {
     width: 44,
     height: 44,
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: -12, // 调整视觉平衡
   },
-  
+
   title: {
     fontSize: 24, // 24-26pt标题字号
     fontWeight: Typography.fontWeight.semibold, // Semibold
@@ -84,12 +87,12 @@ const styles = StyleSheet.create({
     marginLeft: 12, // 标题与圆环间距12-16pt
     marginRight: 16,
   },
-  
+
   rightSection: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   menuButton: {
     width: 44,
     height: 44,

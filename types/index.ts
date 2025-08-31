@@ -58,7 +58,7 @@ export interface AppState {
 
 export const SUGGESTED_ITEMS = [
   'Toilet paper',
-  'Peanut butter', 
+  'Peanut butter',
   'Aluminum foil',
   'Paper bags for recycling',
   'Bread',

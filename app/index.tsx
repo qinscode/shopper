@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
+
   title: {
     ...Typography.textStyles.largeTitle,
     color: Colors.text,

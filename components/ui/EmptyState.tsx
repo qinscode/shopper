@@ -23,12 +23,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   return (
     <View style={[styles.container, style]}>
       {icon && <View style={styles.iconContainer}>{icon}</View>}
-      
+
       <View style={styles.textContainer}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
-      
+
       {action && <View style={styles.actionContainer}>{action}</View>}
     </View>
   );
@@ -41,31 +41,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: Spacing.screenPadding,
   },
-  
+
   iconContainer: {
     marginBottom: Spacing.xl,
     alignItems: 'center',
   },
-  
+
   textContainer: {
     alignItems: 'center',
     marginBottom: Spacing.xl,
   },
-  
+
   title: {
     ...Typography.textStyles.title,
     color: Colors.text,
     textAlign: 'center',
     marginBottom: Spacing.sm,
   },
-  
+
   subtitle: {
     ...Typography.textStyles.body,
     color: Colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
   },
-  
+
   actionContainer: {
     width: '100%',
   },

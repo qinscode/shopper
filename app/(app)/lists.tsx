@@ -1,10 +1,27 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Header, EmptyState, Button, ListItem, ProgressChip, FloatingActionButton, FadeInListItem, Input } from '@/components/ui';
+import {
+  Header,
+  EmptyState,
+  Button,
+  ListItem,
+  ProgressChip,
+  FloatingActionButton,
+  FadeInListItem,
+  Input,
+} from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
 import { Typography } from '@/constants/Typography';
@@ -18,12 +35,18 @@ export default function ListsScreen() {
   const router = useRouter();
   const { getVisibleLists, dispatch } = useApp();
   const allLists = getVisibleLists();
-  
+
   // Filter lists based on search text
-  const filteredLists = searchText.trim() === '' ? allLists : allLists.filter(list =>
-    list.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    list.items.some(item => item.name.toLowerCase().includes(searchText.toLowerCase())),
-  );
+  const filteredLists =
+    searchText.trim() === ''
+      ? allLists
+      : allLists.filter(
+          list =>
+            list.name.toLowerCase().includes(searchText.toLowerCase()) ||
+            list.items.some(item =>
+              item.name.toLowerCase().includes(searchText.toLowerCase())
+            )
+        );
 
   const handleCreateList = () => {
     HapticFeedback.light();
@@ -66,7 +89,7 @@ export default function ListsScreen() {
             dispatch({ type: 'ARCHIVE_LIST', payload: { id: listId } });
           },
         },
-      ],
+      ]
     );
   };
 
@@ -84,7 +107,7 @@ export default function ListsScreen() {
             dispatch({ type: 'DELETE_LIST', payload: { id: listId } });
           },
         },
-      ],
+      ]
     );
   };
 
@@ -92,11 +115,11 @@ export default function ListsScreen() {
     const visibleItems = list.items.slice(0, 3);
     const itemNames = visibleItems.map(item => item.name).join(', ');
     const remainingCount = list.items.length - visibleItems.length;
-    
+
     if (remainingCount > 0) {
       return `${itemNames} + ${remainingCount} more`;
     }
-    
+
     return itemNames || 'No items yet';
   };
 
@@ -104,7 +127,13 @@ export default function ListsScreen() {
     return list.items.filter(item => item.isCompleted).length;
   };
 
-  const renderListItem = ({ item, index }: { item: ShoppingList; index: number }) => {
+  const renderListItem = ({
+    item,
+    index,
+  }: {
+    item: ShoppingList;
+    index: number;
+  }) => {
     const completedCount = getCompletedCount(item);
     const totalCount = item.items.length;
 
@@ -124,7 +153,7 @@ export default function ListsScreen() {
                 {getListPreview(item)}
               </Text>
             </View>
-            
+
             <View style={styles.listCardRight}>
               <ProgressChip
                 completed={completedCount}
@@ -133,30 +162,48 @@ export default function ListsScreen() {
               />
             </View>
           </TouchableOpacity>
-          
+
           <View style={styles.listActions}>
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => handleDuplicateList(item.id)}
             >
-              <Ionicons name="copy-outline" size={16} color={Colors.textSecondary} />
-              <Text style={styles.actionText} numberOfLines={1}>Duplicate</Text>
+              <Ionicons
+                name="copy-outline"
+                size={16}
+                color={Colors.textSecondary}
+              />
+              <Text style={styles.actionText} numberOfLines={1}>
+                Duplicate
+              </Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => handleArchiveList(item.id, item.name)}
             >
-              <Ionicons name="archive-outline" size={16} color={Colors.textSecondary} />
-              <Text style={styles.actionText} numberOfLines={1}>Archive</Text>
+              <Ionicons
+                name="archive-outline"
+                size={16}
+                color={Colors.textSecondary}
+              />
+              <Text style={styles.actionText} numberOfLines={1}>
+                Archive
+              </Text>
             </TouchableOpacity>
-            
+
             <TouchableOpacity
               style={styles.actionButton}
               onPress={() => handleDeleteList(item.id, item.name)}
             >
-              <Ionicons name="trash-outline" size={16} color={Colors.textSecondary} />
-              <Text style={styles.actionText} numberOfLines={1}>Delete</Text>
+              <Ionicons
+                name="trash-outline"
+                size={16}
+                color={Colors.textSecondary}
+              />
+              <Text style={styles.actionText} numberOfLines={1}>
+                Delete
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -170,15 +217,19 @@ export default function ListsScreen() {
         <Header
           title="Shopper"
           leftComponent={
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.headerButton}
               onPress={handleToggleSearch}
             >
-              <Ionicons name={isSearchVisible ? 'close' : 'search'} size={24} color={Colors.text} />
+              <Ionicons
+                name={isSearchVisible ? 'close' : 'search'}
+                size={24}
+                color={Colors.text}
+              />
             </TouchableOpacity>
           }
           rightComponent={
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.headerButton}
               onPress={handleShowSettings}
             >
@@ -190,13 +241,15 @@ export default function ListsScreen() {
           <EmptyState
             title="You have not added any shopping lists"
             subtitle="Tap the button below to create one now"
-            icon={<Image source={require('@/assets/images/empty.png')} style={styles.emptyImage} resizeMode="contain" />}
-            action={
-              <Button
-                title="+ Create"
-                onPress={handleCreateList}
-                fullWidth
+            icon={
+              <Image
+                source={require('@/assets/images/empty.png')}
+                style={styles.emptyImage}
+                resizeMode="contain"
               />
+            }
+            action={
+              <Button title="+ Create" onPress={handleCreateList} fullWidth />
             }
           />
         </View>
@@ -209,15 +262,19 @@ export default function ListsScreen() {
       <Header
         title="Shopper"
         leftComponent={
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.headerButton}
             onPress={handleToggleSearch}
           >
-            <Ionicons name={isSearchVisible ? 'close' : 'search'} size={24} color={Colors.text} />
+            <Ionicons
+              name={isSearchVisible ? 'close' : 'search'}
+              size={24}
+              color={Colors.text}
+            />
           </TouchableOpacity>
         }
         rightComponent={
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.headerButton}
             onPress={handleShowSettings}
           >
@@ -225,7 +282,7 @@ export default function ListsScreen() {
           </TouchableOpacity>
         }
       />
-      
+
       {isSearchVisible && (
         <View style={styles.searchContainer}>
           <Input
@@ -233,24 +290,36 @@ export default function ListsScreen() {
             onChangeText={setSearchText}
             placeholder="Search lists or items..."
             autoFocus
-            leftIcon={<Ionicons name="search" size={20} color={Colors.textSecondary} />}
+            leftIcon={
+              <Ionicons name="search" size={20} color={Colors.textSecondary} />
+            }
             rightIcon={
               searchText.length > 0 ? (
                 <TouchableOpacity onPress={() => setSearchText('')}>
-                  <Ionicons name="close-circle" size={20} color={Colors.textSecondary} />
+                  <Ionicons
+                    name="close-circle"
+                    size={20}
+                    color={Colors.textSecondary}
+                  />
                 </TouchableOpacity>
               ) : undefined
             }
           />
         </View>
       )}
-      
+
       {filteredLists.length === 0 && searchText.trim() !== '' ? (
         <View style={styles.emptyContainer}>
           <EmptyState
             title="No results found"
             subtitle={`No lists or items match "${searchText}"`}
-            icon={<Ionicons name="search-outline" size={48} color={Colors.textTertiary} />}
+            icon={
+              <Ionicons
+                name="search-outline"
+                size={48}
+                color={Colors.textTertiary}
+              />
+            }
             action={
               <Button
                 title="Clear Search"
@@ -264,17 +333,14 @@ export default function ListsScreen() {
         <FlatList
           data={filteredLists}
           renderItem={renderListItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={item => item.id}
           contentContainerStyle={styles.listContainer}
           showsVerticalScrollIndicator={false}
         />
       )}
-      
+
       <View style={styles.fab}>
-        <FloatingActionButton
-          onPress={handleCreateList}
-          icon="add"
-        />
+        <FloatingActionButton onPress={handleCreateList} icon="add" />
       </View>
     </SafeAreaView>
   );
@@ -285,57 +351,57 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   emptyContainer: {
     flex: 1,
   },
-  
+
   searchContainer: {
     paddingHorizontal: Spacing.screenPadding,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.background,
   },
-  
+
   listContainer: {
     padding: 24, // 24pt页面左右安全间距
     paddingBottom: 100, // Space for FAB
   },
-  
+
   listCard: {
     backgroundColor: Colors.surface,
     borderRadius: 20, // 20-22pt卡片圆角
     marginBottom: 16, // 16pt卡片垂直间距
     ...Shadows.medium,
   },
-  
+
   listCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 20, // 减少内边距，从24pt到20pt
     paddingBottom: 12, // 减少底部间距
   },
-  
+
   listCardLeft: {
     flex: 1,
   },
-  
+
   listCardRight: {
     marginLeft: 16,
   },
-  
+
   listTitle: {
     ...Typography.textStyles.subtitle,
     color: Colors.text,
     marginBottom: 8,
     fontWeight: Typography.fontWeight.semibold,
   },
-  
+
   listPreview: {
     fontSize: 15, // 15-16pt预览文案字号
     color: '#B5B5B5', // Figma指定的预览文案颜色
     lineHeight: 20,
   },
-  
+
   listActions: {
     flexDirection: 'row', // 横排
     paddingHorizontal: 20, // 减少水平padding
@@ -343,7 +409,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     justifyContent: 'space-between', // 平均分布
   },
-  
+
   actionButton: {
     flexDirection: 'row', // 图标+文字横排
     alignItems: 'center',
@@ -352,25 +418,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4, // 增加padding，因为现在只有3个按钮
     maxWidth: 100, // 增加最大宽度
   },
-  
+
   actionText: {
     fontSize: 11, // 稍微减小字体以适应更多按钮
     color: Colors.textSecondary,
     marginLeft: 6, // 减少左边距
     flexShrink: 1, // 允许文字压缩
   },
-  
+
   fab: {
     position: 'absolute',
     right: Spacing.screenPadding,
     bottom: Spacing.xl,
   },
-  
+
   emptyImage: {
     width: 200,
     height: 150,
   },
-  
+
   headerButton: {
     marginLeft: Spacing.md,
   },

@@ -1,7 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Colors } from '@/constants/Colors';
@@ -28,9 +35,9 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
   isLast = false,
   rightText,
 }) => (
-  <TouchableOpacity 
-    style={[styles.settingsItem, isLast && styles.lastSettingsItem]} 
-    onPress={onPress} 
+  <TouchableOpacity
+    style={[styles.settingsItem, isLast && styles.lastSettingsItem]}
+    onPress={onPress}
     activeOpacity={0.7}
   >
     <View style={styles.settingsItemLeft}>
@@ -73,16 +80,16 @@ export default function SettingsScreen() {
         <TouchableOpacity onPress={handleBack} style={styles.backButton}>
           <Ionicons name="chevron-back" size={24} color={Colors.text} />
         </TouchableOpacity>
-        
+
         <Text style={styles.headerTitle}>Settings</Text>
-        
+
         <View style={styles.headerRight} />
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Lists</Text>
-          
+
           <View style={styles.cardContainer}>
             <SettingsItem
               title="Archived Lists"
@@ -90,7 +97,7 @@ export default function SettingsScreen() {
               icon="archive-outline"
               onPress={handleArchivedLists}
             />
-            
+
             <SettingsItem
               title="Trash"
               subtitle="View and restore deleted lists"
@@ -103,7 +110,7 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>About</Text>
-          
+
           <View style={styles.cardContainer}>
             <SettingsItem
               title="App Version"
@@ -114,7 +121,7 @@ export default function SettingsScreen() {
                 Alert.alert(
                   'About Shopper',
                   'Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo.',
-                  [{ text: 'OK', style: 'default' }],
+                  [{ text: 'OK', style: 'default' }]
                 );
               }}
               isLast={true}
@@ -131,7 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -139,7 +146,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     backgroundColor: Colors.background,
   },
-  
+
   backButton: {
     width: 44,
     height: 44,
@@ -147,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: -12,
   },
-  
+
   headerTitle: {
     fontSize: 24,
     fontWeight: Typography.fontWeight.semibold,
@@ -155,19 +162,19 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 12,
   },
-  
+
   headerRight: {
     width: 44,
   },
-  
+
   content: {
     flex: 1,
   },
-  
+
   section: {
     marginBottom: Spacing.xl,
   },
-  
+
   sectionTitle: {
     fontSize: 13,
     fontWeight: Typography.fontWeight.semibold,
@@ -178,7 +185,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     marginTop: Spacing.lg,
   },
-  
+
   cardContainer: {
     backgroundColor: Colors.surface,
     marginHorizontal: Spacing.screenPadding,
@@ -186,7 +193,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     ...Shadows.small,
   },
-  
+
   settingsItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -195,22 +202,22 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.5,
     borderBottomColor: Colors.border,
   },
-  
+
   lastSettingsItem: {
     borderBottomWidth: 0,
   },
-  
+
   settingsItemLeft: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   settingsItemRight: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   iconContainer: {
     width: 40,
     height: 40,
@@ -220,24 +227,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: Spacing.md,
   },
-  
+
   textContainer: {
     flex: 1,
   },
-  
+
   settingsTitle: {
     fontSize: 16,
     fontWeight: Typography.fontWeight.medium,
     color: Colors.text,
     marginBottom: 2,
   },
-  
+
   settingsSubtitle: {
     fontSize: 14,
     color: Colors.textSecondary,
     lineHeight: 18,
   },
-  
+
   rightText: {
     fontSize: 15,
     color: Colors.textSecondary,

@@ -40,9 +40,7 @@ export const FadeInListItem: React.FC<FadeInListItemProps> = ({
   }));
 
   return (
-    <Animated.View style={[animatedStyle, style]}>
-      {children}
-    </Animated.View>
+    <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
   );
 };
 
@@ -75,8 +73,6 @@ export const ScaleIn: React.FC<ScaleInProps> = ({
   }));
 
   return (
-    <Animated.View style={[animatedStyle, style]}>
-      {children}
-    </Animated.View>
+    <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
   );
 };

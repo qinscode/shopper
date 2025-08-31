@@ -1,6 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 
 import { Colors } from '@/constants/Colors';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
@@ -40,21 +46,32 @@ export const ListItem: React.FC<ListItemProps> = ({
     >
       <View style={styles.content}>
         {leftComponent && (
-          <View style={styles.leftSection}>
-            {leftComponent}
-          </View>
+          <View style={styles.leftSection}>{leftComponent}</View>
         )}
-        
+
         <View style={styles.middleSection}>
           <View style={styles.attachmentsRow}>
             {hasUrl && (
-              <Ionicons name="link" size={16} color={Colors.textSecondary} style={styles.attachment} />
+              <Ionicons
+                name="link"
+                size={16}
+                color={Colors.textSecondary}
+                style={styles.attachment}
+              />
             )}
             {hasImage && (
-              <Ionicons name="image" size={16} color={Colors.textSecondary} style={styles.attachment} />
+              <Ionicons
+                name="image"
+                size={16}
+                color={Colors.textSecondary}
+                style={styles.attachment}
+              />
             )}
           </View>
-          <Text style={[styles.title, isCompleted && styles.completedTitle]} numberOfLines={1}>
+          <Text
+            style={[styles.title, isCompleted && styles.completedTitle]}
+            numberOfLines={1}
+          >
             {title}
           </Text>
           {subtitle && (
@@ -63,11 +80,15 @@ export const ListItem: React.FC<ListItemProps> = ({
             </Text>
           )}
         </View>
-        
+
         <View style={styles.rightSection}>
           {rightComponent}
           {showChevron && (
-            <Ionicons name="chevron-forward" size={20} color={Colors.textSecondary} />
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={Colors.textSecondary}
+            />
           )}
         </View>
       </View>
@@ -82,7 +103,7 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.xs,
     ...Shadows.small,
   },
-  
+
   content: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -90,40 +111,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     minHeight: Spacing.listItemHeight,
   },
-  
+
   leftSection: {
     marginRight: Spacing.md,
   },
-  
+
   middleSection: {
     flex: 1,
   },
-  
+
   rightSection: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: Spacing.md,
   },
-  
+
   attachmentsRow: {
     flexDirection: 'row',
     marginBottom: Spacing.xs,
   },
-  
+
   attachment: {
     marginRight: Spacing.xs,
   },
-  
+
   title: {
     ...Typography.textStyles.body,
     color: Colors.text,
   },
-  
+
   completedTitle: {
     textDecorationLine: 'line-through',
     color: Colors.textSecondary,
   },
-  
+
   subtitle: {
     ...Typography.textStyles.caption,
     color: Colors.textSecondary,

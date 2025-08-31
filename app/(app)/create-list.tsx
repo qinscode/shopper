@@ -24,8 +24,9 @@ export default function CreateListScreen() {
     }
 
     // Generate ID before dispatch to track the new list
-    const newId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
-    
+    const newId =
+      Date.now().toString() + Math.random().toString(36).substr(2, 9);
+
     dispatch({
       type: 'CREATE_LIST',
       payload: { name: listName.trim() },
@@ -43,7 +44,7 @@ export default function CreateListScreen() {
         showBackButton
         onBackPress={handleCancel}
       />
-      
+
       <View style={styles.content}>
         <Input
           value={listName}
@@ -53,7 +54,7 @@ export default function CreateListScreen() {
           returnKeyType="done"
           onSubmitEditing={handleContinue}
         />
-        
+
         <View style={styles.buttonContainer}>
           <View style={styles.buttonRow}>
             <Button
@@ -79,22 +80,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
   },
-  
+
   content: {
     flex: 1,
     padding: Spacing.screenPadding,
     justifyContent: 'space-between',
   },
-  
+
   buttonContainer: {
     paddingBottom: Spacing.xl,
   },
-  
+
   buttonRow: {
     flexDirection: 'row',
     gap: Spacing.md,
   },
-  
+
   button: {
     flex: 1,
   },

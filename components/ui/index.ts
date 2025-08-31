@@ -8,3 +8,4 @@ export { Checkbox } from './Checkbox';
 export { EmptyState } from './EmptyState';
 export { FloatingActionButton } from './FloatingActionButton';
 export { FadeInListItem, ScaleIn } from './AnimatedComponents';
+export { ArchiveListCard } from './ArchiveListCard';

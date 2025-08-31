@@ -24,13 +24,13 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
   const actualSize = size || defaultSize;
   const strokeWidth = variant === 'large' ? 5 : 3;
   const backgroundStrokeWidth = variant === 'large' ? 5 : 2;
-  
+
   const progress = total > 0 ? completed / total : 0;
   const radius = actualSize / 2 - strokeWidth / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - progress * circumference;
   const isComplete = completed === total && total > 0;
-  
+
   // Figma颜色规格
   const completedColor = '#2ECC71'; // 完成色
   const uncompletedColor = '#6F6F6F'; // 未完成色
@@ -76,11 +76,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  
+
   svg: {
     position: 'absolute',
   },
-  
+
   text: {
     ...Typography.textStyles.caption,
     color: Colors.text,

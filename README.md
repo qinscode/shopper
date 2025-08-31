@@ -5,6 +5,7 @@ A lightweight React Native mobile app built with Expo for creating and managing 
 ## Features
 
 ### ✅ Core Features (Implemented)
+
 - **Onboarding Flow**: 3-screen introduction with app overview
 - **Shopping List Management**: Create, view, and manage multiple lists
 - **Item Management**: Add, complete, and delete shopping list items
@@ -16,6 +17,7 @@ A lightweight React Native mobile app built with Expo for creating and managing 
 - **Persistent Storage**: Data saved locally with AsyncStorage
 
 ### 🎨 Design Features
+
 - **Dark Theme**: Near-black background with high-contrast text
 - **Primary Color**: Teal-green (#20B2A6) for CTAs and accents
 - **Modern UI**: Rounded corners, shadows, and smooth animations
@@ -23,6 +25,7 @@ A lightweight React Native mobile app built with Expo for creating and managing 
 - **Empty States**: Helpful illustrations and guidance
 
 ### 📱 User Journey
+
 1. **Splash Screen** → **Onboarding** → **Lists Overview**
 2. **Create New List** → **Add Items** → **Manage Items**
 3. **Attach URLs/Images** → **Mark Complete** → **Share Lists**
@@ -72,11 +75,13 @@ types/
 ## Getting Started
 
 1. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 2. **Start the development server**:
+
    ```bash
    npm start
    ```
@@ -88,6 +93,7 @@ types/
 ## Design Specification
 
 The app follows a detailed design specification located in `docs/design_spec.md` which includes:
+
 - Complete visual language and color system
 - Typography and spacing guidelines
 - Component specifications
@@ -97,6 +103,7 @@ The app follows a detailed design specification located in `docs/design_spec.md`
 ## Development Status
 
 ✅ **Completed Tasks**:
+
 - Project foundation and dependencies setup
 - Base components and theme system
 - Splash screen and onboarding flow
@@ -107,6 +114,7 @@ The app follows a detailed design specification located in `docs/design_spec.md`
 - Swipe-to-delete with gesture handling
 
 🚧 **In Progress**:
+
 - UI polish and interaction improvements
 - Performance optimizations
 

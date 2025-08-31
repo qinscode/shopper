@@ -27,10 +27,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   const rotation = useSharedValue(0);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { scale: scale.value },
-      { rotate: `${rotation.value}deg` },
-    ],
+    transform: [{ scale: scale.value }, { rotate: `${rotation.value}deg` }],
   }));
 
   const handlePressIn = () => {

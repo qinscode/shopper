@@ -1,6 +1,13 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AppState, ShoppingList, ShoppingItem, CustomItem, ItemCategory, DEFAULT_CATEGORIES } from '@/types';
+import {
+  AppState,
+  ShoppingList,
+  ShoppingItem,
+  CustomItem,
+  ItemCategory,
+  DEFAULT_CATEGORIES,
+} from '@/types';
 
 type Action =
   | { type: 'SET_ONBOARDING_COMPLETE' }
@@ -13,16 +20,38 @@ type Action =
   | { type: 'ARCHIVE_LIST'; payload: { id: string } }
   | { type: 'RESTORE_LIST'; payload: { id: string } }
   | { type: 'PERMANENTLY_DELETE_LIST'; payload: { id: string } }
-  | { type: 'ADD_ITEM'; payload: { listId: string; name: string; customItemId?: string } }
-  | { type: 'UPDATE_ITEM'; payload: { listId: string; itemId: string; updates: Partial<ShoppingItem> } }
+  | {
+      type: 'ADD_ITEM';
+      payload: { listId: string; name: string; customItemId?: string };
+    }
+  | {
+      type: 'UPDATE_ITEM';
+      payload: {
+        listId: string;
+        itemId: string;
+        updates: Partial<ShoppingItem>;
+      };
+    }
   | { type: 'DELETE_ITEM'; payload: { listId: string; itemId: string } }
   | { type: 'TOGGLE_ITEM'; payload: { listId: string; itemId: string } }
-  | { type: 'CREATE_CUSTOM_ITEM'; payload: Omit<CustomItem, 'id' | 'usageCount' | 'createdAt' | 'updatedAt'> }
-  | { type: 'UPDATE_CUSTOM_ITEM'; payload: { id: string; updates: Partial<CustomItem> } }
+  | {
+      type: 'CREATE_CUSTOM_ITEM';
+      payload: Omit<
+        CustomItem,
+        'id' | 'usageCount' | 'createdAt' | 'updatedAt'
+      >;
+    }
+  | {
+      type: 'UPDATE_CUSTOM_ITEM';
+      payload: { id: string; updates: Partial<CustomItem> };
+    }
   | { type: 'DELETE_CUSTOM_ITEM'; payload: { id: string } }
   | { type: 'USE_CUSTOM_ITEM'; payload: { id: string } }
   | { type: 'CREATE_CATEGORY'; payload: Omit<ItemCategory, 'id' | 'createdAt'> }
-  | { type: 'UPDATE_CATEGORY'; payload: { id: string; updates: Partial<ItemCategory> } }
+  | {
+      type: 'UPDATE_CATEGORY';
+      payload: { id: string; updates: Partial<ItemCategory> };
+    }
   | { type: 'DELETE_CATEGORY'; payload: { id: string } }
   | { type: 'INITIALIZE_DEFAULT_CATEGORIES' };
 
@@ -71,7 +100,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'UPDATE_LIST':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.id
             ? { ...list, name: action.payload.name, updatedAt: new Date() }
             : list
@@ -81,13 +110,13 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'DELETE_LIST':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.id
-            ? { 
-                ...list, 
-                isDeleted: true, 
-                deletedAt: new Date(), 
-                updatedAt: new Date() 
+            ? {
+                ...list,
+                isDeleted: true,
+                deletedAt: new Date(),
+                updatedAt: new Date(),
               }
             : list
         ),
@@ -96,7 +125,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'ARCHIVE_LIST':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.id
             ? { ...list, isArchived: true, updatedAt: new Date() }
             : list
@@ -106,14 +135,14 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'RESTORE_LIST':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.id
-            ? { 
-                ...list, 
-                isDeleted: false, 
+            ? {
+                ...list,
+                isDeleted: false,
                 isArchived: false,
-                deletedAt: undefined, 
-                updatedAt: new Date() 
+                deletedAt: undefined,
+                updatedAt: new Date(),
               }
             : list
         ),
@@ -122,18 +151,20 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'PERMANENTLY_DELETE_LIST':
       return {
         ...state,
-        lists: state.lists.filter((list) => list.id !== action.payload.id),
+        lists: state.lists.filter(list => list.id !== action.payload.id),
       };
 
     case 'DUPLICATE_LIST': {
-      const originalList = state.lists.find((list) => list.id === action.payload.id);
+      const originalList = state.lists.find(
+        list => list.id === action.payload.id
+      );
       if (!originalList) return state;
 
       const duplicatedList: ShoppingList = {
         ...originalList,
         id: generateId(),
         name: `${originalList.name} (Copy)`,
-        items: originalList.items.map((item) => ({
+        items: originalList.items.map(item => ({
           ...item,
           id: generateId(),
           isCompleted: false,
@@ -150,7 +181,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'HIDE_LIST':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.id
             ? { ...list, isHidden: true, updatedAt: new Date() }
             : list
@@ -159,10 +190,12 @@ function appReducer(state: AppState, action: Action): AppState {
 
     case 'ADD_ITEM': {
       let newItem: ShoppingItem;
-      
+
       // If adding from custom item, use its defaults
       if (action.payload.customItemId) {
-        const customItem = state.customItems.find(item => item.id === action.payload.customItemId);
+        const customItem = state.customItems.find(
+          item => item.id === action.payload.customItemId
+        );
         newItem = {
           id: generateId(),
           name: action.payload.name,
@@ -187,7 +220,7 @@ function appReducer(state: AppState, action: Action): AppState {
 
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.listId
             ? {
                 ...list,
@@ -202,13 +235,17 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'UPDATE_ITEM':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.listId
             ? {
                 ...list,
-                items: list.items.map((item) =>
+                items: list.items.map(item =>
                   item.id === action.payload.itemId
-                    ? { ...item, ...action.payload.updates, updatedAt: new Date() }
+                    ? {
+                        ...item,
+                        ...action.payload.updates,
+                        updatedAt: new Date(),
+                      }
                     : item
                 ),
                 updatedAt: new Date(),
@@ -220,11 +257,13 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'DELETE_ITEM':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.listId
             ? {
                 ...list,
-                items: list.items.filter((item) => item.id !== action.payload.itemId),
+                items: list.items.filter(
+                  item => item.id !== action.payload.itemId
+                ),
                 updatedAt: new Date(),
               }
             : list
@@ -234,13 +273,17 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'TOGGLE_ITEM':
       return {
         ...state,
-        lists: state.lists.map((list) =>
+        lists: state.lists.map(list =>
           list.id === action.payload.listId
             ? {
                 ...list,
-                items: list.items.map((item) =>
+                items: list.items.map(item =>
                   item.id === action.payload.itemId
-                    ? { ...item, isCompleted: !item.isCompleted, updatedAt: new Date() }
+                    ? {
+                        ...item,
+                        isCompleted: !item.isCompleted,
+                        updatedAt: new Date(),
+                      }
                     : item
                 ),
                 updatedAt: new Date(),
@@ -266,7 +309,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'UPDATE_CUSTOM_ITEM':
       return {
         ...state,
-        customItems: state.customItems.map((item) =>
+        customItems: state.customItems.map(item =>
           item.id === action.payload.id
             ? { ...item, ...action.payload.updates, updatedAt: new Date() }
             : item
@@ -276,19 +319,21 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'DELETE_CUSTOM_ITEM':
       return {
         ...state,
-        customItems: state.customItems.filter((item) => item.id !== action.payload.id),
+        customItems: state.customItems.filter(
+          item => item.id !== action.payload.id
+        ),
       };
 
     case 'USE_CUSTOM_ITEM':
       return {
         ...state,
-        customItems: state.customItems.map((item) =>
+        customItems: state.customItems.map(item =>
           item.id === action.payload.id
-            ? { 
-                ...item, 
+            ? {
+                ...item,
                 usageCount: item.usageCount + 1,
                 lastUsed: new Date(),
-                updatedAt: new Date()
+                updatedAt: new Date(),
               }
             : item
         ),
@@ -309,7 +354,7 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'UPDATE_CATEGORY':
       return {
         ...state,
-        categories: state.categories.map((category) =>
+        categories: state.categories.map(category =>
           category.id === action.payload.id
             ? { ...category, ...action.payload.updates }
             : category
@@ -319,7 +364,9 @@ function appReducer(state: AppState, action: Action): AppState {
     case 'DELETE_CATEGORY':
       return {
         ...state,
-        categories: state.categories.filter((category) => category.id !== action.payload.id),
+        categories: state.categories.filter(
+          category => category.id !== action.payload.id
+        ),
       };
 
     default:
@@ -344,7 +391,9 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const STORAGE_KEY = '@shopper_app_state';
 
-export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
   // Load state from AsyncStorage on app start
@@ -357,27 +406,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           // Convert date strings back to Date objects
           const processedState = {
             ...parsedState,
-            lists: parsedState.lists?.map((list: any) => ({
-              ...list,
-              createdAt: new Date(list.createdAt),
-              updatedAt: new Date(list.updatedAt),
-              deletedAt: list.deletedAt ? new Date(list.deletedAt) : undefined,
-              items: list.items?.map((item: any) => ({
+            lists:
+              parsedState.lists?.map((list: any) => ({
+                ...list,
+                createdAt: new Date(list.createdAt),
+                updatedAt: new Date(list.updatedAt),
+                deletedAt: list.deletedAt
+                  ? new Date(list.deletedAt)
+                  : undefined,
+                items:
+                  list.items?.map((item: any) => ({
+                    ...item,
+                    createdAt: new Date(item.createdAt),
+                    updatedAt: new Date(item.updatedAt),
+                  })) || [],
+              })) || [],
+            customItems:
+              parsedState.customItems?.map((item: any) => ({
                 ...item,
                 createdAt: new Date(item.createdAt),
                 updatedAt: new Date(item.updatedAt),
+                lastUsed: item.lastUsed ? new Date(item.lastUsed) : undefined,
               })) || [],
-            })) || [],
-            customItems: parsedState.customItems?.map((item: any) => ({
-              ...item,
-              createdAt: new Date(item.createdAt),
-              updatedAt: new Date(item.updatedAt),
-              lastUsed: item.lastUsed ? new Date(item.lastUsed) : undefined,
-            })) || [],
-            categories: parsedState.categories?.map((category: any) => ({
-              ...category,
-              createdAt: new Date(category.createdAt),
-            })) || [],
+            categories:
+              parsedState.categories?.map((category: any) => ({
+                ...category,
+                createdAt: new Date(category.createdAt),
+              })) || [],
           };
           dispatch({ type: 'LOAD_STATE', payload: processedState });
         }
@@ -405,31 +460,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [state]);
 
   const getList = (id: string): ShoppingList | undefined => {
-    return state.lists.find((list) => list.id === id);
+    return state.lists.find(list => list.id === id);
   };
 
   const getVisibleLists = (): ShoppingList[] => {
-    return state.lists.filter((list) => !list.isHidden && !list.isArchived && !list.isDeleted);
+    return state.lists.filter(
+      list => !list.isHidden && !list.isArchived && !list.isDeleted
+    );
   };
 
   const getArchivedLists = (): ShoppingList[] => {
-    return state.lists.filter((list) => list.isArchived && !list.isDeleted);
+    return state.lists.filter(list => list.isArchived && !list.isDeleted);
   };
 
   const getDeletedLists = (): ShoppingList[] => {
-    return state.lists.filter((list) => list.isDeleted);
+    return state.lists.filter(list => list.isDeleted);
   };
 
   const getCustomItem = (id: string): CustomItem | undefined => {
-    return state.customItems.find((item) => item.id === id);
+    return state.customItems.find(item => item.id === id);
   };
 
   const getCustomItemsByCategory = (categoryId?: string): CustomItem[] => {
     if (!categoryId) {
-      return state.customItems.filter((item) => !item.category);
+      return state.customItems.filter(item => !item.category);
     }
     const category = state.categories.find(cat => cat.id === categoryId);
-    return state.customItems.filter((item) => item.category === category?.name);
+    return state.customItems.filter(item => item.category === category?.name);
   };
 
   const getMostUsedCustomItems = (limit = 10): CustomItem[] => {
@@ -439,7 +496,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const getCategory = (id: string): ItemCategory | undefined => {
-    return state.categories.find((category) => category.id === id);
+    return state.categories.find(category => category.id === id);
   };
 
   const value: AppContextValue = {

@@ -21,7 +21,10 @@ interface InputProps extends TextInputProps {
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
-  ({ label, error, containerStyle, leftIcon, rightIcon, style, ...props }, ref) => {
+  (
+    { label, error, containerStyle, leftIcon, rightIcon, style, ...props },
+    ref
+  ) => {
     return (
       <View style={[styles.container, containerStyle]}>
         {label && <Text style={styles.label}>{label}</Text>}
@@ -44,7 +47,7 @@ export const Input = forwardRef<TextInput, InputProps>(
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
     );
-  },
+  }
 );
 
 Input.displayName = 'Input';
@@ -53,19 +56,19 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
   },
-  
+
   label: {
     ...Typography.textStyles.body,
     color: Colors.text,
     marginBottom: Spacing.xs,
   },
-  
+
   inputContainer: {
     position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
   },
-  
+
   input: {
     height: Spacing.inputHeight,
     backgroundColor: Colors.surface,
@@ -77,31 +80,31 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  
+
   inputWithLeftIcon: {
     paddingLeft: Spacing.xxl,
   },
-  
+
   inputWithRightIcon: {
     paddingRight: Spacing.xxl,
   },
-  
+
   inputError: {
     borderColor: Colors.error,
   },
-  
+
   leftIcon: {
     position: 'absolute',
     left: Spacing.md,
     zIndex: 1,
   },
-  
+
   rightIcon: {
     position: 'absolute',
     right: Spacing.md,
     zIndex: 1,
   },
-  
+
   error: {
     ...Typography.textStyles.caption,
     color: Colors.error,

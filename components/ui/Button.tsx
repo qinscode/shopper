@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.pill,
     ...Shadows.small,
   },
-  
+
   // Variants
   primary: {
     backgroundColor: Colors.primary,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   secondaryText: {
     color: Colors.textSecondary,
   },
-  
+
   smallText: {
     fontSize: 14,
   },

@@ -59,12 +59,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 3, // 3pt线宽
   },
-  
+
   unchecked: {
     backgroundColor: 'transparent',
     borderColor: '#585858', // Figma规格：灰线 #585858
   },
-  
+
   checked: {
     backgroundColor: 'transparent', // 保持透明，只显示绿色勾选
     borderColor: '#2ECC71', // 绿色边框
