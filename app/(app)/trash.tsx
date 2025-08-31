@@ -1,12 +1,13 @@
-import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import React from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Header, EmptyState, Button, ProgressChip, FadeInListItem } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { ShoppingList } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
@@ -27,9 +28,9 @@ export default function TrashScreen() {
           onPress: () => {
             HapticFeedback.success();
             dispatch({ type: 'RESTORE_LIST', payload: { id: listId } });
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -45,14 +46,14 @@ export default function TrashScreen() {
           onPress: () => {
             HapticFeedback.medium();
             dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } });
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
   const handleEmptyTrash = () => {
-    if (deletedLists.length === 0) return;
+    if (deletedLists.length === 0) {return;}
     
     Alert.alert(
       'Empty Trash',
@@ -67,9 +68,9 @@ export default function TrashScreen() {
             deletedLists.forEach(list => {
               dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: list.id } });
             });
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 

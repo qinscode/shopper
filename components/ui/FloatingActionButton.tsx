@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import Animated, {
@@ -7,7 +8,7 @@ import Animated, {
   withTiming,
   runOnJS,
 } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Colors } from '@/constants/Colors';
 import { Shadows } from '@/constants/Layout';
 
@@ -28,7 +29,7 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { scale: scale.value },
-      { rotate: `${rotation.value}deg` }
+      { rotate: `${rotation.value}deg` },
     ],
   }));
 

@@ -1,13 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, Input, Button } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { HapticFeedback } from '@/utils/haptics';
 
@@ -72,8 +73,8 @@ export default function EditCustomItemScreen() {
             defaultImageUri: defaultImageUri || undefined,
             notes: notes.trim() || undefined,
             tags: tagsArray.length > 0 ? tagsArray : undefined,
-          }
-        }
+          },
+        },
       });
       
       HapticFeedback.success();
@@ -98,13 +99,13 @@ export default function EditCustomItemScreen() {
           onPress: () => {
             dispatch({
               type: 'DELETE_CUSTOM_ITEM',
-              payload: { id: itemId }
+              payload: { id: itemId },
             });
             HapticFeedback.success();
             router.back();
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 

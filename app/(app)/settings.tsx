@@ -1,11 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { HapticFeedback } from '@/utils/haptics';
 
 interface SettingsItemProps {
@@ -112,8 +113,8 @@ export default function SettingsScreen() {
                 HapticFeedback.light();
                 Alert.alert(
                   'About Shopper',
-                  `Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo.`,
-                  [{ text: 'OK', style: 'default' }]
+                  'Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo.',
+                  [{ text: 'OK', style: 'default' }],
                 );
               }}
               isLast={true}

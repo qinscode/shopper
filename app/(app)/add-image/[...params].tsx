@@ -1,13 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as ImagePicker from 'expo-image-picker';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, Button } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 
 export default function AddImageScreen() {
@@ -75,8 +76,8 @@ export default function AddImageScreen() {
       payload: {
         listId,
         itemId,
-        updates: { imageUri: selectedImage }
-      }
+        updates: { imageUri: selectedImage },
+      },
     });
 
     router.back();

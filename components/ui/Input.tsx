@@ -7,9 +7,10 @@ import {
   TextInputProps,
   ViewStyle,
 } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -43,7 +44,7 @@ export const Input = forwardRef<TextInput, InputProps>(
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
     );
-  }
+  },
 );
 
 Input.displayName = 'Input';

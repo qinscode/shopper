@@ -5,9 +5,9 @@ import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { AppProvider } from '@/context/AppContext';
 import { Colors } from '@/constants/Colors';
+import { AppProvider } from '@/context/AppContext';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 const customDarkTheme = {
   ...DarkTheme,

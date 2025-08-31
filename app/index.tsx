@@ -1,6 +1,7 @@
+import { useRouter } from 'expo-router';
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+
 import { Colors } from '@/constants/Colors';
 import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';

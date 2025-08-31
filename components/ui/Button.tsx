@@ -7,9 +7,10 @@ import {
   ViewStyle,
   TextStyle,
 } from 'react-native';
+
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { HapticFeedback } from '@/utils/haptics';
 
 interface ButtonProps {

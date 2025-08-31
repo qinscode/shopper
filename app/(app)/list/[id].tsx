@@ -1,13 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams , Stack } from 'expo-router';
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert, Image } from 'react-native';
-import { useRouter, useLocalSearchParams , Stack } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Swipeable } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { ShoppingItem } from '@/types';
 
@@ -33,12 +34,12 @@ export default function ListDetailScreen() {
           onPress: () => {
             dispatch({
               type: 'ARCHIVE_LIST',
-              payload: { id: listId }
+              payload: { id: listId },
             });
             router.back();
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -54,12 +55,12 @@ export default function ListDetailScreen() {
           onPress: () => {
             dispatch({
               type: 'DELETE_LIST',
-              payload: { id: listId }
+              payload: { id: listId },
             });
             router.back();
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -68,7 +69,7 @@ export default function ListDetailScreen() {
       <>
         <Stack.Screen 
           options={{
-            headerShown: false
+            headerShown: false,
           }}
         />
         <SafeAreaView style={styles.container}>
@@ -106,14 +107,14 @@ export default function ListDetailScreen() {
   const handleToggleItem = (itemId: string) => {
     dispatch({
       type: 'TOGGLE_ITEM',
-      payload: { listId, itemId }
+      payload: { listId, itemId },
     });
   };
 
   const handleDeleteItem = (itemId: string) => {
     dispatch({
       type: 'DELETE_ITEM',
-      payload: { listId, itemId }
+      payload: { listId, itemId },
     });
   };
 
@@ -142,9 +143,9 @@ export default function ListDetailScreen() {
               {
                 text: 'Delete',
                 style: 'destructive',
-                onPress: () => handleDeleteItem(itemId)
-              }
-            ]
+                onPress: () => handleDeleteItem(itemId),
+              },
+            ],
           );
         }}
       >
@@ -175,7 +176,7 @@ export default function ListDetailScreen() {
             <Ionicons 
               name="link-outline" 
               size={18} 
-              color={hasUrl ? Colors.primary : "#585858"} 
+              color={hasUrl ? Colors.primary : '#585858'} 
             />
           </TouchableOpacity>
           
@@ -189,7 +190,7 @@ export default function ListDetailScreen() {
               >
                 <Text style={[
                   styles.emojiIcon,
-                  item.isCompleted && styles.completedEmoji
+                  item.isCompleted && styles.completedEmoji,
                 ]}>{item.emoji}</Text>
               </TouchableOpacity>
             ) : (
@@ -216,7 +217,7 @@ export default function ListDetailScreen() {
               <Text 
                 style={[
                   styles.itemText,
-                  item.isCompleted && styles.completedText
+                  item.isCompleted && styles.completedText,
                 ]}
                 numberOfLines={1}
               >
@@ -240,7 +241,7 @@ export default function ListDetailScreen() {
       <>
         <Stack.Screen 
           options={{
-            headerShown: false
+            headerShown: false,
           }}
         />
         <SafeAreaView style={styles.container}>
@@ -269,18 +270,18 @@ export default function ListDetailScreen() {
                     [
                       {
                         text: 'Archive List',
-                        onPress: handleArchiveList
+                        onPress: handleArchiveList,
                       },
                       {
                         text: 'Delete List',
                         style: 'destructive',
-                        onPress: handleDeleteList
+                        onPress: handleDeleteList,
                       },
                       {
                         text: 'Cancel',
-                        style: 'cancel'
-                      }
-                    ]
+                        style: 'cancel',
+                      },
+                    ],
                   );
                 }}
               >
@@ -309,7 +310,7 @@ export default function ListDetailScreen() {
     <>
       <Stack.Screen 
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
       <SafeAreaView style={styles.container}>
@@ -338,18 +339,18 @@ export default function ListDetailScreen() {
                   [
                     {
                       text: 'Archive List',
-                      onPress: handleArchiveList
+                      onPress: handleArchiveList,
                     },
                     {
                       text: 'Delete List',
                       style: 'destructive',
-                      onPress: handleDeleteList
+                      onPress: handleDeleteList,
                     },
                     {
                       text: 'Cancel',
-                      style: 'cancel'
-                    }
-                  ]
+                      style: 'cancel',
+                    },
+                  ],
                 );
               }}
             >

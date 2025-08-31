@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Input, Button } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { HapticFeedback } from '@/utils/haptics';
 
@@ -55,8 +56,8 @@ export default function EditItemScreen() {
       payload: {
         listId: listIdStr,
         itemId: itemIdStr,
-        updates: { name: trimmedName }
-      }
+        updates: { name: trimmedName },
+      },
     });
     
     router.back();

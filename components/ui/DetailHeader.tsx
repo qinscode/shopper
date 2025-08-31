@@ -1,11 +1,14 @@
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { ProgressChip } from './ProgressChip';
+
+
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
+
+import { ProgressChip } from './ProgressChip';
 
 interface DetailHeaderProps {
   title: string;

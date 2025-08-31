@@ -1,11 +1,12 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { HapticFeedback } from '@/utils/haptics';
 
@@ -36,7 +37,7 @@ export default function SelectEmojiScreen() {
 
   // 处理自定义输入的逻辑
   const processCustomInput = (input: string): string => {
-    if (!input.trim()) return '';
+    if (!input.trim()) {return '';}
     
     // 如果输入的是emoji（检查是否为单个emoji字符）
     const emojiRegex = /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{27BF}]|^[\u{1F600}-\u{1F64F}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]/u;
@@ -65,7 +66,7 @@ export default function SelectEmojiScreen() {
     HapticFeedback.light();
     dispatch({
       type: 'UPDATE_ITEM',
-      payload: { listId: listIdStr, itemId: itemIdStr, updates: { emoji } }
+      payload: { listId: listIdStr, itemId: itemIdStr, updates: { emoji } },
     });
     router.back();
   };
@@ -74,7 +75,7 @@ export default function SelectEmojiScreen() {
     HapticFeedback.light();
     dispatch({
       type: 'UPDATE_ITEM',
-      payload: { listId: listIdStr, itemId: itemIdStr, updates: { emoji: undefined } }
+      payload: { listId: listIdStr, itemId: itemIdStr, updates: { emoji: undefined } },
     });
     router.back();
   };
@@ -83,7 +84,7 @@ export default function SelectEmojiScreen() {
     <TouchableOpacity
       style={[
         styles.emojiButton,
-        item?.emoji === emoji && styles.selectedEmoji
+        item?.emoji === emoji && styles.selectedEmoji,
       ]}
       onPress={() => handleSelectEmoji(emoji)}
       activeOpacity={0.7}

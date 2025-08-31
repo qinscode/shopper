@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, EmptyState, Button, ProgressChip, FadeInListItem } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { ShoppingList } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
@@ -17,6 +18,8 @@ export default function ArchivedListsScreen() {
   const archivedLists = getArchivedLists();
 
   const handleRestoreList = (listId: string, listName: string) => {
+
+    
     Alert.alert(
       'Restore List',
       `Are you sure you want to restore "${listName}"?`,
@@ -27,9 +30,9 @@ export default function ArchivedListsScreen() {
           onPress: () => {
             HapticFeedback.success();
             dispatch({ type: 'RESTORE_LIST', payload: { id: listId } });
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 
@@ -45,9 +48,9 @@ export default function ArchivedListsScreen() {
           onPress: () => {
             HapticFeedback.medium();
             dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } });
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 

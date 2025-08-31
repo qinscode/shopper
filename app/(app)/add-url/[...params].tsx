@@ -1,7 +1,8 @@
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, StyleSheet, Alert } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { Header, Input, Button } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
 import { Spacing } from '@/constants/Layout';
@@ -41,8 +42,8 @@ export default function AddUrlScreen() {
       payload: {
         listId,
         itemId,
-        updates: { url: url.trim() }
-      }
+        updates: { url: url.trim() },
+      },
     });
 
     router.back();

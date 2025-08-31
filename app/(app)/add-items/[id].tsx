@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Keyboard, Image } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, Input, Button } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { SUGGESTED_ITEMS, CustomItem } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
@@ -28,12 +29,12 @@ export default function AddItemsScreen() {
   
   const filteredSuggestions = SUGGESTED_ITEMS.filter(item =>
     item.toLowerCase().includes(searchText.toLowerCase()) &&
-    !existingItemNames.includes(item.toLowerCase())
+    !existingItemNames.includes(item.toLowerCase()),
   ).slice(0, 10); // Limit to 10 suggestions
 
   const filteredCustomItems = state.customItems.filter(item =>
     item.name.toLowerCase().includes(searchText.toLowerCase()) &&
-    !existingItemNames.includes(item.name.toLowerCase())
+    !existingItemNames.includes(item.name.toLowerCase()),
   );
 
   const handleAddItem = (itemName: string, customItemId?: string) => {
@@ -43,14 +44,14 @@ export default function AddItemsScreen() {
 
     dispatch({
       type: 'ADD_ITEM',
-      payload: { listId, name: itemName, customItemId }
+      payload: { listId, name: itemName, customItemId },
     });
 
     // Track usage if it's a custom item
     if (customItemId) {
       dispatch({
         type: 'USE_CUSTOM_ITEM',
-        payload: { id: customItemId }
+        payload: { id: customItemId },
       });
     }
     
@@ -173,7 +174,7 @@ export default function AddItemsScreen() {
               <View style={styles.customItemCategory}>
                 <View style={[
                   styles.categoryDot, 
-                  { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary }
+                  { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary },
                 ]} />
                 <Text style={styles.categoryText}>{item.category}</Text>
               </View>
@@ -275,9 +276,6 @@ export default function AddItemsScreen() {
               </View>
 
 
-
-
-
               <Text style={styles.addButtonText}>ADD</Text>
             </TouchableOpacity>
           )}
@@ -312,14 +310,25 @@ export default function AddItemsScreen() {
             </View>
           )}
           
-          <FlatList
-            data={activeTab === 'suggestions' ? filteredSuggestions : filteredCustomItems}
-            renderItem={activeTab === 'suggestions' ? renderSuggestionItem : renderCustomItem}
-            keyExtractor={(item, index) => `${activeTab}-${index}`}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.suggestionsContainer}
-            onScrollBeginDrag={() => Keyboard.dismiss()}
-          />
+          {activeTab === 'suggestions' ? (
+            <FlatList<string>
+              data={filteredSuggestions}
+              renderItem={renderSuggestionItem}
+              keyExtractor={(item, index) => `${activeTab}-${index}`}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.suggestionsContainer}
+              onScrollBeginDrag={() => Keyboard.dismiss()}
+            />
+          ) : (
+            <FlatList<CustomItem>
+              data={filteredCustomItems}
+              renderItem={renderCustomItem}
+              keyExtractor={(item, index) => `${activeTab}-${index}`}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.suggestionsContainer}
+              onScrollBeginDrag={() => Keyboard.dismiss()}
+            />
+          )}
         </View>
       </View>
     </SafeAreaView>

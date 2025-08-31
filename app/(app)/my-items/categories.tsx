@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, Input, Button, FloatingActionButton, FadeInListItem } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { ItemCategory } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
@@ -14,14 +15,14 @@ import { HapticFeedback } from '@/utils/haptics';
 const CATEGORY_COLORS = [
   '#4CAF50', '#2196F3', '#F44336', '#FF9800', '#9C27B0', 
   '#FF5722', '#607D8B', '#795548', '#E91E63', '#3F51B5',
-  '#00BCD4', '#8BC34A', '#FFC107', '#673AB7', '#009688'
+  '#00BCD4', '#8BC34A', '#FFC107', '#673AB7', '#009688',
 ];
 
 const CATEGORY_ICONS = [
   'basket-outline', 'nutrition-outline', 'fish-outline', 'leaf-outline',
   'wine-outline', 'fast-food-outline', 'person-outline', 'home-outline',
   'medical-outline', 'shirt-outline', 'library-outline', 'car-outline',
-  'phone-portrait-outline', 'game-controller-outline', 'musical-notes-outline'
+  'phone-portrait-outline', 'game-controller-outline', 'musical-notes-outline',
 ];
 
 export default function CategoriesScreen() {
@@ -54,8 +55,8 @@ export default function CategoriesScreen() {
             name: newCategoryName.trim(),
             color: selectedColor,
             icon: selectedIcon,
-          }
-        }
+          },
+        },
       });
       HapticFeedback.success();
       setEditingCategory(null);
@@ -66,7 +67,7 @@ export default function CategoriesScreen() {
           name: newCategoryName.trim(),
           color: selectedColor,
           icon: selectedIcon,
-        }
+        },
       });
       HapticFeedback.success();
     }
@@ -93,7 +94,7 @@ export default function CategoriesScreen() {
     if (itemsInCategory.length > 0) {
       Alert.alert(
         'Cannot Delete Category',
-        `This category contains ${itemsInCategory.length} custom item${itemsInCategory.length === 1 ? '' : 's'}. Please remove or reassign these items first.`
+        `This category contains ${itemsInCategory.length} custom item${itemsInCategory.length === 1 ? '' : 's'}. Please remove or reassign these items first.`,
       );
       return;
     }
@@ -109,12 +110,12 @@ export default function CategoriesScreen() {
           onPress: () => {
             dispatch({
               type: 'DELETE_CATEGORY',
-              payload: { id: category.id }
+              payload: { id: category.id },
             });
             HapticFeedback.success();
-          }
-        }
-      ]
+          },
+        },
+      ],
     );
   };
 

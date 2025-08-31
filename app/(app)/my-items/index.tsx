@@ -1,12 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+
 import { Header, Input, FloatingActionButton, FadeInListItem, EmptyState } from '@/components/ui';
 import { Colors } from '@/constants/Colors';
-import { Typography } from '@/constants/Typography';
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
+import { Typography } from '@/constants/Typography';
 import { useApp } from '@/context/AppContext';
 import { CustomItem } from '@/types';
 import { HapticFeedback } from '@/utils/haptics';
@@ -26,7 +27,7 @@ export default function MyItemsScreen() {
       items = items.filter(item =>
         item.name.toLowerCase().includes(searchText.toLowerCase()) ||
         item.brand?.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.category?.toLowerCase().includes(searchText.toLowerCase())
+        item.category?.toLowerCase().includes(searchText.toLowerCase()),
       );
     }
 
@@ -131,7 +132,7 @@ export default function MyItemsScreen() {
           <View style={styles.itemCategory}>
             <View style={[
               styles.categoryDot, 
-              { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary }
+              { backgroundColor: state.categories.find(c => c.name === item.category)?.color || Colors.primary },
             ]} />
             <Text style={styles.categoryText}>{item.category}</Text>
           </View>

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -6,7 +7,6 @@ import Animated, {
   withTiming,
   interpolate,
 } from 'react-native-reanimated';
-import { ViewStyle } from 'react-native';
 
 interface FadeInListItemProps {
   children: React.ReactNode;
