@@ -1,0 +1,156 @@
+name: EAS Build Production
+
+on:
+  # 手动触发
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., 1.0.0)'
+        required: true
+        type: string
+      platform:
+        description: 'Platform to build'
+        required: true
+        default: 'android'
+        type: choice
+        options:
+          - android
+          - ios
+          - all
+
+  # 当推送版本标签时自动触发 (如 v1.0.0)
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build Production APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check for EXPO_TOKEN
+        run: |
+          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+            echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Extract version info
+        id: version
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            # 从git tag提取版本号 (如 v1.0.0 -> 1.0.0)
+            VERSION=${GITHUB_REF#refs/tags/v}
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "is_release=true" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.version }}" != "" ]]; then
+            # 使用手动输入的版本号
+            VERSION="${{ github.event.inputs.version }}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          else
+            # 默认版本号
+            VERSION="production-$(date +'%Y%m%d')-${GITHUB_SHA:0:7}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+          fi
+          echo "app_name=shopper-production-$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update app version
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          # 更新app.json中的版本号
+          if command -v jq >/dev/null 2>&1; then
+            jq --arg version "$VERSION" '.expo.version = $version' app.json > tmp.json && mv tmp.json app.json
+            
+            # 更新Android versionCode (使用时间戳确保唯一性)
+            VERSION_CODE=$(date +%s)
+            jq --arg versionCode "$VERSION_CODE" '.expo.android.versionCode = ($versionCode | tonumber)' app.json > tmp.json && mv tmp.json app.json
+          else
+            echo "Warning: jq not found, skipping version update"
+          fi
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Build Production APK
+        run: |
+          PLATFORM="${{ github.event.inputs.platform || 'android' }}"
+          echo "Building for platform: $PLATFORM"
+          eas build --platform $PLATFORM --profile production --non-interactive --wait
+
+      - name: Download APK
+        if: github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all'
+        run: |
+          # 等待构建完成并下载APK
+          BUILD_URL=$(eas build:list --platform android --limit 1 --json | jq -r '.[0].artifacts.buildUrl')
+          if [ "$BUILD_URL" != "null" ] && [ "$BUILD_URL" != "" ]; then
+            curl -L "$BUILD_URL" -o "${{ steps.version.outputs.app_name }}.apk"
+            echo "APK downloaded successfully"
+            ls -la *.apk
+          else
+            echo "No build URL found"
+          fi
+
+      - name: Upload APK artifact
+        if: github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.version.outputs.app_name }}
+          path: ${{ steps.version.outputs.app_name }}.apk
+          retention-days: 30
+
+      - name: Create Release (for git tags)
+        if: steps.version.outputs.is_release == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: 'Release ${{ steps.version.outputs.version }}'
+          body: |
+            🚀 **Production Release ${{ steps.version.outputs.version }}**
+
+            **Changes in this release:**
+            - Build triggered from tag: ${{ github.ref_name }}
+            - Platform: ${{ github.event.inputs.platform || 'android' }}
+            - Commit: ${{ github.sha }}
+
+            **Download:**
+            - 📱 APK文件已附加到此release
+            - 🔗 也可在 [EAS Dashboard](https://expo.dev/) 查看构建详情
+          files: ${{ steps.version.outputs.app_name }}.apk
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on commit (for manual builds)
+        if: steps.version.outputs.is_release == 'false' && github.event_name == 'workflow_dispatch'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+              body: `🚀 **Production Build Complete!**\n\nVersion: ${{ steps.version.outputs.version }}\nPlatform: ${{ github.event.inputs.platform || 'android' }}\n\n📱 **Download APK:**\n- Go to [Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n- Download from "Artifacts" section\n- 🔗 Also available in [EAS Dashboard](https://expo.dev/)`
+            });
