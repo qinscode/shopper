@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 # 检查最近的commit是否包含tag
 LATEST_TAG=$(git describe --tags --exact-match HEAD 2>/dev/null)
 
