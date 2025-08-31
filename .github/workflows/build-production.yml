@@ -103,17 +103,30 @@ jobs:
         if: github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all'
         run: |
           # Wait for build completion and download APK
-          BUILD_URL=$(eas build:list --platform android --limit 1 --json | jq -r '.[0].artifacts.buildUrl')
-          if [ "$BUILD_URL" != "null" ] && [ "$BUILD_URL" != "" ]; then
-            curl -L "$BUILD_URL" -o "${{ steps.version.outputs.app_name }}.apk"
-            echo "APK downloaded successfully"
-            ls -la *.apk
+          echo "Fetching build list..."
+          BUILD_LIST=$(eas build:list --platform android --limit 1 --json --non-interactive 2>/dev/null || echo "[]")
+          echo "Build list response: $BUILD_LIST"
+
+          if [ "$BUILD_LIST" != "[]" ] && [ "$BUILD_LIST" != "" ]; then
+            BUILD_URL=$(echo "$BUILD_LIST" | jq -r '.[0].artifacts.buildUrl // empty' 2>/dev/null || echo "")
+            if [ "$BUILD_URL" != "" ] && [ "$BUILD_URL" != "null" ]; then
+              echo "Downloading APK from: $BUILD_URL"
+              curl -L "$BUILD_URL" -o "${{ steps.version.outputs.app_name }}.apk" || echo "Download failed"
+              if [ -f "${{ steps.version.outputs.app_name }}.apk" ]; then
+                echo "APK downloaded successfully"
+                ls -la *.apk
+              else
+                echo "APK file not found after download"
+              fi
+            else
+              echo "No valid build URL found"
+            fi
           else
-            echo "No build URL found"
+            echo "No builds found or empty response"
           fi
 
       - name: Upload APK artifact
-        if: github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all'
+        if: (github.event.inputs.platform == 'android' || github.event.inputs.platform == '' || github.event.inputs.platform == 'all') && hashFiles('*.apk') != ''
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.version.outputs.app_name }}
@@ -135,8 +148,9 @@ jobs:
             - Commit: ${{ github.sha }}
 
             **Download:**
-            - 📱 APK file attached to this release
-            - 🔗 Also available in [EAS Dashboard](https://expo.dev/)
+            - 📱 APK file may be attached to this release (if download succeeded)
+            - 🔗 Always available in [EAS Dashboard](https://expo.dev/)
+            - 📱 QR Code and direct download available in the build link above
           files: ${{ steps.version.outputs.app_name }}.apk
           draft: false
           prerelease: false
