@@ -42,3 +42,7 @@ app-example
 # Native folders (using Prebuild/CNG)
 /android
 /ios
+
+# Image optimization backups
+assets/images-backup/
+.expo/atlas.jsonl

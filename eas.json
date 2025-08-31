@@ -21,8 +21,8 @@
       "distribution": "internal",
       "autoIncrement": true,
       "android": {
-        "buildType": "aab",
-        "gradleCommand": ":app:bundleRelease"
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
       },
       "ios": {
         "autoIncrement": true
@@ -31,11 +31,11 @@
         "EXPO_OPTIMIZE_BUNDLE": "1"
       }
     },
-    "production-apk": {
+    "production-aab": {
       "extends": "production",
       "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "aab",
+        "gradleCommand": ":app:bundleRelease"
       }
     },
     "local": {

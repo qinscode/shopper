@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
@@ -9,6 +9,7 @@ import {
   Platform,
   KeyboardAvoidingView,
   ScrollView,
+  Animated,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -23,14 +24,60 @@ export default function CreateListScreen() {
   const router = useRouter()
   const { dispatch, state } = useApp()
 
+  // Animation values
+  const illustrationScale = useRef(new Animated.Value(1)).current
+  const containerPadding = useRef(new Animated.Value(Spacing.xl * 2)).current
+  const illustrationOpacity = useRef(new Animated.Value(1)).current
+
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
-      () => setKeyboardVisible(true)
+      () => {
+        setKeyboardVisible(true)
+        // Animate to compact state
+        Animated.parallel([
+          Animated.timing(illustrationScale, {
+            toValue: 0.75, // Scale down to 75%
+            duration: 300,
+            useNativeDriver: true,
+          }),
+          Animated.timing(containerPadding, {
+            toValue: Spacing.lg,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(illustrationOpacity, {
+            toValue: 0.8,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start()
+      }
     )
+
     const keyboardDidHideListener = Keyboard.addListener(
       'keyboardDidHide',
-      () => setKeyboardVisible(false)
+      () => {
+        setKeyboardVisible(false)
+        // Animate back to normal state
+        Animated.parallel([
+          Animated.timing(illustrationScale, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+          Animated.timing(containerPadding, {
+            toValue: Spacing.xl * 2,
+            duration: 300,
+            useNativeDriver: false,
+          }),
+          Animated.timing(illustrationOpacity, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start()
+      }
     )
 
     return () => {
@@ -83,21 +130,30 @@ export default function CreateListScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
-            <View
+            <Animated.View
               style={[
                 styles.illustrationContainer,
-                keyboardVisible && styles.illustrationContainerCompact,
+                {
+                  paddingTop: containerPadding,
+                  paddingBottom: containerPadding.interpolate({
+                    inputRange: [Spacing.lg, Spacing.xl * 2],
+                    outputRange: [Spacing.md, Spacing.xl],
+                  }),
+                },
               ]}
             >
-              <Image
+              <Animated.Image
                 source={require('@/assets/images/name_your_list.png')}
                 style={[
                   styles.illustration,
-                  keyboardVisible && styles.illustrationCompact,
+                  {
+                    transform: [{ scale: illustrationScale }],
+                    opacity: illustrationOpacity,
+                  },
                 ]}
                 resizeMode="contain"
               />
-            </View>
+            </Animated.View>
 
             <View style={styles.formSection}>
               <Input
@@ -160,23 +216,11 @@ const styles = StyleSheet.create({
 
   illustrationContainer: {
     alignItems: 'center',
-    paddingTop: Spacing.xl * 2,
-    paddingBottom: Spacing.xl,
-  },
-
-  illustrationContainerCompact: {
-    paddingTop: Spacing.lg,
-    paddingBottom: Spacing.md,
   },
 
   illustration: {
     width: 240,
     height: 160,
-  },
-
-  illustrationCompact: {
-    width: 180,
-    height: 120,
   },
 
   formSection: {

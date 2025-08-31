@@ -13,7 +13,13 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:fix": "npm run format && npm run lint:fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "optimize:images": "node ./scripts/optimize-images.js",
+    "analyze:bundle": "EXPO_ATLAS=true npx expo export --source-maps",
+    "build:production": "NODE_ENV=production eas build --platform all --profile production",
+    "build:android-apk": "NODE_ENV=production eas build --platform android --profile production",
+    "build:android-aab": "NODE_ENV=production eas build --platform android --profile production-aab",
+    "preoptimize": "npm run optimize:images"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",

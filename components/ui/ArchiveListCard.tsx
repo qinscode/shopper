@@ -2,12 +2,14 @@ import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 
-import { ProgressChip, FadeInListItem } from '@/components/ui'
 import { Colors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { ShoppingList } from '@/types'
 import { HapticFeedback } from '@/utils/haptics'
+
+import { FadeInListItem } from './AnimatedComponents'
+import { ProgressChip } from './ProgressChip'
 
 interface ArchiveListCardProps {
   item: ShoppingList
