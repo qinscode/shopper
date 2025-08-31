@@ -5,7 +5,14 @@ const expoConfig = require('eslint-config-expo/flat')
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*', 'node_modules/*', 'android/*', 'ios/*', '.expo/*'],
+    ignores: [
+      'dist/*',
+      'node_modules/*',
+      'android/*',
+      'ios/*',
+      '.expo/*',
+      '.github/*',
+    ],
     plugins: {
       prettier: require('eslint-plugin-prettier'),
     },
