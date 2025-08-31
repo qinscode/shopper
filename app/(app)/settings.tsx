@@ -106,7 +106,6 @@ export default function SettingsScreen() {
           <View style={styles.cardContainer}>
             <SettingsItem
               title="App Version"
-              subtitle="Build information & release notes"
               icon="information-circle-outline"
               rightText="Version 1.0.0"
               onPress={() => {
