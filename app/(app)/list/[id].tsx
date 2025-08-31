@@ -152,9 +152,11 @@ export default function ListDetailScreen() {
               <Ionicons name="chevron-back" size={24} color={Colors.text} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle} numberOfLines={1}>
-              List Not Found
-            </Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.headerTitle} numberOfLines={1}>
+                List Not Found
+              </Text>
+            </View>
 
             <View style={styles.headerRight} />
           </View>
@@ -327,9 +329,17 @@ export default function ListDetailScreen() {
               <Ionicons name="chevron-back" size={24} color={Colors.text} />
             </TouchableOpacity>
 
-            <Text style={styles.headerTitle} numberOfLines={1}>
-              {list.name}
-            </Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.headerTitle} numberOfLines={1}>
+                {list.name}
+              </Text>
+              <TouchableOpacity
+                style={styles.renameButton}
+                onPress={handleRenameList}
+              >
+                <Ionicons name="create-outline" size={20} color={Colors.text} />
+              </TouchableOpacity>
+            </View>
 
             <View style={styles.headerRight}>
               <ProgressChip
@@ -410,9 +420,17 @@ export default function ListDetailScreen() {
             <Ionicons name="chevron-back" size={24} color={Colors.text} />
           </TouchableOpacity>
 
-          <Text style={styles.headerTitle} numberOfLines={1}>
-            {list.name}
-          </Text>
+          <View style={styles.titleContainer}>
+            <Text style={styles.headerTitle} numberOfLines={1}>
+              {list.name}
+            </Text>
+            <TouchableOpacity
+              style={styles.renameButton}
+              onPress={handleRenameList}
+            >
+              <Ionicons name="create-outline" size={20} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.headerRight}>
             <ProgressChip
@@ -504,6 +522,12 @@ const styles = StyleSheet.create({
     fontWeight: Typography.fontWeight.semibold,
     color: Colors.text,
     flex: 1,
+  },
+
+  titleContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     marginLeft: 12,
     marginRight: 16,
   },
@@ -519,6 +543,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 8,
+  },
+
+  renameButton: {
+    padding: 4,
   },
 
   content: {
