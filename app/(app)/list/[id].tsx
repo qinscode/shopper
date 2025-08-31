@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,13 +9,20 @@ import {
   StyleSheet,
   Alert,
   Image,
+  Modal,
 } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui'
+import {
+  EmptyState,
+  Button,
+  Checkbox,
+  ProgressChip,
+  Input,
+} from '@/components/ui'
 import { Colors } from '@/constants/Colors'
-import { Spacing } from '@/constants/Layout'
+import { Spacing, BorderRadius } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
 import { ShoppingItem } from '@/types'
@@ -27,6 +34,25 @@ export default function ListDetailScreen() {
 
   const { getList, dispatch } = useApp()
   const list = getList(listId)
+
+  const [isRenameModalVisible, setRenameModalVisible] = useState(false)
+  const [newListName, setNewListName] = useState('')
+
+  const handleRenameList = () => {
+    setNewListName(list?.name || '')
+    setRenameModalVisible(true)
+  }
+
+  const handleSaveListName = () => {
+    const trimmed = newListName.trim()
+    if (trimmed) {
+      dispatch({
+        type: 'UPDATE_LIST',
+        payload: { id: listId, name: trimmed },
+      })
+    }
+    setRenameModalVisible(false)
+  }
 
   const completedCount = list
     ? list.items.filter(item => item.isCompleted).length
@@ -73,6 +99,41 @@ export default function ListDetailScreen() {
       ]
     )
   }
+
+  const renameModal = (
+    <Modal
+      visible={isRenameModalVisible}
+      animationType="fade"
+      transparent
+      onRequestClose={() => setRenameModalVisible(false)}
+    >
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalTitle}>Rename List</Text>
+          <Input
+            value={newListName}
+            onChangeText={setNewListName}
+            placeholder="List name"
+            autoFocus
+            containerStyle={styles.modalInput}
+          />
+          <View style={styles.modalButtons}>
+            <Button
+              title="Cancel"
+              variant="secondary"
+              onPress={() => setRenameModalVisible(false)}
+              style={styles.modalButton}
+            />
+            <Button
+              title="Save"
+              onPress={handleSaveListName}
+              style={styles.modalButton}
+            />
+          </View>
+        </View>
+      </View>
+    </Modal>
+  )
 
   if (!list) {
     return (
@@ -285,6 +346,10 @@ export default function ListDetailScreen() {
                     'Choose an action for this list',
                     [
                       {
+                        text: 'Rename List',
+                        onPress: handleRenameList,
+                      },
+                      {
                         text: 'Archive List',
                         onPress: handleArchiveList,
                       },
@@ -324,6 +389,7 @@ export default function ListDetailScreen() {
             }
           />
         </SafeAreaView>
+        {renameModal}
       </>
     )
   }
@@ -359,6 +425,10 @@ export default function ListDetailScreen() {
               style={styles.menuButton}
               onPress={() => {
                 Alert.alert('List Options', 'Choose an action for this list', [
+                  {
+                    text: 'Rename List',
+                    onPress: handleRenameList,
+                  },
                   {
                     text: 'Archive List',
                     onPress: handleArchiveList,
@@ -402,6 +472,7 @@ export default function ListDetailScreen() {
           <Button title="+ Add Item" onPress={handleAddItem} fullWidth />
         </View>
       </SafeAreaView>
+      {renameModal}
     </>
   )
 }
@@ -560,5 +631,40 @@ const styles = StyleSheet.create({
   emptyImage: {
     width: 180,
     height: 120,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: Spacing.lg,
+  },
+
+  modalContent: {
+    width: '100%',
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.lg,
+  },
+
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.text,
+  },
+
+  modalInput: {
+    marginTop: Spacing.md,
+  },
+
+  modalButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: Spacing.md,
+  },
+
+  modalButton: {
+    marginLeft: Spacing.sm,
   },
 })
