@@ -1,7 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,37 +9,37 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
+import { Header, Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
 
 export default function AddImageScreen() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const router = useRouter();
-  const { params } = useLocalSearchParams();
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const router = useRouter()
+  const { params } = useLocalSearchParams()
 
   // Extract listId and itemId from params array
-  const listId = Array.isArray(params) ? params[0] : '';
-  const itemId = Array.isArray(params) ? params[1] : '';
+  const listId = Array.isArray(params) ? params[0] : ''
+  const itemId = Array.isArray(params) ? params[1] : ''
 
-  const { getList, dispatch } = useApp();
-  const list = getList(listId);
-  const item = list?.items.find(item => item.id === itemId);
+  const { getList, dispatch } = useApp()
+  const list = getList(listId)
+  const item = list?.items.find(item => item.id === itemId)
 
   const handleCancel = () => {
-    router.back();
-  };
+    router.back()
+  }
 
   const handlePickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (status !== 'granted') {
-      Alert.alert('Sorry, we need camera roll permissions to make this work!');
-      return;
+      Alert.alert('Sorry, we need camera roll permissions to make this work!')
+      return
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -47,35 +47,35 @@ export default function AddImageScreen() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.8,
-    });
+    })
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setSelectedImage(result.assets[0].uri)
     }
-  };
+  }
 
   const handleTakePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync()
     if (status !== 'granted') {
-      Alert.alert('Sorry, we need camera permissions to make this work!');
-      return;
+      Alert.alert('Sorry, we need camera permissions to make this work!')
+      return
     }
 
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 0.8,
-    });
+    })
 
     if (!result.canceled) {
-      setSelectedImage(result.assets[0].uri);
+      setSelectedImage(result.assets[0].uri)
     }
-  };
+  }
 
   const handleSave = () => {
     if (!selectedImage) {
-      Alert.alert('Error', 'Please select an image');
-      return;
+      Alert.alert('Error', 'Please select an image')
+      return
     }
 
     dispatch({
@@ -85,10 +85,10 @@ export default function AddImageScreen() {
         itemId,
         updates: { imageUri: selectedImage },
       },
-    });
+    })
 
-    router.back();
-  };
+    router.back()
+  }
 
   if (!item) {
     return (
@@ -99,7 +99,7 @@ export default function AddImageScreen() {
           onBackPress={handleCancel}
         />
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -180,7 +180,7 @@ export default function AddImageScreen() {
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -274,4 +274,4 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
   },
-});
+})

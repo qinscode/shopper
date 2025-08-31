@@ -1,16 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Circle } from 'react-native-svg';
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import Svg, { Circle } from 'react-native-svg'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
 interface ProgressChipProps {
-  completed: number;
-  total: number;
-  size?: number;
-  variant?: 'small' | 'large'; // 新增变体支持
+  completed: number
+  total: number
+  size?: number
+  variant?: 'small' | 'large' // 新增变体支持
 }
 
 export const ProgressChip: React.FC<ProgressChipProps> = ({
@@ -20,20 +20,20 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
   variant = 'small',
 }) => {
   // 根据变体设置默认大小和线宽
-  const defaultSize = variant === 'large' ? 60 : Spacing.progressChipSize;
-  const actualSize = size || defaultSize;
-  const strokeWidth = variant === 'large' ? 5 : 3;
-  const backgroundStrokeWidth = variant === 'large' ? 5 : 2;
+  const defaultSize = variant === 'large' ? 60 : Spacing.progressChipSize
+  const actualSize = size || defaultSize
+  const strokeWidth = variant === 'large' ? 5 : 3
+  const backgroundStrokeWidth = variant === 'large' ? 5 : 2
 
-  const progress = total > 0 ? completed / total : 0;
-  const radius = actualSize / 2 - strokeWidth / 2;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - progress * circumference;
-  const isComplete = completed === total && total > 0;
+  const progress = total > 0 ? completed / total : 0
+  const radius = actualSize / 2 - strokeWidth / 2
+  const circumference = 2 * Math.PI * radius
+  const strokeDashoffset = circumference - progress * circumference
+  const isComplete = completed === total && total > 0
 
   // Figma颜色规格
-  const completedColor = '#2ECC71'; // 完成色
-  const uncompletedColor = '#6F6F6F'; // 未完成色
+  const completedColor = '#2ECC71' // 完成色
+  const uncompletedColor = '#6F6F6F' // 未完成色
 
   return (
     <View style={[styles.container, { width: actualSize, height: actualSize }]}>
@@ -67,8 +67,8 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
         {completed}/{total}
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
     fontWeight: Typography.fontWeight.semibold,
     textAlign: 'center',
   },
-});
+})

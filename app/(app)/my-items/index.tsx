@@ -1,14 +1,14 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
   Header,
@@ -16,24 +16,24 @@ import {
   FloatingActionButton,
   FadeInListItem,
   EmptyState,
-} from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { CustomItem } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+} from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { CustomItem } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 export default function MyItemsScreen() {
-  const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const router = useRouter();
-  const { state, getMostUsedCustomItems, getCustomItemsByCategory } = useApp();
+  const [searchText, setSearchText] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const router = useRouter()
+  const { state, getMostUsedCustomItems, getCustomItemsByCategory } = useApp()
 
   const filteredCustomItems = React.useMemo(() => {
     let items = selectedCategory
       ? getCustomItemsByCategory(selectedCategory)
-      : state.customItems;
+      : state.customItems
 
     if (searchText) {
       items = items.filter(
@@ -41,31 +41,31 @@ export default function MyItemsScreen() {
           item.name.toLowerCase().includes(searchText.toLowerCase()) ||
           item.brand?.toLowerCase().includes(searchText.toLowerCase()) ||
           item.category?.toLowerCase().includes(searchText.toLowerCase())
-      );
+      )
     }
 
-    return items.sort((a, b) => b.usageCount - a.usageCount);
+    return items.sort((a, b) => b.usageCount - a.usageCount)
   }, [
     searchText,
     selectedCategory,
     state.customItems,
     getCustomItemsByCategory,
-  ]);
+  ])
 
   const handleCreateItem = () => {
-    HapticFeedback.light();
-    router.push('/(app)/my-items/create');
-  };
+    HapticFeedback.light()
+    router.push('/(app)/my-items/create')
+  }
 
   const handleEditItem = (itemId: string) => {
-    HapticFeedback.light();
-    router.push(`/(app)/my-items/edit/${itemId}`);
-  };
+    HapticFeedback.light()
+    router.push(`/(app)/my-items/edit/${itemId}`)
+  }
 
   const handleCategoryPress = (categoryId: string | null) => {
-    HapticFeedback.selection();
-    setSelectedCategory(selectedCategory === categoryId ? null : categoryId);
-  };
+    HapticFeedback.selection()
+    setSelectedCategory(selectedCategory === categoryId ? null : categoryId)
+  }
 
   const renderCategoryFilter = () => (
     <View style={styles.categoryFilter}>
@@ -87,7 +87,7 @@ export default function MyItemsScreen() {
       </TouchableOpacity>
 
       {state.categories.map(category => {
-        const itemCount = getCustomItemsByCategory(category.id).length;
+        const itemCount = getCustomItemsByCategory(category.id).length
         return (
           <TouchableOpacity
             key={category.id}
@@ -125,17 +125,17 @@ export default function MyItemsScreen() {
               </Text>
             </View>
           </TouchableOpacity>
-        );
+        )
       })}
     </View>
-  );
+  )
 
   const renderCustomItem = ({
     item,
     index,
   }: {
-    item: CustomItem;
-    index: number;
+    item: CustomItem
+    index: number
   }) => (
     <FadeInListItem delay={index * 50}>
       <TouchableOpacity
@@ -205,7 +205,7 @@ export default function MyItemsScreen() {
         </View>
       </TouchableOpacity>
     </FadeInListItem>
-  );
+  )
 
   if (state.customItems.length === 0) {
     return (
@@ -256,7 +256,7 @@ export default function MyItemsScreen() {
           <FloatingActionButton onPress={handleCreateItem} icon="add" />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -315,7 +315,7 @@ export default function MyItemsScreen() {
         <FloatingActionButton onPress={handleCreateItem} icon="add" />
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -485,4 +485,4 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.sm,
     fontWeight: Typography.fontWeight.semibold,
   },
-});
+})

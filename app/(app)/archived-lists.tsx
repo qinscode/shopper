@@ -1,35 +1,35 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React from 'react'
+import { View, FlatList, StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { useApp } from '@/context/AppContext';
-import { ShoppingList } from '@/types';
-import { getListPreview, getCompletedCount } from '@/utils/listHelpers';
+import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { useApp } from '@/context/AppContext'
+import { ShoppingList } from '@/types'
+import { getListPreview, getCompletedCount } from '@/utils/listHelpers'
 
 export default function ArchivedListsScreen() {
-  const router = useRouter();
-  const { getArchivedLists, dispatch } = useApp();
-  const archivedLists = getArchivedLists();
+  const router = useRouter()
+  const { getArchivedLists, dispatch } = useApp()
+  const archivedLists = getArchivedLists()
 
   const handleRestoreList = (listId: string) => {
-    dispatch({ type: 'RESTORE_LIST', payload: { id: listId } });
-  };
+    dispatch({ type: 'RESTORE_LIST', payload: { id: listId } })
+  }
 
   const handleDeletePermanently = (listId: string) => {
-    dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } });
-  };
+    dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } })
+  }
 
   const renderListItem = ({
     item,
     index,
   }: {
-    item: ShoppingList;
-    index: number;
+    item: ShoppingList
+    index: number
   }) => (
     <ArchiveListCard
       item={item}
@@ -40,7 +40,7 @@ export default function ArchivedListsScreen() {
       getListPreview={getListPreview}
       getCompletedCount={getCompletedCount}
     />
-  );
+  )
 
   if (archivedLists.length === 0) {
     return (
@@ -67,7 +67,7 @@ export default function ArchivedListsScreen() {
           />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -86,7 +86,7 @@ export default function ArchivedListsScreen() {
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: Spacing.screenPadding,
   },
-});
+})

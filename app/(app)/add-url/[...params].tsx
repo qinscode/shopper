@@ -1,42 +1,42 @@
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import React, { useState } from 'react'
+import { View, StyleSheet, Alert } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, Input, Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { useApp } from '@/context/AppContext';
+import { Header, Input, Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { useApp } from '@/context/AppContext'
 
 export default function AddUrlScreen() {
-  const [url, setUrl] = useState('');
-  const router = useRouter();
-  const { params } = useLocalSearchParams();
+  const [url, setUrl] = useState('')
+  const router = useRouter()
+  const { params } = useLocalSearchParams()
 
   // Extract listId and itemId from params array
-  const listId = Array.isArray(params) ? params[0] : '';
-  const itemId = Array.isArray(params) ? params[1] : '';
+  const listId = Array.isArray(params) ? params[0] : ''
+  const itemId = Array.isArray(params) ? params[1] : ''
 
-  const { getList, dispatch } = useApp();
-  const list = getList(listId);
-  const item = list?.items.find(item => item.id === itemId);
+  const { getList, dispatch } = useApp()
+  const list = getList(listId)
+  const item = list?.items.find(item => item.id === itemId)
 
   const handleCancel = () => {
-    router.back();
-  };
+    router.back()
+  }
 
   const handleSave = () => {
     if (url.trim().length === 0) {
-      Alert.alert('Error', 'Please enter a URL');
-      return;
+      Alert.alert('Error', 'Please enter a URL')
+      return
     }
 
     // Basic URL validation
     if (!url.includes('http') && !url.includes('www')) {
       const formattedUrl = url.startsWith('www')
         ? `https://${url}`
-        : `https://${url}`;
-      setUrl(formattedUrl);
+        : `https://${url}`
+      setUrl(formattedUrl)
     }
 
     dispatch({
@@ -46,10 +46,10 @@ export default function AddUrlScreen() {
         itemId,
         updates: { url: url.trim() },
       },
-    });
+    })
 
-    router.back();
-  };
+    router.back()
+  }
 
   if (!item) {
     return (
@@ -60,7 +60,7 @@ export default function AddUrlScreen() {
           onBackPress={handleCancel}
         />
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -97,7 +97,7 @@ export default function AddUrlScreen() {
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
   },
-});
+})

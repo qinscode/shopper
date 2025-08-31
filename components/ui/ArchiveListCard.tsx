@@ -1,23 +1,23 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 
-import { ProgressChip, FadeInListItem } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { ShoppingList } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+import { ProgressChip, FadeInListItem } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { ShoppingList } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 interface ArchiveListCardProps {
-  item: ShoppingList;
-  index: number;
-  type: 'archived' | 'deleted';
-  onRestore: (listId: string, listName: string) => void;
-  onPermanentDelete: (listId: string, listName: string) => void;
-  getListPreview: (list: ShoppingList) => string;
-  getCompletedCount: (list: ShoppingList) => number;
-  getDaysInTrash?: (deletedAt: Date) => number;
+  item: ShoppingList
+  index: number
+  type: 'archived' | 'deleted'
+  onRestore: (listId: string, listName: string) => void
+  onPermanentDelete: (listId: string, listName: string) => void
+  getListPreview: (list: ShoppingList) => string
+  getCompletedCount: (list: ShoppingList) => number
+  getDaysInTrash?: (deletedAt: Date) => number
 }
 
 export function ArchiveListCard({
@@ -30,8 +30,8 @@ export function ArchiveListCard({
   getCompletedCount,
   getDaysInTrash,
 }: ArchiveListCardProps) {
-  const completedCount = getCompletedCount(item);
-  const totalCount = item.items.length;
+  const completedCount = getCompletedCount(item)
+  const totalCount = item.items.length
 
   const handleRestoreList = () => {
     Alert.alert(
@@ -42,13 +42,13 @@ export function ArchiveListCard({
         {
           text: 'Restore',
           onPress: () => {
-            HapticFeedback.success();
-            onRestore(item.id, item.name);
+            HapticFeedback.success()
+            onRestore(item.id, item.name)
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const handleDeletePermanently = () => {
     Alert.alert(
@@ -60,30 +60,30 @@ export function ArchiveListCard({
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            HapticFeedback.medium();
-            onPermanentDelete(item.id, item.name);
+            HapticFeedback.medium()
+            onPermanentDelete(item.id, item.name)
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const renderDateText = () => {
     if (type === 'deleted' && getDaysInTrash && item.deletedAt) {
-      const daysInTrash = getDaysInTrash(item.deletedAt);
+      const daysInTrash = getDaysInTrash(item.deletedAt)
       return (
         <Text style={styles.deletedDate}>
           Deleted {daysInTrash} {daysInTrash === 1 ? 'day' : 'days'} ago
         </Text>
-      );
+      )
     }
 
     return (
       <Text style={styles.archivedDate}>
         Archived {item.updatedAt.toLocaleDateString()}
       </Text>
-    );
-  };
+    )
+  }
 
   return (
     <FadeInListItem delay={index * 100}>
@@ -135,7 +135,7 @@ export function ArchiveListCard({
         </View>
       </View>
     </FadeInListItem>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -206,4 +206,4 @@ const styles = StyleSheet.create({
     ...Typography.textStyles.caption,
     marginLeft: Spacing.xs,
   },
-});
+})

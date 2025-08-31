@@ -1,22 +1,22 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
-import PagerView from 'react-native-pager-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import PagerView from 'react-native-pager-view'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
+import { Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
 
-const { width } = Dimensions.get('window');
+const { width } = Dimensions.get('window')
 
 interface OnboardingPageProps {
-  title: string;
-  headline: string;
-  body: string;
-  imageSource: any;
+  title: string
+  headline: string
+  body: string
+  imageSource: any
 }
 
 const OnboardingPage: React.FC<OnboardingPageProps> = ({
@@ -41,7 +41,7 @@ const OnboardingPage: React.FC<OnboardingPageProps> = ({
       <Text style={styles.body}>{body}</Text>
     </View>
   </View>
-);
+)
 
 const CarouselDots: React.FC<{ activeIndex: number; total: number }> = ({
   activeIndex,
@@ -58,12 +58,12 @@ const CarouselDots: React.FC<{ activeIndex: number; total: number }> = ({
       />
     ))}
   </View>
-);
+)
 
 export default function OnboardingScreen() {
-  const [currentPage, setCurrentPage] = useState(0);
-  const router = useRouter();
-  const { dispatch } = useApp();
+  const [currentPage, setCurrentPage] = useState(0)
+  const router = useRouter()
+  const { dispatch } = useApp()
 
   const onboardingData: OnboardingPageProps[] = [
     {
@@ -84,12 +84,12 @@ export default function OnboardingScreen() {
       body: '...make a list now, buy it later',
       imageSource: require('@/assets/images/onbording3.png'),
     },
-  ];
+  ]
 
   const handleStartUsingShopper = () => {
-    dispatch({ type: 'SET_ONBOARDING_COMPLETE' });
-    router.replace('/(app)/lists');
-  };
+    dispatch({ type: 'SET_ONBOARDING_COMPLETE' })
+    router.replace('/(app)/lists')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -114,7 +114,7 @@ export default function OnboardingScreen() {
         )}
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -201,4 +201,4 @@ const styles = StyleSheet.create({
   inactiveDot: {
     backgroundColor: Colors.inactive,
   },
-});
+})

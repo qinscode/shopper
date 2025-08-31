@@ -1,21 +1,21 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
+import { TouchableOpacity, StyleSheet } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
   runOnJS,
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 
-import { Colors } from '@/constants/Colors';
-import { Shadows } from '@/constants/Layout';
+import { Colors } from '@/constants/Colors'
+import { Shadows } from '@/constants/Layout'
 
 interface FloatingActionButtonProps {
-  onPress: () => void;
-  icon?: keyof typeof Ionicons.glyphMap;
-  size?: number;
+  onPress: () => void
+  icon?: keyof typeof Ionicons.glyphMap
+  size?: number
 }
 
 export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
@@ -23,29 +23,29 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   icon = 'add',
   size = 56,
 }) => {
-  const scale = useSharedValue(1);
-  const rotation = useSharedValue(0);
+  const scale = useSharedValue(1)
+  const rotation = useSharedValue(0)
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }, { rotate: `${rotation.value}deg` }],
-  }));
+  }))
 
   const handlePressIn = () => {
-    scale.value = withSpring(0.9, { damping: 15, stiffness: 200 });
-  };
+    scale.value = withSpring(0.9, { damping: 15, stiffness: 200 })
+  }
 
   const handlePressOut = () => {
-    scale.value = withSpring(1, { damping: 15, stiffness: 200 });
-  };
+    scale.value = withSpring(1, { damping: 15, stiffness: 200 })
+  }
 
   const handlePress = () => {
     rotation.value = withTiming(180, { duration: 200 }, () => {
       rotation.value = withTiming(360, { duration: 200 }, () => {
-        rotation.value = 0;
-      });
-    });
-    runOnJS(onPress)();
-  };
+        rotation.value = 0
+      })
+    })
+    runOnJS(onPress)()
+  }
 
   return (
     <TouchableOpacity
@@ -68,8 +68,8 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
         <Ionicons name={icon} size={size * 0.4} color={Colors.text} />
       </Animated.View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -78,4 +78,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...Shadows.large,
   },
-});
+})

@@ -1,16 +1,16 @@
-import React from 'react';
-import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
 interface EmptyStateProps {
-  title: string;
-  subtitle: string;
-  icon?: React.ReactNode;
-  action?: React.ReactNode;
-  style?: ViewStyle;
+  title: string
+  subtitle: string
+  icon?: React.ReactNode
+  action?: React.ReactNode
+  style?: ViewStyle
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
@@ -31,8 +31,8 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
       {action && <View style={styles.actionContainer}>{action}</View>}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
   actionContainer: {
     width: '100%',
   },
-});
+})

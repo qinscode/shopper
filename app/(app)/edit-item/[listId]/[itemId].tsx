@@ -1,55 +1,55 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import React, { useState, useEffect } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Input, Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { HapticFeedback } from '@/utils/haptics';
+import { Input, Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { HapticFeedback } from '@/utils/haptics'
 
 export default function EditItemScreen() {
-  const router = useRouter();
-  const { listId, itemId } = useLocalSearchParams();
-  const { getList, dispatch } = useApp();
+  const router = useRouter()
+  const { listId, itemId } = useLocalSearchParams()
+  const { getList, dispatch } = useApp()
 
-  const listIdStr = typeof listId === 'string' ? listId : listId?.[0] || '';
-  const itemIdStr = typeof itemId === 'string' ? itemId : itemId?.[0] || '';
+  const listIdStr = typeof listId === 'string' ? listId : listId?.[0] || ''
+  const itemIdStr = typeof itemId === 'string' ? itemId : itemId?.[0] || ''
 
-  const list = getList(listIdStr);
-  const item = list?.items.find(item => item.id === itemIdStr);
+  const list = getList(listIdStr)
+  const item = list?.items.find(item => item.id === itemIdStr)
 
-  const [itemName, setItemName] = useState(item?.name || '');
+  const [itemName, setItemName] = useState(item?.name || '')
 
   useEffect(() => {
     if (item) {
-      setItemName(item.name);
+      setItemName(item.name)
     }
-  }, [item]);
+  }, [item])
 
   const handleSave = () => {
-    const trimmedName = itemName.trim();
+    const trimmedName = itemName.trim()
 
     if (!trimmedName) {
-      Alert.alert('Error', 'Item name cannot be empty');
-      return;
+      Alert.alert('Error', 'Item name cannot be empty')
+      return
     }
 
     if (!item) {
-      Alert.alert('Error', 'Item not found');
-      return;
+      Alert.alert('Error', 'Item not found')
+      return
     }
 
     if (trimmedName === item.name) {
       // No changes, just go back
-      router.back();
-      return;
+      router.back()
+      return
     }
 
-    HapticFeedback.light();
+    HapticFeedback.light()
 
     dispatch({
       type: 'UPDATE_ITEM',
@@ -58,15 +58,15 @@ export default function EditItemScreen() {
         itemId: itemIdStr,
         updates: { name: trimmedName },
       },
-    });
+    })
 
-    router.back();
-  };
+    router.back()
+  }
 
   const handleCancel = () => {
-    HapticFeedback.light();
-    router.back();
-  };
+    HapticFeedback.light()
+    router.back()
+  }
 
   if (!item || !list) {
     return (
@@ -84,7 +84,7 @@ export default function EditItemScreen() {
           <Button title="Go Back" onPress={handleCancel} fullWidth />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -128,7 +128,7 @@ export default function EditItemScreen() {
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -185,4 +185,4 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
   },
-});
+})

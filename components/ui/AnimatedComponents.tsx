@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
-import { ViewStyle } from 'react-native';
+import React, { useEffect } from 'react'
+import { ViewStyle } from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   withTiming,
   interpolate,
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 
 interface FadeInListItemProps {
-  children: React.ReactNode;
-  delay?: number;
-  style?: ViewStyle;
+  children: React.ReactNode
+  delay?: number
+  style?: ViewStyle
 }
 
 export const FadeInListItem: React.FC<FadeInListItemProps> = ({
@@ -19,35 +19,35 @@ export const FadeInListItem: React.FC<FadeInListItemProps> = ({
   delay = 0,
   style,
 }) => {
-  const opacity = useSharedValue(0);
-  const translateY = useSharedValue(50);
+  const opacity = useSharedValue(0)
+  const translateY = useSharedValue(50)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      opacity.value = withTiming(1, { duration: 400 });
+      opacity.value = withTiming(1, { duration: 400 })
       translateY.value = withSpring(0, {
         damping: 20,
         stiffness: 150,
-      });
-    }, delay);
+      })
+    }, delay)
 
-    return () => clearTimeout(timer);
-  }, [delay, opacity, translateY]);
+    return () => clearTimeout(timer)
+  }, [delay, opacity, translateY])
 
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: opacity.value,
     transform: [{ translateY: translateY.value }],
-  }));
+  }))
 
   return (
     <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
-  );
-};
+  )
+}
 
 interface ScaleInProps {
-  children: React.ReactNode;
-  delay?: number;
-  style?: ViewStyle;
+  children: React.ReactNode
+  delay?: number
+  style?: ViewStyle
 }
 
 export const ScaleIn: React.FC<ScaleInProps> = ({
@@ -55,24 +55,24 @@ export const ScaleIn: React.FC<ScaleInProps> = ({
   delay = 0,
   style,
 }) => {
-  const scale = useSharedValue(0);
+  const scale = useSharedValue(0)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       scale.value = withSpring(1, {
         damping: 15,
         stiffness: 200,
-      });
-    }, delay);
+      })
+    }, delay)
 
-    return () => clearTimeout(timer);
-  }, [delay, scale]);
+    return () => clearTimeout(timer)
+  }, [delay, scale])
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
-  }));
+  }))
 
   return (
     <Animated.View style={[animatedStyle, style]}>{children}</Animated.View>
-  );
-};
+  )
+}

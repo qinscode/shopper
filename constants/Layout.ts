@@ -24,7 +24,7 @@ export const Spacing = {
   listItemHeight: 64,
   iconSize: 24,
   progressChipSize: 40,
-};
+}
 
 export const BorderRadius = {
   sm: 6,
@@ -32,7 +32,7 @@ export const BorderRadius = {
   lg: 16,
   xl: 20,
   pill: 999, // For pill-shaped buttons
-};
+}
 
 export const Shadows = {
   small: {
@@ -53,4 +53,4 @@ export const Shadows = {
     shadowRadius: 16,
     elevation: 8, // Android
   },
-};
+}

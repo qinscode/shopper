@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,14 +9,14 @@ import {
   FlatList,
   TextInput,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { HapticFeedback } from '@/utils/haptics';
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { HapticFeedback } from '@/utils/haptics'
 
 const EMOJI_DATA = [
   '🛒',
@@ -99,61 +99,61 @@ const EMOJI_DATA = [
   '🧊',
   '🥄',
   '🍴',
-];
+]
 
 export default function SelectEmojiScreen() {
-  const router = useRouter();
-  const { listId, itemId } = useLocalSearchParams();
-  const listIdStr = typeof listId === 'string' ? listId : listId?.[0] || '';
-  const itemIdStr = typeof itemId === 'string' ? itemId : itemId?.[0] || '';
+  const router = useRouter()
+  const { listId, itemId } = useLocalSearchParams()
+  const listIdStr = typeof listId === 'string' ? listId : listId?.[0] || ''
+  const itemIdStr = typeof itemId === 'string' ? itemId : itemId?.[0] || ''
 
-  const { getList, dispatch } = useApp();
-  const list = getList(listIdStr);
-  const item = list?.items.find(i => i.id === itemIdStr);
+  const { getList, dispatch } = useApp()
+  const list = getList(listIdStr)
+  const item = list?.items.find(i => i.id === itemIdStr)
 
-  const [customInput, setCustomInput] = useState('');
+  const [customInput, setCustomInput] = useState('')
 
   // 处理自定义输入的逻辑
   const processCustomInput = (input: string): string => {
     if (!input.trim()) {
-      return '';
+      return ''
     }
 
     // 如果输入的是emoji（检查是否为单个emoji字符）
     const emojiRegex =
-      /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{27BF}]|^[\u{1F600}-\u{1F64F}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]/u;
+      /^[\u{1F300}-\u{1F9FF}]|^[\u{2600}-\u{27BF}]|^[\u{1F600}-\u{1F64F}]|^[\u{1F680}-\u{1F6FF}]|^[\u{1F1E0}-\u{1F1FF}]/u
     if (emojiRegex.test(input)) {
       // 取第一个emoji字符
-      const match = input.match(emojiRegex);
-      return match ? match[0] : input.charAt(0);
+      const match = input.match(emojiRegex)
+      return match ? match[0] : input.charAt(0)
     }
 
     // 如果是文字，取第一个字符
-    return input.charAt(0).toUpperCase();
-  };
+    return input.charAt(0).toUpperCase()
+  }
 
   const handleCustomSubmit = () => {
     if (!customInput.trim()) {
-      Alert.alert('提示', '请输入emoji或文字');
-      return;
+      Alert.alert('提示', '请输入emoji或文字')
+      return
     }
 
-    const processedEmoji = processCustomInput(customInput);
-    handleSelectEmoji(processedEmoji);
-    setCustomInput('');
-  };
+    const processedEmoji = processCustomInput(customInput)
+    handleSelectEmoji(processedEmoji)
+    setCustomInput('')
+  }
 
   const handleSelectEmoji = (emoji: string) => {
-    HapticFeedback.light();
+    HapticFeedback.light()
     dispatch({
       type: 'UPDATE_ITEM',
       payload: { listId: listIdStr, itemId: itemIdStr, updates: { emoji } },
-    });
-    router.back();
-  };
+    })
+    router.back()
+  }
 
   const handleRemoveEmoji = () => {
-    HapticFeedback.light();
+    HapticFeedback.light()
     dispatch({
       type: 'UPDATE_ITEM',
       payload: {
@@ -161,9 +161,9 @@ export default function SelectEmojiScreen() {
         itemId: itemIdStr,
         updates: { emoji: undefined },
       },
-    });
-    router.back();
-  };
+    })
+    router.back()
+  }
 
   const renderEmojiItem = ({ item: emoji }: { item: string }) => (
     <TouchableOpacity
@@ -176,7 +176,7 @@ export default function SelectEmojiScreen() {
     >
       <Text style={styles.emojiText}>{emoji}</Text>
     </TouchableOpacity>
-  );
+  )
 
   return (
     <>
@@ -262,7 +262,7 @@ export default function SelectEmojiScreen() {
         </View>
       </SafeAreaView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -401,4 +401,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontWeight: Typography.fontWeight.medium,
   },
-});
+})

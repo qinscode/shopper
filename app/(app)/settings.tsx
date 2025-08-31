@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React from 'react'
 import {
   View,
   Text,
@@ -8,22 +8,22 @@ import {
   StyleSheet,
   ScrollView,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { HapticFeedback } from '@/utils/haptics';
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { HapticFeedback } from '@/utils/haptics'
 
 interface SettingsItemProps {
-  title: string;
-  subtitle?: string;
-  icon: string;
-  iconColor?: string;
-  onPress: () => void;
-  isLast?: boolean;
-  rightText?: string;
+  title: string
+  subtitle?: string
+  icon: string
+  iconColor?: string
+  onPress: () => void
+  isLast?: boolean
+  rightText?: string
 }
 
 const SettingsItem: React.FC<SettingsItemProps> = ({
@@ -54,25 +54,25 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
       <Ionicons name="chevron-forward" size={18} color={Colors.textTertiary} />
     </View>
   </TouchableOpacity>
-);
+)
 
 export default function SettingsScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleBack = () => {
-    HapticFeedback.light();
-    router.back();
-  };
+    HapticFeedback.light()
+    router.back()
+  }
 
   const handleArchivedLists = () => {
-    HapticFeedback.light();
-    router.push('/(app)/archived-lists');
-  };
+    HapticFeedback.light()
+    router.push('/(app)/archived-lists')
+  }
 
   const handleTrash = () => {
-    HapticFeedback.light();
-    router.push('/(app)/trash');
-  };
+    HapticFeedback.light()
+    router.push('/(app)/trash')
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -117,12 +117,12 @@ export default function SettingsScreen() {
               icon="information-circle-outline"
               rightText="Version 1.0.0"
               onPress={() => {
-                HapticFeedback.light();
+                HapticFeedback.light()
                 Alert.alert(
                   'About Shopper',
                   'Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo.',
                   [{ text: 'OK', style: 'default' }]
-                );
+                )
               }}
               isLast={true}
             />
@@ -130,7 +130,7 @@ export default function SettingsScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -250,4 +250,4 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginRight: Spacing.sm,
   },
-});
+})

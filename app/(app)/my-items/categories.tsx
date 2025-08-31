@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
   Header,
@@ -17,13 +17,13 @@ import {
   Button,
   FloatingActionButton,
   FadeInListItem,
-} from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { ItemCategory } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+} from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { ItemCategory } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 const CATEGORY_COLORS = [
   '#4CAF50',
@@ -41,7 +41,7 @@ const CATEGORY_COLORS = [
   '#FFC107',
   '#673AB7',
   '#009688',
-];
+]
 
 const CATEGORY_ICONS = [
   'basket-outline',
@@ -59,24 +59,24 @@ const CATEGORY_ICONS = [
   'phone-portrait-outline',
   'game-controller-outline',
   'musical-notes-outline',
-];
+]
 
 export default function CategoriesScreen() {
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false)
   const [editingCategory, setEditingCategory] = useState<ItemCategory | null>(
     null
-  );
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [selectedColor, setSelectedColor] = useState(CATEGORY_COLORS[0]);
-  const [selectedIcon, setSelectedIcon] = useState(CATEGORY_ICONS[0]);
+  )
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [selectedColor, setSelectedColor] = useState(CATEGORY_COLORS[0])
+  const [selectedIcon, setSelectedIcon] = useState(CATEGORY_ICONS[0])
 
-  const router = useRouter();
-  const { state, dispatch, getCustomItemsByCategory } = useApp();
+  const router = useRouter()
+  const { state, dispatch, getCustomItemsByCategory } = useApp()
 
   const handleCreateCategory = () => {
     if (newCategoryName.trim().length === 0) {
-      Alert.alert('Error', 'Please enter a category name');
-      return;
+      Alert.alert('Error', 'Please enter a category name')
+      return
     }
 
     if (
@@ -84,8 +84,8 @@ export default function CategoriesScreen() {
         cat => cat.name.toLowerCase() === newCategoryName.trim().toLowerCase()
       )
     ) {
-      Alert.alert('Error', 'A category with this name already exists');
-      return;
+      Alert.alert('Error', 'A category with this name already exists')
+      return
     }
 
     if (editingCategory) {
@@ -99,9 +99,9 @@ export default function CategoriesScreen() {
             icon: selectedIcon,
           },
         },
-      });
-      HapticFeedback.success();
-      setEditingCategory(null);
+      })
+      HapticFeedback.success()
+      setEditingCategory(null)
     } else {
       dispatch({
         type: 'CREATE_CATEGORY',
@@ -110,35 +110,35 @@ export default function CategoriesScreen() {
           color: selectedColor,
           icon: selectedIcon,
         },
-      });
-      HapticFeedback.success();
+      })
+      HapticFeedback.success()
     }
 
     // Reset form
-    setNewCategoryName('');
-    setSelectedColor(CATEGORY_COLORS[0]);
-    setSelectedIcon(CATEGORY_ICONS[0]);
-    setShowCreateForm(false);
-  };
+    setNewCategoryName('')
+    setSelectedColor(CATEGORY_COLORS[0])
+    setSelectedIcon(CATEGORY_ICONS[0])
+    setShowCreateForm(false)
+  }
 
   const handleEditCategory = (category: ItemCategory) => {
-    setEditingCategory(category);
-    setNewCategoryName(category.name);
-    setSelectedColor(category.color);
-    setSelectedIcon(category.icon || CATEGORY_ICONS[0]);
-    setShowCreateForm(true);
-    HapticFeedback.light();
-  };
+    setEditingCategory(category)
+    setNewCategoryName(category.name)
+    setSelectedColor(category.color)
+    setSelectedIcon(category.icon || CATEGORY_ICONS[0])
+    setShowCreateForm(true)
+    HapticFeedback.light()
+  }
 
   const handleDeleteCategory = (category: ItemCategory) => {
-    const itemsInCategory = getCustomItemsByCategory(category.id);
+    const itemsInCategory = getCustomItemsByCategory(category.id)
 
     if (itemsInCategory.length > 0) {
       Alert.alert(
         'Cannot Delete Category',
         `This category contains ${itemsInCategory.length} custom item${itemsInCategory.length === 1 ? '' : 's'}. Please remove or reassign these items first.`
-      );
-      return;
+      )
+      return
     }
 
     Alert.alert(
@@ -153,21 +153,21 @@ export default function CategoriesScreen() {
             dispatch({
               type: 'DELETE_CATEGORY',
               payload: { id: category.id },
-            });
-            HapticFeedback.success();
+            })
+            HapticFeedback.success()
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const cancelEdit = () => {
-    setEditingCategory(null);
-    setNewCategoryName('');
-    setSelectedColor(CATEGORY_COLORS[0]);
-    setSelectedIcon(CATEGORY_ICONS[0]);
-    setShowCreateForm(false);
-  };
+    setEditingCategory(null)
+    setNewCategoryName('')
+    setSelectedColor(CATEGORY_COLORS[0])
+    setSelectedIcon(CATEGORY_ICONS[0])
+    setShowCreateForm(false)
+  }
 
   const renderColorPicker = () => (
     <View style={styles.colorPicker}>
@@ -182,8 +182,8 @@ export default function CategoriesScreen() {
               selectedColor === color && styles.selectedColorOption,
             ]}
             onPress={() => {
-              setSelectedColor(color);
-              HapticFeedback.selection();
+              setSelectedColor(color)
+              HapticFeedback.selection()
             }}
           >
             {selectedColor === color && (
@@ -193,7 +193,7 @@ export default function CategoriesScreen() {
         ))}
       </View>
     </View>
-  );
+  )
 
   const renderIconPicker = () => (
     <View style={styles.iconPicker}>
@@ -207,8 +207,8 @@ export default function CategoriesScreen() {
               selectedIcon === icon && styles.selectedIconOption,
             ]}
             onPress={() => {
-              setSelectedIcon(icon);
-              HapticFeedback.selection();
+              setSelectedIcon(icon)
+              HapticFeedback.selection()
             }}
           >
             <Ionicons
@@ -220,7 +220,7 @@ export default function CategoriesScreen() {
         ))}
       </View>
     </View>
-  );
+  )
 
   const renderCreateForm = () => (
     <View style={styles.createForm}>
@@ -253,16 +253,16 @@ export default function CategoriesScreen() {
         />
       </View>
     </View>
-  );
+  )
 
   const renderCategoryItem = ({
     item,
     index,
   }: {
-    item: ItemCategory;
-    index: number;
+    item: ItemCategory
+    index: number
   }) => {
-    const itemCount = getCustomItemsByCategory(item.id).length;
+    const itemCount = getCustomItemsByCategory(item.id).length
 
     return (
       <FadeInListItem delay={index * 50}>
@@ -311,8 +311,8 @@ export default function CategoriesScreen() {
           </View>
         </View>
       </FadeInListItem>
-    );
-  };
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -343,7 +343,7 @@ export default function CategoriesScreen() {
         </View>
       )}
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -500,4 +500,4 @@ const styles = StyleSheet.create({
     right: Spacing.screenPadding,
     bottom: Spacing.xl,
   },
-});
+})

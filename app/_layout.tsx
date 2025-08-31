@@ -2,16 +2,16 @@ import {
   DarkTheme,
   DefaultTheme,
   ThemeProvider,
-} from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import 'react-native-reanimated';
+} from '@react-navigation/native'
+import { useFonts } from 'expo-font'
+import { Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import 'react-native-reanimated'
 
-import { Colors } from '@/constants/Colors';
-import { AppProvider } from '@/context/AppContext';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/constants/Colors'
+import { AppProvider } from '@/context/AppContext'
+import { useColorScheme } from '@/hooks/useColorScheme'
 
 const customDarkTheme = {
   ...DarkTheme,
@@ -24,16 +24,16 @@ const customDarkTheme = {
     notification: Colors.primary,
     primary: Colors.primary,
   },
-};
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  })
 
   if (!loaded) {
-    return null;
+    return null
   }
 
   return (
@@ -50,5 +50,5 @@ export default function RootLayout() {
         </ThemeProvider>
       </AppProvider>
     </GestureHandlerRootView>
-  );
+  )
 }

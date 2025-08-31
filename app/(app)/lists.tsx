@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -9,8 +9,8 @@ import {
   StyleSheet,
   Image,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import {
   Header,
@@ -21,20 +21,20 @@ import {
   FloatingActionButton,
   FadeInListItem,
   Input,
-} from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { ShoppingList } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+} from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { ShoppingList } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 export default function ListsScreen() {
-  const [searchText, setSearchText] = useState('');
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const router = useRouter();
-  const { getVisibleLists, dispatch } = useApp();
-  const allLists = getVisibleLists();
+  const [searchText, setSearchText] = useState('')
+  const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const router = useRouter()
+  const { getVisibleLists, dispatch } = useApp()
+  const allLists = getVisibleLists()
 
   // Filter lists based on search text
   const filteredLists =
@@ -46,38 +46,38 @@ export default function ListsScreen() {
             list.items.some(item =>
               item.name.toLowerCase().includes(searchText.toLowerCase())
             )
-        );
+        )
 
   const handleCreateList = () => {
-    HapticFeedback.light();
-    router.push('/(app)/create-list');
-  };
+    HapticFeedback.light()
+    router.push('/(app)/create-list')
+  }
 
   const handleToggleSearch = () => {
-    HapticFeedback.light();
-    setIsSearchVisible(!isSearchVisible);
+    HapticFeedback.light()
+    setIsSearchVisible(!isSearchVisible)
     if (isSearchVisible) {
-      setSearchText('');
+      setSearchText('')
     }
-  };
+  }
 
   const handleShowSettings = () => {
-    HapticFeedback.light();
-    router.push('/(app)/settings');
-  };
+    HapticFeedback.light()
+    router.push('/(app)/settings')
+  }
 
   const handleOpenList = (listId: string) => {
-    HapticFeedback.light();
-    router.push(`/(app)/list/${listId}`);
-  };
+    HapticFeedback.light()
+    router.push(`/(app)/list/${listId}`)
+  }
 
   const handleDuplicateList = (listId: string) => {
-    HapticFeedback.medium();
-    dispatch({ type: 'DUPLICATE_LIST', payload: { id: listId } });
-  };
+    HapticFeedback.medium()
+    dispatch({ type: 'DUPLICATE_LIST', payload: { id: listId } })
+  }
 
   const handleArchiveList = (listId: string, listName: string) => {
-    HapticFeedback.medium();
+    HapticFeedback.medium()
     Alert.alert(
       'Archive List',
       `Are you sure you want to archive "${listName}"?`,
@@ -86,15 +86,15 @@ export default function ListsScreen() {
         {
           text: 'Archive',
           onPress: () => {
-            dispatch({ type: 'ARCHIVE_LIST', payload: { id: listId } });
+            dispatch({ type: 'ARCHIVE_LIST', payload: { id: listId } })
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const handleDeleteList = (listId: string, listName: string) => {
-    HapticFeedback.medium();
+    HapticFeedback.medium()
     Alert.alert(
       'Delete List',
       `Are you sure you want to delete "${listName}"? You can restore it from the trash later.`,
@@ -104,38 +104,38 @@ export default function ListsScreen() {
           text: 'Delete',
           style: 'destructive',
           onPress: () => {
-            dispatch({ type: 'DELETE_LIST', payload: { id: listId } });
+            dispatch({ type: 'DELETE_LIST', payload: { id: listId } })
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const getListPreview = (list: ShoppingList): string => {
-    const visibleItems = list.items.slice(0, 3);
-    const itemNames = visibleItems.map(item => item.name).join(', ');
-    const remainingCount = list.items.length - visibleItems.length;
+    const visibleItems = list.items.slice(0, 3)
+    const itemNames = visibleItems.map(item => item.name).join(', ')
+    const remainingCount = list.items.length - visibleItems.length
 
     if (remainingCount > 0) {
-      return `${itemNames} + ${remainingCount} more`;
+      return `${itemNames} + ${remainingCount} more`
     }
 
-    return itemNames || 'No items yet';
-  };
+    return itemNames || 'No items yet'
+  }
 
   const getCompletedCount = (list: ShoppingList): number => {
-    return list.items.filter(item => item.isCompleted).length;
-  };
+    return list.items.filter(item => item.isCompleted).length
+  }
 
   const renderListItem = ({
     item,
     index,
   }: {
-    item: ShoppingList;
-    index: number;
+    item: ShoppingList
+    index: number
   }) => {
-    const completedCount = getCompletedCount(item);
-    const totalCount = item.items.length;
+    const completedCount = getCompletedCount(item)
+    const totalCount = item.items.length
 
     return (
       <FadeInListItem delay={index * 100}>
@@ -208,8 +208,8 @@ export default function ListsScreen() {
           </View>
         </View>
       </FadeInListItem>
-    );
-  };
+    )
+  }
 
   if (allLists.length === 0) {
     return (
@@ -254,7 +254,7 @@ export default function ListsScreen() {
           />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -343,7 +343,7 @@ export default function ListsScreen() {
         <FloatingActionButton onPress={handleCreateList} icon="add" />
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -440,4 +440,4 @@ const styles = StyleSheet.create({
   headerButton: {
     marginLeft: Spacing.md,
   },
-});
+})

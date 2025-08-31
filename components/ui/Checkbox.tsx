@@ -1,15 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
+import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native'
 
-import { Colors } from '@/constants/Colors';
-import { HapticFeedback } from '@/utils/haptics';
+import { Colors } from '@/constants/Colors'
+import { HapticFeedback } from '@/utils/haptics'
 
 interface CheckboxProps {
-  checked: boolean;
-  onToggle: () => void;
-  size?: number;
-  style?: ViewStyle;
+  checked: boolean
+  onToggle: () => void
+  size?: number
+  style?: ViewStyle
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({
@@ -20,12 +20,12 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 }) => {
   const handleToggle = () => {
     if (checked) {
-      HapticFeedback.light();
+      HapticFeedback.light()
     } else {
-      HapticFeedback.success();
+      HapticFeedback.success()
     }
-    onToggle();
-  };
+    onToggle()
+  }
 
   return (
     <TouchableOpacity
@@ -50,8 +50,8 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         />
       )}
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent', // 保持透明，只显示绿色勾选
     borderColor: '#2ECC71', // 绿色边框
   },
-});
+})

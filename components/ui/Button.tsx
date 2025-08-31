@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import {
   TouchableOpacity,
   Text,
@@ -6,23 +6,23 @@ import {
   ActivityIndicator,
   ViewStyle,
   TextStyle,
-} from 'react-native';
+} from 'react-native'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { HapticFeedback } from '@/utils/haptics';
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { HapticFeedback } from '@/utils/haptics'
 
 interface ButtonProps {
-  title: string;
-  onPress: () => void;
-  variant?: 'primary' | 'secondary';
-  size?: 'small' | 'medium' | 'large';
-  disabled?: boolean;
-  loading?: boolean;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
-  fullWidth?: boolean;
+  title: string
+  onPress: () => void
+  variant?: 'primary' | 'secondary'
+  size?: 'small' | 'medium' | 'large'
+  disabled?: boolean
+  loading?: boolean
+  style?: ViewStyle
+  textStyle?: TextStyle
+  fullWidth?: boolean
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -43,7 +43,7 @@ export const Button: React.FC<ButtonProps> = ({
     fullWidth && styles.fullWidth,
     disabled && styles.disabled,
     style,
-  ];
+  ]
 
   const textStyles = [
     styles.text,
@@ -51,14 +51,14 @@ export const Button: React.FC<ButtonProps> = ({
     styles[`${size}Text` as keyof typeof styles],
     disabled && styles.disabledText,
     textStyle,
-  ];
+  ]
 
   const handlePress = () => {
     if (!disabled && !loading) {
-      HapticFeedback.light();
-      onPress();
+      HapticFeedback.light()
+      onPress()
     }
-  };
+  }
 
   return (
     <TouchableOpacity
@@ -76,8 +76,8 @@ export const Button: React.FC<ButtonProps> = ({
         <Text style={textStyles}>{title}</Text>
       )}
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   base: {
@@ -146,4 +146,4 @@ const styles = StyleSheet.create({
   disabledText: {
     color: Colors.textTertiary,
   },
-});
+})

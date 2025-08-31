@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams, Stack } from 'expo-router';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
+import React from 'react'
 import {
   View,
   Text,
@@ -9,29 +9,29 @@ import {
   StyleSheet,
   Alert,
   Image,
-} from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { Swipeable } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { ShoppingItem } from '@/types';
+import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { ShoppingItem } from '@/types'
 
 export default function ListDetailScreen() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const listId = typeof id === 'string' ? id : id?.[0] || '';
+  const router = useRouter()
+  const { id } = useLocalSearchParams()
+  const listId = typeof id === 'string' ? id : id?.[0] || ''
 
-  const { getList, dispatch } = useApp();
-  const list = getList(listId);
+  const { getList, dispatch } = useApp()
+  const list = getList(listId)
 
   const completedCount = list
     ? list.items.filter(item => item.isCompleted).length
-    : 0;
-  const totalCount = list ? list.items.length : 0;
+    : 0
+  const totalCount = list ? list.items.length : 0
 
   const handleArchiveList = () => {
     Alert.alert(
@@ -45,13 +45,13 @@ export default function ListDetailScreen() {
             dispatch({
               type: 'ARCHIVE_LIST',
               payload: { id: listId },
-            });
-            router.back();
+            })
+            router.back()
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const handleDeleteList = () => {
     Alert.alert(
@@ -66,13 +66,13 @@ export default function ListDetailScreen() {
             dispatch({
               type: 'DELETE_LIST',
               payload: { id: listId },
-            });
-            router.back();
+            })
+            router.back()
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   if (!list) {
     return (
@@ -106,38 +106,38 @@ export default function ListDetailScreen() {
           />
         </SafeAreaView>
       </>
-    );
+    )
   }
 
   const handleAddItem = () => {
-    router.push(`/(app)/add-items/${listId}`);
-  };
+    router.push(`/(app)/add-items/${listId}`)
+  }
 
   const handleToggleItem = (itemId: string) => {
     dispatch({
       type: 'TOGGLE_ITEM',
       payload: { listId, itemId },
-    });
-  };
+    })
+  }
 
   const handleDeleteItem = (itemId: string) => {
     dispatch({
       type: 'DELETE_ITEM',
       payload: { listId, itemId },
-    });
-  };
+    })
+  }
 
   const handleSelectEmoji = (itemId: string) => {
-    router.push(`/(app)/select-emoji/${listId}/${itemId}`);
-  };
+    router.push(`/(app)/select-emoji/${listId}/${itemId}`)
+  }
 
   const handleAddUrl = (itemId: string) => {
-    router.push(`/(app)/add-url/${listId}/${itemId}`);
-  };
+    router.push(`/(app)/add-url/${listId}/${itemId}`)
+  }
 
   const handleEditItem = (itemId: string) => {
-    router.push(`/(app)/edit-item/${listId}/${itemId}`);
-  };
+    router.push(`/(app)/edit-item/${listId}/${itemId}`)
+  }
 
   const renderRightActions = (itemId: string, itemName: string) => (
     <View style={styles.rightActionsContainer}>
@@ -155,16 +155,16 @@ export default function ListDetailScreen() {
                 onPress: () => handleDeleteItem(itemId),
               },
             ]
-          );
+          )
         }}
       >
         <Ionicons name="trash-outline" size={20} color={Colors.text} />
       </TouchableOpacity>
     </View>
-  );
+  )
 
   const renderItem = ({ item }: { item: ShoppingItem }) => {
-    const hasUrl = !!item.url;
+    const hasUrl = !!item.url
 
     return (
       <Swipeable
@@ -246,8 +246,8 @@ export default function ListDetailScreen() {
           />
         </TouchableOpacity>
       </Swipeable>
-    );
-  };
+    )
+  }
 
   if (list.items.length === 0) {
     return (
@@ -298,7 +298,7 @@ export default function ListDetailScreen() {
                         style: 'cancel',
                       },
                     ]
-                  );
+                  )
                 }}
               >
                 <Ionicons
@@ -325,7 +325,7 @@ export default function ListDetailScreen() {
           />
         </SafeAreaView>
       </>
-    );
+    )
   }
 
   return (
@@ -372,7 +372,7 @@ export default function ListDetailScreen() {
                     text: 'Cancel',
                     style: 'cancel',
                   },
-                ]);
+                ])
               }}
             >
               <Ionicons
@@ -403,7 +403,7 @@ export default function ListDetailScreen() {
         </View>
       </SafeAreaView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -561,4 +561,4 @@ const styles = StyleSheet.create({
     width: 180,
     height: 120,
   },
-});
+})

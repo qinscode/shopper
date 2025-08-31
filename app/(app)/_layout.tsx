@@ -1,7 +1,7 @@
-import { Stack } from 'expo-router';
-import React from 'react';
+import { Stack } from 'expo-router'
+import React from 'react'
 
-import { Colors } from '@/constants/Colors';
+import { Colors } from '@/constants/Colors'
 
 export default function AppLayout() {
   return (
@@ -22,5 +22,5 @@ export default function AppLayout() {
       <Stack.Screen name="my-items/edit/[id]" />
       <Stack.Screen name="my-items/categories" />
     </Stack>
-  );
+  )
 }

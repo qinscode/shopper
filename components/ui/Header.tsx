@@ -1,26 +1,26 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ViewStyle,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
 interface HeaderProps {
-  title: string;
-  showBackButton?: boolean;
-  onBackPress?: () => void;
-  leftComponent?: React.ReactNode;
-  rightComponent?: React.ReactNode;
-  titleAlign?: 'center' | 'left'; // 新增标题对齐方式
-  style?: ViewStyle;
+  title: string
+  showBackButton?: boolean
+  onBackPress?: () => void
+  leftComponent?: React.ReactNode
+  rightComponent?: React.ReactNode
+  titleAlign?: 'center' | 'left' // 新增标题对齐方式
+  style?: ViewStyle
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -32,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({
   titleAlign = 'center',
   style,
 }) => {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
   return (
     <View style={[styles.container, style]}>
@@ -64,8 +64,8 @@ export const Header: React.FC<HeaderProps> = ({
         <View style={styles.rightSection}>{rightComponent}</View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   titleLeft: {
     textAlign: 'left',
   },
-});
+})

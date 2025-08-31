@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
+import React from 'react'
 import {
   View,
   Text,
@@ -8,38 +8,38 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { ShoppingList } from '@/types';
+import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { ShoppingList } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 import {
   getListPreview,
   getCompletedCount,
   getDaysInTrash,
-} from '@/utils/listHelpers';
-import { HapticFeedback } from '@/utils/haptics';
+} from '@/utils/listHelpers'
 
 export default function TrashScreen() {
-  const router = useRouter();
-  const { getDeletedLists, dispatch } = useApp();
-  const deletedLists = getDeletedLists();
+  const router = useRouter()
+  const { getDeletedLists, dispatch } = useApp()
+  const deletedLists = getDeletedLists()
 
   const handleRestoreList = (listId: string) => {
-    dispatch({ type: 'RESTORE_LIST', payload: { id: listId } });
-  };
+    dispatch({ type: 'RESTORE_LIST', payload: { id: listId } })
+  }
 
   const handleDeletePermanently = (listId: string) => {
-    dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } });
-  };
+    dispatch({ type: 'PERMANENTLY_DELETE_LIST', payload: { id: listId } })
+  }
 
   const handleEmptyTrash = () => {
     if (deletedLists.length === 0) {
-      return;
+      return
     }
 
     Alert.alert(
@@ -51,25 +51,25 @@ export default function TrashScreen() {
           text: 'Empty Trash',
           style: 'destructive',
           onPress: () => {
-            HapticFeedback.medium();
+            HapticFeedback.medium()
             deletedLists.forEach(list => {
               dispatch({
                 type: 'PERMANENTLY_DELETE_LIST',
                 payload: { id: list.id },
-              });
-            });
+              })
+            })
           },
         },
       ]
-    );
-  };
+    )
+  }
 
   const renderListItem = ({
     item,
     index,
   }: {
-    item: ShoppingList;
-    index: number;
+    item: ShoppingList
+    index: number
   }) => (
     <ArchiveListCard
       item={item}
@@ -81,7 +81,7 @@ export default function TrashScreen() {
       getCompletedCount={getCompletedCount}
       getDaysInTrash={getDaysInTrash}
     />
-  );
+  )
 
   if (deletedLists.length === 0) {
     return (
@@ -108,7 +108,7 @@ export default function TrashScreen() {
           />
         </View>
       </SafeAreaView>
-    );
+    )
   }
 
   return (
@@ -138,7 +138,7 @@ export default function TrashScreen() {
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -174,4 +174,4 @@ const styles = StyleSheet.create({
   listContainer: {
     padding: Spacing.screenPadding,
   },
-});
+})

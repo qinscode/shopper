@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { createContext, useContext, useReducer, useEffect } from 'react'
+
 import {
   AppState,
   ShoppingList,
@@ -7,7 +8,7 @@ import {
   CustomItem,
   ItemCategory,
   DEFAULT_CATEGORIES,
-} from '@/types';
+} from '@/types'
 
 type Action =
   | { type: 'SET_ONBOARDING_COMPLETE' }
@@ -21,58 +22,55 @@ type Action =
   | { type: 'RESTORE_LIST'; payload: { id: string } }
   | { type: 'PERMANENTLY_DELETE_LIST'; payload: { id: string } }
   | {
-      type: 'ADD_ITEM';
-      payload: { listId: string; name: string; customItemId?: string };
+      type: 'ADD_ITEM'
+      payload: { listId: string; name: string; customItemId?: string }
     }
   | {
-      type: 'UPDATE_ITEM';
+      type: 'UPDATE_ITEM'
       payload: {
-        listId: string;
-        itemId: string;
-        updates: Partial<ShoppingItem>;
-      };
+        listId: string
+        itemId: string
+        updates: Partial<ShoppingItem>
+      }
     }
   | { type: 'DELETE_ITEM'; payload: { listId: string; itemId: string } }
   | { type: 'TOGGLE_ITEM'; payload: { listId: string; itemId: string } }
   | {
-      type: 'CREATE_CUSTOM_ITEM';
-      payload: Omit<
-        CustomItem,
-        'id' | 'usageCount' | 'createdAt' | 'updatedAt'
-      >;
+      type: 'CREATE_CUSTOM_ITEM'
+      payload: Omit<CustomItem, 'id' | 'usageCount' | 'createdAt' | 'updatedAt'>
     }
   | {
-      type: 'UPDATE_CUSTOM_ITEM';
-      payload: { id: string; updates: Partial<CustomItem> };
+      type: 'UPDATE_CUSTOM_ITEM'
+      payload: { id: string; updates: Partial<CustomItem> }
     }
   | { type: 'DELETE_CUSTOM_ITEM'; payload: { id: string } }
   | { type: 'USE_CUSTOM_ITEM'; payload: { id: string } }
   | { type: 'CREATE_CATEGORY'; payload: Omit<ItemCategory, 'id' | 'createdAt'> }
   | {
-      type: 'UPDATE_CATEGORY';
-      payload: { id: string; updates: Partial<ItemCategory> };
+      type: 'UPDATE_CATEGORY'
+      payload: { id: string; updates: Partial<ItemCategory> }
     }
   | { type: 'DELETE_CATEGORY'; payload: { id: string } }
-  | { type: 'INITIALIZE_DEFAULT_CATEGORIES' };
+  | { type: 'INITIALIZE_DEFAULT_CATEGORIES' }
 
 const initialState: AppState = {
   lists: [],
   customItems: [],
   categories: [],
   hasCompletedOnboarding: false,
-};
+}
 
 function generateId(): string {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9);
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9)
 }
 
 function appReducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'SET_ONBOARDING_COMPLETE':
-      return { ...state, hasCompletedOnboarding: true };
+      return { ...state, hasCompletedOnboarding: true }
 
     case 'LOAD_STATE':
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload }
 
     case 'INITIALIZE_DEFAULT_CATEGORIES': {
       if (state.categories.length === 0) {
@@ -80,10 +78,10 @@ function appReducer(state: AppState, action: Action): AppState {
           ...cat,
           id: generateId(),
           createdAt: new Date(),
-        }));
-        return { ...state, categories: defaultCategories };
+        }))
+        return { ...state, categories: defaultCategories }
       }
-      return state;
+      return state
     }
 
     case 'CREATE_LIST': {
@@ -93,8 +91,8 @@ function appReducer(state: AppState, action: Action): AppState {
         items: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-      };
-      return { ...state, lists: [...state.lists, newList] };
+      }
+      return { ...state, lists: [...state.lists, newList] }
     }
 
     case 'UPDATE_LIST':
@@ -105,7 +103,7 @@ function appReducer(state: AppState, action: Action): AppState {
             ? { ...list, name: action.payload.name, updatedAt: new Date() }
             : list
         ),
-      };
+      }
 
     case 'DELETE_LIST':
       return {
@@ -120,7 +118,7 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
 
     case 'ARCHIVE_LIST':
       return {
@@ -130,7 +128,7 @@ function appReducer(state: AppState, action: Action): AppState {
             ? { ...list, isArchived: true, updatedAt: new Date() }
             : list
         ),
-      };
+      }
 
     case 'RESTORE_LIST':
       return {
@@ -146,19 +144,21 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
 
     case 'PERMANENTLY_DELETE_LIST':
       return {
         ...state,
         lists: state.lists.filter(list => list.id !== action.payload.id),
-      };
+      }
 
     case 'DUPLICATE_LIST': {
       const originalList = state.lists.find(
         list => list.id === action.payload.id
-      );
-      if (!originalList) return state;
+      )
+      if (!originalList) {
+        return state
+      }
 
       const duplicatedList: ShoppingList = {
         ...originalList,
@@ -173,9 +173,9 @@ function appReducer(state: AppState, action: Action): AppState {
         })),
         createdAt: new Date(),
         updatedAt: new Date(),
-      };
+      }
 
-      return { ...state, lists: [...state.lists, duplicatedList] };
+      return { ...state, lists: [...state.lists, duplicatedList] }
     }
 
     case 'HIDE_LIST':
@@ -186,16 +186,16 @@ function appReducer(state: AppState, action: Action): AppState {
             ? { ...list, isHidden: true, updatedAt: new Date() }
             : list
         ),
-      };
+      }
 
     case 'ADD_ITEM': {
-      let newItem: ShoppingItem;
+      let newItem: ShoppingItem
 
       // If adding from custom item, use its defaults
       if (action.payload.customItemId) {
         const customItem = state.customItems.find(
           item => item.id === action.payload.customItemId
-        );
+        )
         newItem = {
           id: generateId(),
           name: action.payload.name,
@@ -207,7 +207,7 @@ function appReducer(state: AppState, action: Action): AppState {
           notes: customItem?.notes,
           createdAt: new Date(),
           updatedAt: new Date(),
-        };
+        }
       } else {
         newItem = {
           id: generateId(),
@@ -215,7 +215,7 @@ function appReducer(state: AppState, action: Action): AppState {
           isCompleted: false,
           createdAt: new Date(),
           updatedAt: new Date(),
-        };
+        }
       }
 
       return {
@@ -229,7 +229,7 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
     }
 
     case 'UPDATE_ITEM':
@@ -252,7 +252,7 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
 
     case 'DELETE_ITEM':
       return {
@@ -268,7 +268,7 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
 
     case 'TOGGLE_ITEM':
       return {
@@ -290,7 +290,7 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : list
         ),
-      };
+      }
 
     case 'CREATE_CUSTOM_ITEM': {
       const newCustomItem: CustomItem = {
@@ -299,11 +299,11 @@ function appReducer(state: AppState, action: Action): AppState {
         usageCount: 0,
         createdAt: new Date(),
         updatedAt: new Date(),
-      };
+      }
       return {
         ...state,
         customItems: [...state.customItems, newCustomItem],
-      };
+      }
     }
 
     case 'UPDATE_CUSTOM_ITEM':
@@ -314,7 +314,7 @@ function appReducer(state: AppState, action: Action): AppState {
             ? { ...item, ...action.payload.updates, updatedAt: new Date() }
             : item
         ),
-      };
+      }
 
     case 'DELETE_CUSTOM_ITEM':
       return {
@@ -322,7 +322,7 @@ function appReducer(state: AppState, action: Action): AppState {
         customItems: state.customItems.filter(
           item => item.id !== action.payload.id
         ),
-      };
+      }
 
     case 'USE_CUSTOM_ITEM':
       return {
@@ -337,18 +337,18 @@ function appReducer(state: AppState, action: Action): AppState {
               }
             : item
         ),
-      };
+      }
 
     case 'CREATE_CATEGORY': {
       const newCategory: ItemCategory = {
         ...action.payload,
         id: generateId(),
         createdAt: new Date(),
-      };
+      }
       return {
         ...state,
         categories: [...state.categories, newCategory],
-      };
+      }
     }
 
     case 'UPDATE_CATEGORY':
@@ -359,7 +359,7 @@ function appReducer(state: AppState, action: Action): AppState {
             ? { ...category, ...action.payload.updates }
             : category
         ),
-      };
+      }
 
     case 'DELETE_CATEGORY':
       return {
@@ -367,42 +367,42 @@ function appReducer(state: AppState, action: Action): AppState {
         categories: state.categories.filter(
           category => category.id !== action.payload.id
         ),
-      };
+      }
 
     default:
-      return state;
+      return state
   }
 }
 
 interface AppContextValue {
-  state: AppState;
-  dispatch: React.Dispatch<Action>;
-  getList: (id: string) => ShoppingList | undefined;
-  getVisibleLists: () => ShoppingList[];
-  getArchivedLists: () => ShoppingList[];
-  getDeletedLists: () => ShoppingList[];
-  getCustomItem: (id: string) => CustomItem | undefined;
-  getCustomItemsByCategory: (categoryId?: string) => CustomItem[];
-  getMostUsedCustomItems: (limit?: number) => CustomItem[];
-  getCategory: (id: string) => ItemCategory | undefined;
+  state: AppState
+  dispatch: React.Dispatch<Action>
+  getList: (id: string) => ShoppingList | undefined
+  getVisibleLists: () => ShoppingList[]
+  getArchivedLists: () => ShoppingList[]
+  getDeletedLists: () => ShoppingList[]
+  getCustomItem: (id: string) => CustomItem | undefined
+  getCustomItemsByCategory: (categoryId?: string) => CustomItem[]
+  getMostUsedCustomItems: (limit?: number) => CustomItem[]
+  getCategory: (id: string) => ItemCategory | undefined
 }
 
-const AppContext = createContext<AppContextValue | undefined>(undefined);
+const AppContext = createContext<AppContextValue | undefined>(undefined)
 
-const STORAGE_KEY = '@shopper_app_state';
+const STORAGE_KEY = '@shopper_app_state'
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, initialState)
 
   // Load state from AsyncStorage on app start
   useEffect(() => {
     const loadState = async () => {
       try {
-        const storedState = await AsyncStorage.getItem(STORAGE_KEY);
+        const storedState = await AsyncStorage.getItem(STORAGE_KEY)
         if (storedState) {
-          const parsedState = JSON.parse(storedState);
+          const parsedState = JSON.parse(storedState)
           // Convert date strings back to Date objects
           const processedState = {
             ...parsedState,
@@ -433,71 +433,71 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
                 ...category,
                 createdAt: new Date(category.createdAt),
               })) || [],
-          };
-          dispatch({ type: 'LOAD_STATE', payload: processedState });
+          }
+          dispatch({ type: 'LOAD_STATE', payload: processedState })
         }
         // Initialize default categories if none exist
-        dispatch({ type: 'INITIALIZE_DEFAULT_CATEGORIES' });
+        dispatch({ type: 'INITIALIZE_DEFAULT_CATEGORIES' })
       } catch (error) {
-        console.error('Failed to load app state:', error);
+        console.error('Failed to load app state:', error)
         // Initialize default categories on error too
-        dispatch({ type: 'INITIALIZE_DEFAULT_CATEGORIES' });
+        dispatch({ type: 'INITIALIZE_DEFAULT_CATEGORIES' })
       }
-    };
-    loadState();
-  }, []);
+    }
+    loadState()
+  }, [])
 
   // Save state to AsyncStorage whenever it changes
   useEffect(() => {
     const saveState = async () => {
       try {
-        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state))
       } catch (error) {
-        console.error('Failed to save app state:', error);
+        console.error('Failed to save app state:', error)
       }
-    };
-    saveState();
-  }, [state]);
+    }
+    saveState()
+  }, [state])
 
   const getList = (id: string): ShoppingList | undefined => {
-    return state.lists.find(list => list.id === id);
-  };
+    return state.lists.find(list => list.id === id)
+  }
 
   const getVisibleLists = (): ShoppingList[] => {
     return state.lists.filter(
       list => !list.isHidden && !list.isArchived && !list.isDeleted
-    );
-  };
+    )
+  }
 
   const getArchivedLists = (): ShoppingList[] => {
-    return state.lists.filter(list => list.isArchived && !list.isDeleted);
-  };
+    return state.lists.filter(list => list.isArchived && !list.isDeleted)
+  }
 
   const getDeletedLists = (): ShoppingList[] => {
-    return state.lists.filter(list => list.isDeleted);
-  };
+    return state.lists.filter(list => list.isDeleted)
+  }
 
   const getCustomItem = (id: string): CustomItem | undefined => {
-    return state.customItems.find(item => item.id === id);
-  };
+    return state.customItems.find(item => item.id === id)
+  }
 
   const getCustomItemsByCategory = (categoryId?: string): CustomItem[] => {
     if (!categoryId) {
-      return state.customItems.filter(item => !item.category);
+      return state.customItems.filter(item => !item.category)
     }
-    const category = state.categories.find(cat => cat.id === categoryId);
-    return state.customItems.filter(item => item.category === category?.name);
-  };
+    const category = state.categories.find(cat => cat.id === categoryId)
+    return state.customItems.filter(item => item.category === category?.name)
+  }
 
   const getMostUsedCustomItems = (limit = 10): CustomItem[] => {
     return [...state.customItems]
       .sort((a, b) => b.usageCount - a.usageCount)
-      .slice(0, limit);
-  };
+      .slice(0, limit)
+  }
 
   const getCategory = (id: string): ItemCategory | undefined => {
-    return state.categories.find(category => category.id === id);
-  };
+    return state.categories.find(category => category.id === id)
+  }
 
   const value: AppContextValue = {
     state,
@@ -510,15 +510,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     getCustomItemsByCategory,
     getMostUsedCustomItems,
     getCategory,
-  };
+  }
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-};
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>
+}
 
 export const useApp = (): AppContextValue => {
-  const context = useContext(AppContext);
+  const context = useContext(AppContext)
   if (!context) {
-    throw new Error('useApp must be used within an AppProvider');
+    throw new Error('useApp must be used within an AppProvider')
   }
-  return context;
-};
+  return context
+}

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef } from 'react'
 import {
   TextInput,
   View,
@@ -6,18 +6,18 @@ import {
   StyleSheet,
   TextInputProps,
   ViewStyle,
-} from 'react-native';
+} from 'react-native'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
 interface InputProps extends TextInputProps {
-  label?: string;
-  error?: string;
-  containerStyle?: ViewStyle;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  label?: string
+  error?: string
+  containerStyle?: ViewStyle
+  leftIcon?: React.ReactNode
+  rightIcon?: React.ReactNode
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
@@ -46,11 +46,11 @@ export const Input = forwardRef<TextInput, InputProps>(
         </View>
         {error && <Text style={styles.error}>{error}</Text>}
       </View>
-    );
+    )
   }
-);
+)
 
-Input.displayName = 'Input';
+Input.displayName = 'Input'
 
 const styles = StyleSheet.create({
   container: {
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
     color: Colors.error,
     marginTop: Spacing.xs,
   },
-});
+})

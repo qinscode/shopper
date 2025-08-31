@@ -1,59 +1,59 @@
 export interface ShoppingItem {
-  id: string;
-  name: string;
-  isCompleted: boolean;
-  url?: string;
-  imageUri?: string;
-  emoji?: string; // 自定义emoji图标
-  category?: string;
-  brand?: string;
-  notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  id: string
+  name: string
+  isCompleted: boolean
+  url?: string
+  imageUri?: string
+  emoji?: string // 自定义emoji图标
+  category?: string
+  brand?: string
+  notes?: string
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface CustomItem {
-  id: string;
-  name: string;
-  category?: string;
-  brand?: string;
-  defaultUrl?: string;
-  defaultImageUri?: string;
-  notes?: string;
-  tags?: string[];
-  color?: string;
-  usageCount: number; // Track how often this item is used
-  createdAt: Date;
-  updatedAt: Date;
-  lastUsed?: Date;
+  id: string
+  name: string
+  category?: string
+  brand?: string
+  defaultUrl?: string
+  defaultImageUri?: string
+  notes?: string
+  tags?: string[]
+  color?: string
+  usageCount: number // Track how often this item is used
+  createdAt: Date
+  updatedAt: Date
+  lastUsed?: Date
 }
 
 export interface ItemCategory {
-  id: string;
-  name: string;
-  color: string;
-  icon?: string;
-  createdAt: Date;
+  id: string
+  name: string
+  color: string
+  icon?: string
+  createdAt: Date
 }
 
 export interface ShoppingList {
-  id: string;
-  name: string;
-  items: ShoppingItem[];
-  createdAt: Date;
-  updatedAt: Date;
-  isHidden?: boolean;
-  isArchived?: boolean;
-  isDeleted?: boolean;
-  deletedAt?: Date;
+  id: string
+  name: string
+  items: ShoppingItem[]
+  createdAt: Date
+  updatedAt: Date
+  isHidden?: boolean
+  isArchived?: boolean
+  isDeleted?: boolean
+  deletedAt?: Date
 }
 
 export interface AppState {
-  lists: ShoppingList[];
-  customItems: CustomItem[];
-  categories: ItemCategory[];
-  hasCompletedOnboarding: boolean;
-  currentListId?: string;
+  lists: ShoppingList[]
+  customItems: CustomItem[]
+  categories: ItemCategory[]
+  hasCompletedOnboarding: boolean
+  currentListId?: string
 }
 
 export const SUGGESTED_ITEMS = [
@@ -77,7 +77,7 @@ export const SUGGESTED_ITEMS = [
   'Tea',
   'Sugar',
   'Salt',
-];
+]
 
 export const DEFAULT_CATEGORIES: Omit<ItemCategory, 'id' | 'createdAt'>[] = [
   { name: 'Groceries', color: '#4CAF50', icon: 'basket-outline' },
@@ -88,4 +88,4 @@ export const DEFAULT_CATEGORIES: Omit<ItemCategory, 'id' | 'createdAt'>[] = [
   { name: 'Snacks', color: '#FF5722', icon: 'fast-food-outline' },
   { name: 'Personal Care', color: '#607D8B', icon: 'person-outline' },
   { name: 'Household', color: '#795548', icon: 'home-outline' },
-];
+]

@@ -1,7 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -10,74 +10,74 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, Input, Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { CustomItem } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+import { Header, Input, Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { CustomItem } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 export default function CreateEditCustomItemScreen() {
-  const [name, setName] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
-  const [defaultUrl, setDefaultUrl] = useState('');
-  const [defaultImageUri, setDefaultImageUri] = useState('');
-  const [notes, setNotes] = useState('');
-  const [tags, setTags] = useState('');
+  const [name, setName] = useState('')
+  const [brand, setBrand] = useState('')
+  const [category, setCategory] = useState('')
+  const [defaultUrl, setDefaultUrl] = useState('')
+  const [defaultImageUri, setDefaultImageUri] = useState('')
+  const [notes, setNotes] = useState('')
+  const [tags, setTags] = useState('')
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
-  );
-  const [loading, setLoading] = useState(false);
+  )
+  const [loading, setLoading] = useState(false)
 
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const itemId = typeof id === 'string' ? id : undefined;
-  const isEditing = !!itemId;
+  const router = useRouter()
+  const { id } = useLocalSearchParams()
+  const itemId = typeof id === 'string' ? id : undefined
+  const isEditing = !!itemId
 
-  const { state, dispatch, getCustomItem } = useApp();
+  const { state, dispatch, getCustomItem } = useApp()
 
   useEffect(() => {
     if (isEditing && itemId) {
-      const item = getCustomItem(itemId);
+      const item = getCustomItem(itemId)
       if (item) {
-        setName(item.name);
-        setBrand(item.brand || '');
-        setCategory(item.category || '');
-        setDefaultUrl(item.defaultUrl || '');
-        setDefaultImageUri(item.defaultImageUri || '');
-        setNotes(item.notes || '');
-        setTags(item.tags?.join(', ') || '');
+        setName(item.name)
+        setBrand(item.brand || '')
+        setCategory(item.category || '')
+        setDefaultUrl(item.defaultUrl || '')
+        setDefaultImageUri(item.defaultImageUri || '')
+        setNotes(item.notes || '')
+        setTags(item.tags?.join(', ') || '')
 
         // Find category ID
         const categoryId = state.categories.find(
           c => c.name === item.category
-        )?.id;
-        setSelectedCategoryId(categoryId || null);
+        )?.id
+        setSelectedCategoryId(categoryId || null)
       }
     }
-  }, [isEditing, itemId, getCustomItem, state.categories]);
+  }, [isEditing, itemId, getCustomItem, state.categories])
 
   const handleSave = async () => {
     if (name.trim().length === 0) {
-      Alert.alert('Error', 'Please enter an item name');
-      return;
+      Alert.alert('Error', 'Please enter an item name')
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     try {
       const selectedCategory = state.categories.find(
         c => c.id === selectedCategoryId
-      );
+      )
       const tagsArray = tags
         .split(',')
         .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
+        .filter(tag => tag.length > 0)
 
       if (isEditing && itemId) {
         dispatch({
@@ -94,8 +94,8 @@ export default function CreateEditCustomItemScreen() {
               tags: tagsArray.length > 0 ? tagsArray : undefined,
             },
           },
-        });
-        HapticFeedback.success();
+        })
+        HapticFeedback.success()
       } else {
         dispatch({
           type: 'CREATE_CUSTOM_ITEM',
@@ -108,27 +108,27 @@ export default function CreateEditCustomItemScreen() {
             notes: notes.trim() || undefined,
             tags: tagsArray.length > 0 ? tagsArray : undefined,
           },
-        });
-        HapticFeedback.success();
+        })
+        HapticFeedback.success()
       }
 
-      router.back();
+      router.back()
     } catch (error) {
-      Alert.alert('Error', 'Failed to save item');
-      HapticFeedback.error();
+      Alert.alert('Error', 'Failed to save item')
+      HapticFeedback.error()
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handlePickImage = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (status !== 'granted') {
       Alert.alert(
         'Permission needed',
         'Camera roll permissions are required to add images.'
-      );
-      return;
+      )
+      return
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -136,40 +136,40 @@ export default function CreateEditCustomItemScreen() {
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
-    });
+    })
 
     if (!result.canceled) {
-      setDefaultImageUri(result.assets[0].uri);
-      HapticFeedback.light();
+      setDefaultImageUri(result.assets[0].uri)
+      HapticFeedback.light()
     }
-  };
+  }
 
   const handleTakePhoto = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    const { status } = await ImagePicker.requestCameraPermissionsAsync()
     if (status !== 'granted') {
       Alert.alert(
         'Permission needed',
         'Camera permissions are required to take photos.'
-      );
-      return;
+      )
+      return
     }
 
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [1, 1],
       quality: 0.8,
-    });
+    })
 
     if (!result.canceled) {
-      setDefaultImageUri(result.assets[0].uri);
-      HapticFeedback.light();
+      setDefaultImageUri(result.assets[0].uri)
+      HapticFeedback.light()
     }
-  };
+  }
 
   const handleRemoveImage = () => {
-    setDefaultImageUri('');
-    HapticFeedback.light();
-  };
+    setDefaultImageUri('')
+    HapticFeedback.light()
+  }
 
   const renderCategorySelector = () => (
     <View style={styles.section}>
@@ -181,9 +181,9 @@ export default function CreateEditCustomItemScreen() {
             selectedCategoryId === null && styles.selectedCategoryOption,
           ]}
           onPress={() => {
-            setSelectedCategoryId(null);
-            setCategory('');
-            HapticFeedback.selection();
+            setSelectedCategoryId(null)
+            setCategory('')
+            HapticFeedback.selection()
           }}
         >
           <Ionicons
@@ -212,9 +212,9 @@ export default function CreateEditCustomItemScreen() {
               { borderColor: cat.color },
             ]}
             onPress={() => {
-              setSelectedCategoryId(cat.id);
-              setCategory(cat.name);
-              HapticFeedback.selection();
+              setSelectedCategoryId(cat.id)
+              setCategory(cat.name)
+              HapticFeedback.selection()
             }}
           >
             <Ionicons
@@ -239,7 +239,7 @@ export default function CreateEditCustomItemScreen() {
         ))}
       </View>
     </View>
-  );
+  )
 
   const renderImageSection = () => (
     <View style={styles.section}>
@@ -309,7 +309,7 @@ export default function CreateEditCustomItemScreen() {
         </View>
       )}
     </View>
-  );
+  )
 
   return (
     <SafeAreaView style={styles.container}>
@@ -386,7 +386,7 @@ export default function CreateEditCustomItemScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -498,4 +498,4 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xl,
     marginBottom: Spacing.xxl,
   },
-});
+})

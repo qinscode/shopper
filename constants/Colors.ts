@@ -30,4 +30,4 @@ export const Colors = {
   // Special colors
   overlay: 'rgba(0, 0, 0, 0.7)', // For modals/overlays
   shadow: 'rgba(0, 0, 0, 0.3)', // For shadows
-};
+}

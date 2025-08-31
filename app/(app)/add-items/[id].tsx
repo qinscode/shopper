@@ -1,6 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import React, { useState, useRef } from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import { useRouter, useLocalSearchParams } from 'expo-router'
+import React, { useState, useRef } from 'react'
 import {
   View,
   Text,
@@ -10,101 +10,101 @@ import {
   TextInput,
   Keyboard,
   Image,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Header, Input, Button } from '@/components/ui';
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
-import { useApp } from '@/context/AppContext';
-import { SUGGESTED_ITEMS, CustomItem } from '@/types';
-import { HapticFeedback } from '@/utils/haptics';
+import { Header, Input, Button } from '@/components/ui'
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
+import { SUGGESTED_ITEMS, CustomItem } from '@/types'
+import { HapticFeedback } from '@/utils/haptics'
 
 export default function AddItemsScreen() {
-  const [searchText, setSearchText] = useState('');
-  const [recentlyAdded, setRecentlyAdded] = useState<string[]>([]);
+  const [searchText, setSearchText] = useState('')
+  const [recentlyAdded, setRecentlyAdded] = useState<string[]>([])
   const [activeTab, setActiveTab] = useState<'suggestions' | 'custom'>(
     'suggestions'
-  );
-  const inputRef = useRef<TextInput>(null);
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const listId = typeof id === 'string' ? id : id?.[0] || '';
+  )
+  const inputRef = useRef<TextInput>(null)
+  const router = useRouter()
+  const { id } = useLocalSearchParams()
+  const listId = typeof id === 'string' ? id : id?.[0] || ''
 
-  const { dispatch, getList, state, getMostUsedCustomItems } = useApp();
-  const list = getList(listId);
+  const { dispatch, getList, state, getMostUsedCustomItems } = useApp()
+  const list = getList(listId)
 
   // Filter out items that are already in the list
   const existingItemNames =
-    list?.items.map(item => item.name.toLowerCase()) || [];
+    list?.items.map(item => item.name.toLowerCase()) || []
 
   const filteredSuggestions = SUGGESTED_ITEMS.filter(
     item =>
       item.toLowerCase().includes(searchText.toLowerCase()) &&
       !existingItemNames.includes(item.toLowerCase())
-  ).slice(0, 10); // Limit to 10 suggestions
+  ).slice(0, 10) // Limit to 10 suggestions
 
   const filteredCustomItems = state.customItems.filter(
     item =>
       item.name.toLowerCase().includes(searchText.toLowerCase()) &&
       !existingItemNames.includes(item.name.toLowerCase())
-  );
+  )
 
   const handleAddItem = (itemName: string, customItemId?: string) => {
     if (existingItemNames.includes(itemName.toLowerCase())) {
-      return; // Don't add duplicate items
+      return // Don't add duplicate items
     }
 
     dispatch({
       type: 'ADD_ITEM',
       payload: { listId, name: itemName, customItemId },
-    });
+    })
 
     // Track usage if it's a custom item
     if (customItemId) {
       dispatch({
         type: 'USE_CUSTOM_ITEM',
         payload: { id: customItemId },
-      });
+      })
     }
 
-    HapticFeedback.success();
+    HapticFeedback.success()
 
     // Add to recently added list
     setRecentlyAdded(prev => {
-      const updated = [itemName, ...prev.filter(name => name !== itemName)];
-      return updated.slice(0, 5); // Keep only last 5 items
-    });
+      const updated = [itemName, ...prev.filter(name => name !== itemName)]
+      return updated.slice(0, 5) // Keep only last 5 items
+    })
 
     // Clear search text if it matches the added item
     if (searchText.toLowerCase() === itemName.toLowerCase()) {
-      setSearchText('');
+      setSearchText('')
     }
 
     // Keep focus on input for quick adding
     setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  };
+      inputRef.current?.focus()
+    }, 100)
+  }
 
   const handleAddCustomItem = () => {
-    const trimmedText = searchText.trim();
+    const trimmedText = searchText.trim()
     if (
       trimmedText.length > 0 &&
       !existingItemNames.includes(trimmedText.toLowerCase())
     ) {
-      handleAddItem(trimmedText);
+      handleAddItem(trimmedText)
     }
-  };
+  }
 
   const renderTabBar = () => (
     <View style={styles.tabBar}>
       <TouchableOpacity
         style={[styles.tab, activeTab === 'suggestions' && styles.activeTab]}
         onPress={() => {
-          setActiveTab('suggestions');
-          HapticFeedback.selection();
+          setActiveTab('suggestions')
+          HapticFeedback.selection()
         }}
       >
         <Text
@@ -120,8 +120,8 @@ export default function AddItemsScreen() {
       <TouchableOpacity
         style={[styles.tab, activeTab === 'custom' && styles.activeTab]}
         onPress={() => {
-          setActiveTab('custom');
-          HapticFeedback.selection();
+          setActiveTab('custom')
+          HapticFeedback.selection()
         }}
       >
         <Text
@@ -134,16 +134,16 @@ export default function AddItemsScreen() {
         </Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 
   const renderSuggestionItem = ({
     item,
     index,
   }: {
-    item: string;
-    index: number;
+    item: string
+    index: number
   }) => {
-    const isAlreadyInList = existingItemNames.includes(item.toLowerCase());
+    const isAlreadyInList = existingItemNames.includes(item.toLowerCase())
 
     return (
       <TouchableOpacity
@@ -179,17 +179,17 @@ export default function AddItemsScreen() {
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
   const renderCustomItem = ({
     item,
     index,
   }: {
-    item: CustomItem;
-    index: number;
+    item: CustomItem
+    index: number
   }) => {
-    const isAlreadyInList = existingItemNames.includes(item.name.toLowerCase());
+    const isAlreadyInList = existingItemNames.includes(item.name.toLowerCase())
 
     return (
       <TouchableOpacity
@@ -281,8 +281,8 @@ export default function AddItemsScreen() {
           </TouchableOpacity>
         )}
       </TouchableOpacity>
-    );
-  };
+    )
+  }
 
   const renderRecentItem = ({ item }: { item: string }) => (
     <TouchableOpacity
@@ -299,7 +299,7 @@ export default function AddItemsScreen() {
         <Ionicons name="add-circle-outline" size={20} color={Colors.primary} />
       </TouchableOpacity>
     </TouchableOpacity>
-  );
+  )
 
   // Check if the current search text can be added as a custom item
   const canAddCustomItem =
@@ -310,10 +310,10 @@ export default function AddItemsScreen() {
     ) &&
     !filteredCustomItems.some(
       item => item.name.toLowerCase() === searchText.trim().toLowerCase()
-    );
+    )
 
   const currentItems =
-    activeTab === 'suggestions' ? filteredSuggestions : filteredCustomItems;
+    activeTab === 'suggestions' ? filteredSuggestions : filteredCustomItems
 
   return (
     <SafeAreaView style={styles.container}>
@@ -431,7 +431,7 @@ export default function AddItemsScreen() {
         </View>
       </View>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -701,4 +701,4 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
     textAlign: 'center',
   },
-});
+})

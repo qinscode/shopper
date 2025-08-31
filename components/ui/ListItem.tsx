@@ -1,28 +1,28 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ViewStyle,
-} from 'react-native';
+} from 'react-native'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing, BorderRadius, Shadows } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
 interface ListItemProps {
-  title: string;
-  subtitle?: string;
-  leftComponent?: React.ReactNode;
-  rightComponent?: React.ReactNode;
-  onPress?: () => void;
-  style?: ViewStyle;
-  showChevron?: boolean;
-  isCompleted?: boolean;
-  hasUrl?: boolean;
-  hasImage?: boolean;
+  title: string
+  subtitle?: string
+  leftComponent?: React.ReactNode
+  rightComponent?: React.ReactNode
+  onPress?: () => void
+  style?: ViewStyle
+  showChevron?: boolean
+  isCompleted?: boolean
+  hasUrl?: boolean
+  hasImage?: boolean
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -93,8 +93,8 @@ export const ListItem: React.FC<ListItemProps> = ({
         </View>
       </View>
     </TouchableOpacity>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -150,4 +150,4 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginTop: Spacing.xs,
   },
-});
+})

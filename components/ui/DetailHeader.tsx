@@ -1,20 +1,20 @@
-import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons'
+import React from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors';
-import { Spacing } from '@/constants/Layout';
-import { Typography } from '@/constants/Typography';
+import { Colors } from '@/constants/Colors'
+import { Spacing } from '@/constants/Layout'
+import { Typography } from '@/constants/Typography'
 
-import { ProgressChip } from './ProgressChip';
+import { ProgressChip } from './ProgressChip'
 
 interface DetailHeaderProps {
-  title: string;
-  completed: number;
-  total: number;
-  onBackPress: () => void;
-  onMenuPress?: () => void;
+  title: string
+  completed: number
+  total: number
+  onBackPress: () => void
+  onMenuPress?: () => void
 }
 
 export const DetailHeader: React.FC<DetailHeaderProps> = ({
@@ -24,7 +24,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   onBackPress,
   onMenuPress,
 }) => {
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets()
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -56,8 +56,8 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -100,4 +100,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 8,
   },
-});
+})
