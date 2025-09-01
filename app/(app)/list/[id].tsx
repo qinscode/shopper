@@ -527,17 +527,16 @@ const styles = StyleSheet.create({
   },
 
   titleContainer: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginLeft: 12,
-    marginRight: 16,
-    justifyContent: 'center',
+    marginLeft: 4,
+    flexShrink: 1,
   },
 
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 'auto',
   },
 
   menuButton: {
