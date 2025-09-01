@@ -7,7 +7,6 @@ import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import { IconSymbol } from '@/components/ui/IconSymbol'
-import { Colors } from '@/constants/Colors'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function TabTwoScreen() {
@@ -15,8 +14,8 @@ export default function TabTwoScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{
-        light: Colors.light.background,
-        dark: Colors.dark.background,
+        light: colors.background,
+        dark: colors.background,
       }}
       headerImage={
         <IconSymbol

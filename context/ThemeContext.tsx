@@ -5,6 +5,8 @@ import {
   useColorScheme as useRNColorScheme,
 } from 'react-native'
 
+import { applyTheme } from '@/constants/Colors'
+
 export type ThemePreference = 'light' | 'dark' | 'system'
 
 interface ThemeContextValue {
@@ -42,6 +44,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   const theme = themePreference === 'system' ? systemScheme : themePreference
+
+  useEffect(() => {
+    applyTheme(theme)
+  }, [theme])
 
   return (
     <ThemeContext.Provider
