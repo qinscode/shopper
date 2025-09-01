@@ -13,10 +13,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { ShoppingList } from '@/types'
 import { HapticFeedback } from '@/utils/haptics'
 import {
@@ -29,6 +29,7 @@ export default function TrashScreen() {
   const router = useRouter()
   const { getDeletedLists, dispatch } = useApp()
   const deletedLists = getDeletedLists()
+  const colors = useThemeColors()
 
   const handleRestoreList = (listId: string) => {
     dispatch({ type: 'RESTORE_LIST', payload: { id: listId } })
@@ -86,7 +87,9 @@ export default function TrashScreen() {
 
   if (deletedLists.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <Header
           title="Trash"
           showBackButton
@@ -113,20 +116,29 @@ export default function TrashScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Header
         title="Trash"
         showBackButton
         onBackPress={() => router.back()}
         rightComponent={
           <TouchableOpacity onPress={handleEmptyTrash}>
-            <Text style={styles.emptyTrashText}>Empty</Text>
+            <Text style={[styles.emptyTrashText, { color: colors.error }]}>
+              Empty
+            </Text>
           </TouchableOpacity>
         }
       />
 
-      <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>
+      <View
+        style={[
+          styles.infoContainer,
+          { backgroundColor: colors.surface, borderBottomColor: colors.border },
+        ]}
+      >
+        <Text style={[styles.infoText, { color: colors.textSecondary }]}>
           Items in trash are automatically deleted after 30 days
         </Text>
       </View>
@@ -145,7 +157,6 @@ export default function TrashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
 
   emptyContainer: {
@@ -160,20 +171,16 @@ const styles = StyleSheet.create({
   infoContainer: {
     paddingHorizontal: Spacing.screenPadding,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
   },
 
   infoText: {
     ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
     textAlign: 'center',
   },
 
   emptyTrashText: {
     ...Typography.textStyles.body,
-    color: Colors.error,
     fontWeight: Typography.fontWeight.semibold,
   },
 

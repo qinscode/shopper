@@ -14,15 +14,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, Input, Button } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function CreateListScreen() {
   const [listName, setListName] = useState('')
   const [keyboardVisible, setKeyboardVisible] = useState(false)
   const router = useRouter()
   const { dispatch, state } = useApp()
+  const colors = useThemeColors()
 
   // Animation values
   const illustrationScale = useRef(new Animated.Value(1)).current
@@ -111,7 +112,9 @@ export default function CreateListScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Header
         title="Name your list"
         showBackButton
@@ -192,7 +195,6 @@ export default function CreateListScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
 
   keyboardAvoidingView: {
