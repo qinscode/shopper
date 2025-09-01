@@ -1,9 +1,10 @@
 import React from 'react'
 import { View, Text, StyleSheet, ViewStyle } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface EmptyStateProps {
   title: string
@@ -22,6 +23,9 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   action,
   style,
 }) => {
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
+
   return (
     <View style={[styles.container, style]}>
       {(icon || illustration) && (
@@ -38,39 +42,40 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.screenPadding,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingHorizontal: Spacing.screenPadding,
+    },
 
-  iconContainer: {
-    marginBottom: Spacing.xl,
-    alignItems: 'center',
-  },
+    iconContainer: {
+      marginBottom: Spacing.xl,
+      alignItems: 'center',
+    },
 
-  textContainer: {
-    alignItems: 'center',
-    marginBottom: Spacing.xl,
-  },
+    textContainer: {
+      alignItems: 'center',
+      marginBottom: Spacing.xl,
+    },
 
-  title: {
-    ...Typography.textStyles.title,
-    color: Colors.text,
-    textAlign: 'center',
-    marginBottom: Spacing.sm,
-  },
+    title: {
+      ...Typography.textStyles.title,
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: Spacing.sm,
+    },
 
-  subtitle: {
-    ...Typography.textStyles.body,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 24,
-  },
+    subtitle: {
+      ...Typography.textStyles.body,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      lineHeight: 24,
+    },
 
-  actionContainer: {
-    width: '100%',
-  },
-})
+    actionContainer: {
+      width: '100%',
+    },
+  })

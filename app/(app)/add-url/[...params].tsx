@@ -4,9 +4,10 @@ import { View, StyleSheet, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, Input, Button } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function AddUrlScreen() {
   const [url, setUrl] = useState('')
@@ -50,6 +51,9 @@ export default function AddUrlScreen() {
 
     router.back()
   }
+
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
 
   if (!item) {
     return (
@@ -100,28 +104,29 @@ export default function AddUrlScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    flex: 1,
-    padding: Spacing.screenPadding,
-    justifyContent: 'space-between',
-  },
+    content: {
+      flex: 1,
+      padding: Spacing.screenPadding,
+      justifyContent: 'space-between',
+    },
 
-  buttonContainer: {
-    paddingBottom: Spacing.xl,
-  },
+    buttonContainer: {
+      paddingBottom: Spacing.xl,
+    },
 
-  buttonRow: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    buttonRow: {
+      flexDirection: 'row',
+      gap: Spacing.md,
+    },
 
-  button: {
-    flex: 1,
-  },
-})
+    button: {
+      flex: 1,
+    },
+  })

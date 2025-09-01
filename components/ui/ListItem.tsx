@@ -8,9 +8,10 @@ import {
   ViewStyle,
 } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface ListItemProps {
   title: string
@@ -37,6 +38,9 @@ export const ListItem: React.FC<ListItemProps> = ({
   hasUrl = false,
   hasImage = false,
 }) => {
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
+
   return (
     <TouchableOpacity
       style={[styles.container, style]}
@@ -55,7 +59,7 @@ export const ListItem: React.FC<ListItemProps> = ({
               <Ionicons
                 name="link"
                 size={16}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
                 style={styles.attachment}
               />
             )}
@@ -63,7 +67,7 @@ export const ListItem: React.FC<ListItemProps> = ({
               <Ionicons
                 name="image"
                 size={16}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
                 style={styles.attachment}
               />
             )}
@@ -87,7 +91,7 @@ export const ListItem: React.FC<ListItemProps> = ({
             <Ionicons
               name="chevron-forward"
               size={20}
-              color={Colors.textSecondary}
+              color={colors.textSecondary}
             />
           )}
         </View>
@@ -96,58 +100,59 @@ export const ListItem: React.FC<ListItemProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    marginVertical: Spacing.xs,
-    ...Shadows.small,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      marginVertical: Spacing.xs,
+      ...Shadows.small,
+    },
 
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.md,
-    minHeight: Spacing.listItemHeight,
-  },
+    content: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: Spacing.md,
+      paddingHorizontal: Spacing.md,
+      minHeight: Spacing.listItemHeight,
+    },
 
-  leftSection: {
-    marginRight: Spacing.md,
-  },
+    leftSection: {
+      marginRight: Spacing.md,
+    },
 
-  middleSection: {
-    flex: 1,
-  },
+    middleSection: {
+      flex: 1,
+    },
 
-  rightSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: Spacing.md,
-  },
+    rightSection: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginLeft: Spacing.md,
+    },
 
-  attachmentsRow: {
-    flexDirection: 'row',
-    marginBottom: Spacing.xs,
-  },
+    attachmentsRow: {
+      flexDirection: 'row',
+      marginBottom: Spacing.xs,
+    },
 
-  attachment: {
-    marginRight: Spacing.xs,
-  },
+    attachment: {
+      marginRight: Spacing.xs,
+    },
 
-  title: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-  },
+    title: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+    },
 
-  completedTitle: {
-    textDecorationLine: 'line-through',
-    color: Colors.textSecondary,
-  },
+    completedTitle: {
+      textDecorationLine: 'line-through',
+      color: colors.textSecondary,
+    },
 
-  subtitle: {
-    ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
-    marginTop: Spacing.xs,
-  },
-})
+    subtitle: {
+      ...Typography.textStyles.caption,
+      color: colors.textSecondary,
+      marginTop: Spacing.xs,
+    },
+  })

@@ -12,10 +12,11 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { HapticFeedback } from '@/utils/haptics'
 
 const EMOJI_DATA = [
@@ -112,6 +113,8 @@ export default function SelectEmojiScreen() {
   const item = list?.items.find(i => i.id === itemIdStr)
 
   const [customInput, setCustomInput] = useState('')
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
 
   // 处理自定义输入的逻辑
   const processCustomInput = (input: string): string => {
@@ -183,8 +186,8 @@ export default function SelectEmojiScreen() {
       <Stack.Screen
         options={{
           title: 'Choose Emoji',
-          headerStyle: { backgroundColor: Colors.background },
-          headerTintColor: Colors.text,
+          headerStyle: { backgroundColor: colors.background },
+          headerTintColor: colors.text,
           headerTitleStyle: { fontSize: 18, fontWeight: '600' },
         }}
       />
@@ -203,7 +206,7 @@ export default function SelectEmojiScreen() {
                 value={customInput}
                 onChangeText={setCustomInput}
                 placeholder="Enter emoji or text..."
-                placeholderTextColor={Colors.textTertiary}
+                placeholderTextColor={colors.textTertiary}
                 maxLength={10}
                 returnKeyType="done"
                 onSubmitEditing={handleCustomSubmit}
@@ -221,7 +224,7 @@ export default function SelectEmojiScreen() {
                   name="checkmark"
                   size={20}
                   color={
-                    customInput.trim() ? Colors.primary : Colors.textTertiary
+                    customInput.trim() ? colors.primary : colors.textTertiary
                   }
                 />
               </TouchableOpacity>
@@ -254,7 +257,7 @@ export default function SelectEmojiScreen() {
                 onPress={handleRemoveEmoji}
                 activeOpacity={0.7}
               >
-                <Ionicons name="trash-outline" size={20} color={Colors.error} />
+                <Ionicons name="trash-outline" size={20} color={colors.error} />
                 <Text style={styles.removeText}>Remove emoji</Text>
               </TouchableOpacity>
             )}
@@ -265,140 +268,141 @@ export default function SelectEmojiScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    flex: 1,
-    padding: 24,
-  },
+    content: {
+      flex: 1,
+      padding: 24,
+    },
 
-  subtitle: {
-    fontSize: 17,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: 24,
-    lineHeight: 24,
-  },
+    subtitle: {
+      fontSize: 17,
+      color: colors.textSecondary,
+      textAlign: 'center',
+      marginBottom: 24,
+      lineHeight: 24,
+    },
 
-  customInputSection: {
-    marginBottom: 32,
-    backgroundColor: Colors.surface,
-    borderRadius: 16,
-    padding: 20,
-  },
+    customInputSection: {
+      marginBottom: 32,
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      padding: 20,
+    },
 
-  inputLabel: {
-    fontSize: 16,
-    fontWeight: Typography.fontWeight.medium,
-    color: Colors.text,
-    marginBottom: 12,
-  },
+    inputLabel: {
+      fontSize: 16,
+      fontWeight: Typography.fontWeight.medium,
+      color: colors.text,
+      marginBottom: 12,
+    },
 
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.background,
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-  },
+    inputContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.background,
+      borderRadius: 12,
+      paddingHorizontal: 16,
+      paddingVertical: 4,
+    },
 
-  textInput: {
-    flex: 1,
-    fontSize: 16,
-    color: Colors.text,
-    paddingVertical: 12,
-  },
+    textInput: {
+      flex: 1,
+      fontSize: 16,
+      color: colors.text,
+      paddingVertical: 12,
+    },
 
-  submitButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: Colors.primary + '20',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 8,
-  },
+    submitButton: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      backgroundColor: colors.primary + '20',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginLeft: 8,
+    },
 
-  submitButtonDisabled: {
-    backgroundColor: Colors.surface,
-  },
+    submitButtonDisabled: {
+      backgroundColor: colors.surface,
+    },
 
-  preview: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: Colors.background,
-  },
+    preview: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 12,
+      paddingTop: 12,
+      borderTopWidth: 1,
+      borderTopColor: colors.background,
+    },
 
-  previewLabel: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    marginRight: 12,
-  },
+    previewLabel: {
+      fontSize: 14,
+      color: colors.textSecondary,
+      marginRight: 12,
+    },
 
-  previewEmoji: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    backgroundColor: Colors.background,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    previewEmoji: {
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      backgroundColor: colors.background,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
 
-  previewText: {
-    fontSize: 18,
-  },
+    previewText: {
+      fontSize: 18,
+    },
 
-  emojiGrid: {
-    paddingBottom: 20,
-  },
+    emojiGrid: {
+      paddingBottom: 20,
+    },
 
-  emojiButton: {
-    width: 48,
-    height: 48,
-    margin: 8,
-    borderRadius: 12,
-    backgroundColor: Colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
+    emojiButton: {
+      width: 48,
+      height: 48,
+      margin: 8,
+      borderRadius: 12,
+      backgroundColor: colors.surface,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 2,
+      borderColor: 'transparent',
+    },
 
-  selectedEmoji: {
-    borderColor: Colors.primary,
-    backgroundColor: Colors.primary + '20',
-  },
+    selectedEmoji: {
+      borderColor: colors.primary,
+      backgroundColor: colors.primary + '20',
+    },
 
-  emojiText: {
-    fontSize: 24,
-  },
+    emojiText: {
+      fontSize: 24,
+    },
 
-  actions: {
-    paddingTop: 20,
-    alignItems: 'center',
-  },
+    actions: {
+      paddingTop: 20,
+      alignItems: 'center',
+    },
 
-  removeButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    backgroundColor: Colors.surface,
-  },
+    removeButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 20,
+      borderRadius: 20,
+      backgroundColor: colors.surface,
+    },
 
-  removeText: {
-    fontSize: 16,
-    color: Colors.error,
-    marginLeft: 8,
-    fontWeight: Typography.fontWeight.medium,
-  },
-})
+    removeText: {
+      fontSize: 16,
+      color: colors.error,
+      marginLeft: 8,
+      fontWeight: Typography.fontWeight.medium,
+    },
+  })
