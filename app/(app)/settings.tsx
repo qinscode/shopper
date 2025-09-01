@@ -1,16 +1,17 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import ActionSheet from '@/components/ui/ActionSheet'
+import Dialog from '@/components/ui/Dialog'
 import { Colors, ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
@@ -154,6 +155,8 @@ export default function SettingsScreen() {
   const colorScheme = useColorScheme()
   const colors = Colors[colorScheme]
   const styles = useMemo(() => createStyles(colors), [colors])
+  const [showThemeSheet, setShowThemeSheet] = useState(false)
+  const [showAboutDialog, setShowAboutDialog] = useState(false)
 
   const SettingsItem = ({
     title,
@@ -206,12 +209,7 @@ export default function SettingsScreen() {
 
   const handleTheme = () => {
     HapticFeedback.light()
-    Alert.alert('Theme', 'Select app theme', [
-      { text: 'Light', onPress: () => setThemePreference('light') },
-      { text: 'Dark', onPress: () => setThemePreference('dark') },
-      { text: 'System', onPress: () => setThemePreference('system') },
-      { text: 'Cancel', style: 'cancel' },
-    ])
+    setShowThemeSheet(true)
   }
 
   const themeLabel =
@@ -280,17 +278,69 @@ export default function SettingsScreen() {
               rightText="Version 1.0.0"
               onPress={() => {
                 HapticFeedback.light()
-                Alert.alert(
-                  'About Shopper',
-                  'Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo.',
-                  [{ text: 'OK', style: 'default' }]
-                )
+                setShowAboutDialog(true)
               }}
               isLast={true}
             />
           </View>
         </View>
       </ScrollView>
+
+      <ActionSheet
+        visible={showThemeSheet}
+        onClose={() => setShowThemeSheet(false)}
+        title="Theme"
+        subtitle="Select app theme"
+        options={[
+          {
+            text: 'Light',
+            icon: 'sunny-outline',
+            onPress: () => {
+              HapticFeedback.light()
+              setThemePreference('light')
+            },
+          },
+          {
+            text: 'Dark',
+            icon: 'moon-outline',
+            onPress: () => {
+              HapticFeedback.light()
+              setThemePreference('dark')
+            },
+          },
+          {
+            text: 'System',
+            icon: 'phone-portrait-outline',
+            onPress: () => {
+              HapticFeedback.light()
+              setThemePreference('system')
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => {
+              HapticFeedback.light()
+            },
+          },
+        ]}
+      />
+
+      <Dialog
+        visible={showAboutDialog}
+        onClose={() => setShowAboutDialog(false)}
+        title="About Shopper"
+        message="Version: 1.0.0\nAuthor: Jack Qin\n\nA lightweight shopping list app built with React Native and Expo."
+        buttons={[
+          {
+            text: 'OK',
+            style: 'primary',
+            onPress: () => {
+              HapticFeedback.light()
+            },
+          },
+        ]}
+      />
     </SafeAreaView>
   )
 }

@@ -19,7 +19,7 @@ interface ArchiveListCardProps {
   onPermanentDelete: (listId: string, listName: string) => void
   getListPreview: (list: ShoppingList) => string
   getCompletedCount: (list: ShoppingList) => number
-  getDaysInTrash?: (deletedAt: Date) => number
+  getRelativeTime?: (deletedAt: Date) => string
 }
 
 export function ArchiveListCard({
@@ -30,7 +30,7 @@ export function ArchiveListCard({
   onPermanentDelete,
   getListPreview,
   getCompletedCount,
-  getDaysInTrash,
+  getRelativeTime,
 }: ArchiveListCardProps) {
   const completedCount = getCompletedCount(item)
   const totalCount = item.items.length
@@ -71,13 +71,9 @@ export function ArchiveListCard({
   }
 
   const renderDateText = () => {
-    if (type === 'deleted' && getDaysInTrash && item.deletedAt) {
-      const daysInTrash = getDaysInTrash(item.deletedAt)
-      return (
-        <Text style={styles.deletedDate}>
-          Deleted {daysInTrash} {daysInTrash === 1 ? 'day' : 'days'} ago
-        </Text>
-      )
+    if (type === 'deleted' && getRelativeTime && item.deletedAt) {
+      const relativeTimeText = getRelativeTime(item.deletedAt)
+      return <Text style={styles.deletedDate}>Deleted {relativeTimeText}</Text>
     }
 
     return (

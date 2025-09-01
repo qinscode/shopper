@@ -20,6 +20,7 @@ import {
   Checkbox,
   ProgressChip,
   Input,
+  ActionSheet,
 } from '@/components/ui'
 import { Colors, ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius } from '@/constants/Layout'
@@ -40,6 +41,7 @@ export default function ListDetailScreen() {
 
   const [isRenameModalVisible, setRenameModalVisible] = useState(false)
   const [newListName, setNewListName] = useState('')
+  const [isListOptionsVisible, setListOptionsVisible] = useState(false)
 
   const handleRenameList = () => {
     setNewListName(list?.name || '')
@@ -55,6 +57,10 @@ export default function ListDetailScreen() {
       })
     }
     setRenameModalVisible(false)
+  }
+
+  const handleShowListOptions = () => {
+    setListOptionsVisible(true)
   }
 
   const completedCount = list
@@ -102,6 +108,29 @@ export default function ListDetailScreen() {
       ]
     )
   }
+
+  const listOptionsData = [
+    {
+      text: 'Rename List',
+      onPress: handleRenameList,
+      icon: 'create-outline' as const,
+    },
+    {
+      text: 'Archive List',
+      onPress: handleArchiveList,
+      icon: 'archive-outline' as const,
+    },
+    {
+      text: 'Delete List',
+      onPress: handleDeleteList,
+      style: 'destructive' as const,
+      icon: 'trash-outline' as const,
+    },
+    {
+      text: 'Cancel',
+      style: 'cancel' as const,
+    },
+  ]
 
   const renameModal = (
     <Modal
@@ -354,31 +383,7 @@ export default function ListDetailScreen() {
               />
               <TouchableOpacity
                 style={styles.menuButton}
-                onPress={() => {
-                  Alert.alert(
-                    'List Options',
-                    'Choose an action for this list',
-                    [
-                      {
-                        text: 'Rename List',
-                        onPress: handleRenameList,
-                      },
-                      {
-                        text: 'Archive List',
-                        onPress: handleArchiveList,
-                      },
-                      {
-                        text: 'Delete List',
-                        style: 'destructive',
-                        onPress: handleDeleteList,
-                      },
-                      {
-                        text: 'Cancel',
-                        style: 'cancel',
-                      },
-                    ]
-                  )
-                }}
+                onPress={handleShowListOptions}
               >
                 <Ionicons
                   name="ellipsis-horizontal"
@@ -404,6 +409,13 @@ export default function ListDetailScreen() {
           />
         </SafeAreaView>
         {renameModal}
+        <ActionSheet
+          visible={isListOptionsVisible}
+          onClose={() => setListOptionsVisible(false)}
+          title="List Options"
+          subtitle="Choose an action for this list"
+          options={listOptionsData}
+        />
       </>
     )
   }
@@ -446,27 +458,7 @@ export default function ListDetailScreen() {
             />
             <TouchableOpacity
               style={styles.menuButton}
-              onPress={() => {
-                Alert.alert('List Options', 'Choose an action for this list', [
-                  {
-                    text: 'Rename List',
-                    onPress: handleRenameList,
-                  },
-                  {
-                    text: 'Archive List',
-                    onPress: handleArchiveList,
-                  },
-                  {
-                    text: 'Delete List',
-                    style: 'destructive',
-                    onPress: handleDeleteList,
-                  },
-                  {
-                    text: 'Cancel',
-                    style: 'cancel',
-                  },
-                ])
-              }}
+              onPress={handleShowListOptions}
             >
               <Ionicons
                 name="ellipsis-horizontal"
@@ -496,6 +488,13 @@ export default function ListDetailScreen() {
         </View>
       </SafeAreaView>
       {renameModal}
+      <ActionSheet
+        visible={isListOptionsVisible}
+        onClose={() => setListOptionsVisible(false)}
+        title="List Options"
+        subtitle="Choose an action for this list"
+        options={listOptionsData}
+      />
     </>
   )
 }
@@ -527,15 +526,15 @@ const createStyles = (colors: ThemeColors) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginLeft: 4,
-      flexShrink: 1,
+      flex: 1,
     },
     headerTitle: {
       fontSize: 24,
       fontWeight: Typography.fontWeight.semibold,
       color: colors.text,
-      flex: 1,
       marginLeft: 12,
-      marginRight: 16,
+      marginRight: 8,
+      flexShrink: 1,
     },
 
     headerRight: {

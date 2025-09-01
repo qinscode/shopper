@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import 'react-native-reanimated'
 
 import { Colors } from '@/constants/Colors'
@@ -51,10 +52,7 @@ function AppInner() {
         <Stack.Screen name="(app)" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar
-        style={colorScheme === 'dark' ? 'light' : 'dark'}
-        backgroundColor={Colors[colorScheme].background}
-      />
+      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
     </NavigationThemeProvider>
   )
 }
@@ -70,11 +68,13 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemePreferenceProvider>
-        <AppProvider>
-          <AppInner />
-        </AppProvider>
-      </ThemePreferenceProvider>
+      <SafeAreaProvider>
+        <ThemePreferenceProvider>
+          <AppProvider>
+            <AppInner />
+          </AppProvider>
+        </ThemePreferenceProvider>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   )
 }

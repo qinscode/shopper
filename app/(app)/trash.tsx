@@ -22,7 +22,7 @@ import { HapticFeedback } from '@/utils/haptics'
 import {
   getListPreview,
   getCompletedCount,
-  getDaysInTrash,
+  getRelativeTime,
 } from '@/utils/listHelpers'
 
 export default function TrashScreen() {
@@ -81,7 +81,7 @@ export default function TrashScreen() {
       onPermanentDelete={handleDeletePermanently}
       getListPreview={getListPreview}
       getCompletedCount={getCompletedCount}
-      getDaysInTrash={getDaysInTrash}
+      getRelativeTime={getRelativeTime}
     />
   )
 
