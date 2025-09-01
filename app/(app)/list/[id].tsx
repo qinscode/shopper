@@ -336,6 +336,7 @@ export default function ListDetailScreen() {
               <TouchableOpacity
                 style={styles.renameButton}
                 onPress={handleRenameList}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
                 <Ionicons name="create-outline" size={24} color={Colors.text} />
               </TouchableOpacity>
@@ -427,6 +428,7 @@ export default function ListDetailScreen() {
             <TouchableOpacity
               style={styles.renameButton}
               onPress={handleRenameList}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
               <Ionicons name="create-outline" size={24} color={Colors.text} />
             </TouchableOpacity>
@@ -521,7 +523,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: Typography.fontWeight.semibold,
     color: Colors.text,
-    flex: 1,
+    flexShrink: 1,
   },
 
   titleContainer: {
@@ -530,6 +532,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 12,
     marginRight: 16,
+    justifyContent: 'center',
   },
 
   headerRight: {
@@ -546,11 +549,11 @@ const styles = StyleSheet.create({
   },
 
   renameButton: {
-    width: 44,
-    height: 44,
+    width: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: 8,
+    marginLeft: 4,
   },
 
   content: {
