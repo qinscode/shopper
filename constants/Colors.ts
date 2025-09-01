@@ -44,10 +44,14 @@ const darkColors = {
 const Colors = {
   light: lightColors,
   dark: darkColors,
-  ...darkColors, // default for backward compatibility
-} as const
+  ...lightColors, // default to light; will be updated on theme changes
+}
 
 export type ThemeColors = typeof lightColors
+
+export function applyTheme(theme: 'light' | 'dark') {
+  Object.assign(Colors, Colors[theme])
+}
 
 export { Colors }
 export default Colors

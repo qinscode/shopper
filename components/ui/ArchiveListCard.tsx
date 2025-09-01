@@ -1,10 +1,11 @@
 import { Ionicons } from '@expo/vector-icons'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { ShoppingList } from '@/types'
 import { HapticFeedback } from '@/utils/haptics'
 
@@ -34,6 +35,8 @@ export function ArchiveListCard({
 }: ArchiveListCardProps) {
   const completedCount = getCompletedCount(item)
   const totalCount = item.items.length
+  const colors = useThemeColors()
+  const styles = useMemo(() => createStyles(colors), [colors])
 
   const handleRestoreList = () => {
     Alert.alert(
@@ -118,9 +121,9 @@ export function ArchiveListCard({
             <Ionicons
               name="arrow-undo-outline"
               size={16}
-              color={Colors.primary}
+              color={colors.primary}
             />
-            <Text style={[styles.actionText, { color: Colors.primary }]}>
+            <Text style={[styles.actionText, { color: colors.primary }]}>
               Restore
             </Text>
           </TouchableOpacity>
@@ -129,8 +132,8 @@ export function ArchiveListCard({
             style={styles.actionButton}
             onPress={handleDeletePermanently}
           >
-            <Ionicons name="trash-outline" size={16} color={Colors.error} />
-            <Text style={[styles.actionText, { color: Colors.error }]}>
+            <Ionicons name="trash-outline" size={16} color={colors.error} />
+            <Text style={[styles.actionText, { color: colors.error }]}>
               Delete
             </Text>
           </TouchableOpacity>
@@ -140,72 +143,73 @@ export function ArchiveListCard({
   )
 }
 
-const styles = StyleSheet.create({
-  listCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.md,
-    ...Shadows.medium,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    listCard: {
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      marginBottom: Spacing.md,
+      ...Shadows.medium,
+    },
 
-  deletedCard: {
-    opacity: 0.8,
-  },
+    deletedCard: {
+      opacity: 0.8,
+    },
 
-  listCardContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: Spacing.md,
-  },
+    listCardContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: Spacing.md,
+    },
 
-  listCardLeft: {
-    flex: 1,
-  },
+    listCardLeft: {
+      flex: 1,
+    },
 
-  listCardRight: {
-    marginLeft: Spacing.md,
-  },
+    listCardRight: {
+      marginLeft: Spacing.md,
+    },
 
-  listTitle: {
-    ...Typography.textStyles.subtitle,
-    color: Colors.text,
-    marginBottom: Spacing.xs,
-  },
+    listTitle: {
+      ...Typography.textStyles.subtitle,
+      color: colors.text,
+      marginBottom: Spacing.xs,
+    },
 
-  listPreview: {
-    ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
-    marginBottom: Spacing.xs,
-  },
+    listPreview: {
+      ...Typography.textStyles.caption,
+      color: colors.textSecondary,
+      marginBottom: Spacing.xs,
+    },
 
-  archivedDate: {
-    ...Typography.textStyles.caption,
-    color: Colors.textTertiary,
-    fontSize: 11,
-  },
+    archivedDate: {
+      ...Typography.textStyles.caption,
+      color: colors.textTertiary,
+      fontSize: 11,
+    },
 
-  deletedDate: {
-    ...Typography.textStyles.caption,
-    color: Colors.error,
-    fontSize: 11,
-  },
+    deletedDate: {
+      ...Typography.textStyles.caption,
+      color: colors.error,
+      fontSize: 11,
+    },
 
-  listActions: {
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-  },
+    listActions: {
+      flexDirection: 'row',
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      paddingHorizontal: Spacing.md,
+      paddingVertical: Spacing.sm,
+    },
 
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: Spacing.lg,
-  },
+    actionButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginRight: Spacing.lg,
+    },
 
-  actionText: {
-    ...Typography.textStyles.caption,
-    marginLeft: Spacing.xs,
-  },
-})
+    actionText: {
+      ...Typography.textStyles.caption,
+      marginLeft: Spacing.xs,
+    },
+  })

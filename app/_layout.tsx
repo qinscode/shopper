@@ -6,6 +6,7 @@ import {
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useMemo } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 
@@ -14,37 +15,27 @@ import { AppProvider } from '@/context/AppContext'
 import { ThemeProvider as ThemePreferenceProvider } from '@/context/ThemeContext'
 import { useColorScheme } from '@/hooks/useColorScheme'
 
-const customDarkTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    background: Colors.dark?.background ?? Colors.background,
-    card: Colors.dark?.surface ?? Colors.surface,
-    text: Colors.dark?.text ?? Colors.text,
-    border: Colors.dark?.border ?? Colors.border,
-    notification: Colors.dark?.primary ?? Colors.primary,
-    primary: Colors.dark?.primary ?? Colors.primary,
-  },
-}
-
-const customLightTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: Colors.light?.background ?? Colors.background,
-    card: Colors.light?.surface ?? Colors.surface,
-    text: Colors.light?.text ?? Colors.text,
-    border: Colors.light?.border ?? Colors.border,
-    notification: Colors.light?.primary ?? Colors.primary,
-    primary: Colors.light?.primary ?? Colors.primary,
-  },
-}
-
 function AppInner() {
   const colorScheme = useColorScheme()
-  const theme = colorScheme === 'dark' ? customDarkTheme : customLightTheme
+  const navigationTheme = useMemo(() => {
+    const base = colorScheme === 'dark' ? DarkTheme : DefaultTheme
+    const schemeColors = Colors[colorScheme]
+    return {
+      ...base,
+      colors: {
+        ...base.colors,
+        background: schemeColors.background,
+        card: schemeColors.surface,
+        text: schemeColors.text,
+        border: schemeColors.border,
+        notification: schemeColors.primary,
+        primary: schemeColors.primary,
+      },
+    }
+  }, [colorScheme])
+
   return (
-    <NavigationThemeProvider value={theme}>
+    <NavigationThemeProvider value={navigationTheme}>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="(onboarding)" />
