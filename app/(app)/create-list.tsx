@@ -1,10 +1,9 @@
 import { useRouter } from 'expo-router'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
   View,
   StyleSheet,
   Alert,
-  Image,
   Keyboard,
   Platform,
   KeyboardAvoidingView,
@@ -14,16 +13,18 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, Input, Button } from '@/components/ui'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { useApp } from '@/context/AppContext'
 import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function CreateListScreen() {
   const [listName, setListName] = useState('')
-  const [keyboardVisible, setKeyboardVisible] = useState(false)
+  const [, setKeyboardVisible] = useState(false)
   const router = useRouter()
-  const { dispatch, state } = useApp()
   const colors = useThemeColors()
+  const styles = useMemo(() => createStyles(colors), [colors])
+  const { dispatch, state } = useApp()
 
   // Animation values
   const illustrationScale = useRef(new Animated.Value(1)).current
@@ -96,10 +97,6 @@ export default function CreateListScreen() {
       Alert.alert('Error', 'Please enter a list name')
       return
     }
-
-    // Generate ID before dispatch to track the new list
-    const newId =
-      Date.now().toString() + Math.random().toString(36).substr(2, 9)
 
     dispatch({
       type: 'CREATE_LIST',
@@ -192,58 +189,60 @@ export default function CreateListScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  keyboardAvoidingView: {
-    flex: 1,
-  },
+    keyboardAvoidingView: {
+      flex: 1,
+    },
 
-  scrollView: {
-    flex: 1,
-  },
+    scrollView: {
+      flex: 1,
+    },
 
-  scrollContent: {
-    flexGrow: 1,
-  },
+    scrollContent: {
+      flexGrow: 1,
+    },
 
-  content: {
-    flex: 1,
-    padding: Spacing.screenPadding,
-    justifyContent: 'space-between',
-    minHeight: '100%',
-  },
+    content: {
+      flex: 1,
+      padding: Spacing.screenPadding,
+      justifyContent: 'space-between',
+      minHeight: '100%',
+    },
 
-  illustrationContainer: {
-    alignItems: 'center',
-  },
+    illustrationContainer: {
+      alignItems: 'center',
+    },
 
-  illustration: {
-    width: 240,
-    height: 160,
-  },
+    illustration: {
+      width: 240,
+      height: 160,
+    },
 
-  formSection: {
-    paddingVertical: Spacing.lg,
-  },
+    formSection: {
+      paddingVertical: Spacing.lg,
+    },
 
-  input: {
-    marginBottom: Spacing.lg,
-  },
+    input: {
+      marginBottom: Spacing.lg,
+    },
 
-  buttonContainer: {
-    paddingBottom: Platform.OS === 'ios' ? Spacing.xl : Spacing.lg,
-    marginTop: 'auto',
-  },
+    buttonContainer: {
+      paddingBottom: Platform.OS === 'ios' ? Spacing.xl : Spacing.lg,
+      marginTop: 'auto',
+    },
 
-  buttonRow: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-  },
+    buttonRow: {
+      flexDirection: 'row',
+      gap: Spacing.md,
+    },
 
-  button: {
-    flex: 1,
-  },
-})
+    button: {
+      flex: 1,
+    },
+  })
