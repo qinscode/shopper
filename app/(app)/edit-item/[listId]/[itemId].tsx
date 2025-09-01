@@ -5,10 +5,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Input, Button } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { HapticFeedback } from '@/utils/haptics'
 
 export default function EditItemScreen() {
@@ -23,6 +24,8 @@ export default function EditItemScreen() {
   const item = list?.items.find(item => item.id === itemIdStr)
 
   const [itemName, setItemName] = useState(item?.name || '')
+  const colors = useThemeColors()
+  const styles = createStyles(colors)
 
   useEffect(() => {
     if (item) {
@@ -73,7 +76,7 @@ export default function EditItemScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
-            <Ionicons name="chevron-back" size={24} color={Colors.text} />
+            <Ionicons name="chevron-back" size={24} color={colors.text} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle}>Item Not Found</Text>
@@ -91,7 +94,7 @@ export default function EditItemScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={handleCancel} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color={Colors.text} />
+          <Ionicons name="chevron-back" size={24} color={colors.text} />
         </TouchableOpacity>
 
         <Text style={styles.headerTitle}>Edit Item</Text>
@@ -130,59 +133,59 @@ export default function EditItemScreen() {
     </SafeAreaView>
   )
 }
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 56,
+      paddingHorizontal: 24,
+      backgroundColor: colors.background,
+    },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 56,
-    paddingHorizontal: 24,
-    backgroundColor: Colors.background,
-  },
+    backButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: -12,
+    },
 
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: -12,
-  },
+    headerTitle: {
+      fontSize: 24,
+      fontWeight: Typography.fontWeight.semibold,
+      color: colors.text,
+      flex: 1,
+      marginLeft: 12,
+      textAlign: 'center',
+    },
 
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.text,
-    flex: 1,
-    marginLeft: 12,
-    textAlign: 'center',
-  },
+    headerRight: {
+      width: 44,
+    },
 
-  headerRight: {
-    width: 44,
-  },
+    content: {
+      flex: 1,
+      padding: Spacing.screenPadding,
+    },
 
-  content: {
-    flex: 1,
-    padding: Spacing.screenPadding,
-  },
+    inputContainer: {
+      marginBottom: Spacing.xl,
+    },
 
-  inputContainer: {
-    marginBottom: Spacing.xl,
-  },
+    buttonContainer: {
+      flexDirection: 'row',
+      gap: Spacing.md,
+      marginTop: 'auto',
+      paddingBottom: Spacing.lg,
+    },
 
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: Spacing.md,
-    marginTop: 'auto',
-    paddingBottom: Spacing.lg,
-  },
-
-  button: {
-    flex: 1,
-  },
-})
+    button: {
+      flex: 1,
+    },
+  })

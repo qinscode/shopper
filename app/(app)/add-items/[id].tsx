@@ -14,10 +14,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, Input, Button } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { SUGGESTED_ITEMS, CustomItem } from '@/types'
 import { HapticFeedback } from '@/utils/haptics'
 
@@ -34,6 +35,8 @@ export default function AddItemsScreen() {
 
   const { dispatch, getList, state, getMostUsedCustomItems } = useApp()
   const list = getList(listId)
+  const colors = useThemeColors()
+  const styles = createStyles(colors)
 
   // Filter out items that are already in the list
   const existingItemNames =
@@ -165,7 +168,7 @@ export default function AddItemsScreen() {
             <Ionicons
               name="checkmark-circle"
               size={16}
-              color={Colors.success}
+              color={colors.success}
             />
           )}
         </View>
@@ -209,7 +212,7 @@ export default function AddItemsScreen() {
               <View
                 style={[
                   styles.customItemPlaceholder,
-                  { backgroundColor: item.color || Colors.primary },
+                  { backgroundColor: item.color || colors.primary },
                 ]}
               >
                 <Text style={styles.customItemInitial}>
@@ -239,7 +242,7 @@ export default function AddItemsScreen() {
                     {
                       backgroundColor:
                         state.categories.find(c => c.name === item.category)
-                          ?.color || Colors.primary,
+                          ?.color || colors.primary,
                     },
                   ]}
                 />
@@ -258,7 +261,7 @@ export default function AddItemsScreen() {
               <Ionicons
                 name="link"
                 size={14}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
                 style={styles.attachment}
               />
             )}
@@ -266,7 +269,7 @@ export default function AddItemsScreen() {
               <Ionicons
                 name="checkmark-circle"
                 size={20}
-                color={Colors.success}
+                color={colors.success}
               />
             )}
           </View>
@@ -290,13 +293,13 @@ export default function AddItemsScreen() {
       onPress={() => handleAddItem(item)}
       activeOpacity={0.7}
     >
-      <Ionicons name="time-outline" size={16} color={Colors.textSecondary} />
+      <Ionicons name="time-outline" size={16} color={colors.textSecondary} />
       <Text style={styles.recentText}>{item}</Text>
       <TouchableOpacity
         style={styles.quickAddButton}
         onPress={() => handleAddItem(item)}
       >
-        <Ionicons name="add-circle-outline" size={20} color={Colors.primary} />
+        <Ionicons name="add-circle-outline" size={20} color={colors.primary} />
       </TouchableOpacity>
     </TouchableOpacity>
   )
@@ -323,7 +326,7 @@ export default function AddItemsScreen() {
         onBackPress={() => router.back()}
         rightComponent={
           <TouchableOpacity onPress={() => router.push('/(app)/my-items')}>
-            <Ionicons name="library-outline" size={24} color={Colors.text} />
+            <Ionicons name="library-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         }
       />
@@ -340,7 +343,7 @@ export default function AddItemsScreen() {
             onSubmitEditing={handleAddCustomItem}
             style={styles.searchInput}
             leftIcon={
-              <Ionicons name="search" size={20} color={Colors.textSecondary} />
+              <Ionicons name="search" size={20} color={colors.textSecondary} />
             }
             rightIcon={
               searchText.length > 0 ? (
@@ -348,7 +351,7 @@ export default function AddItemsScreen() {
                   <Ionicons
                     name="close-circle"
                     size={20}
-                    color={Colors.textSecondary}
+                    color={colors.textSecondary}
                   />
                 </TouchableOpacity>
               ) : undefined
@@ -364,7 +367,7 @@ export default function AddItemsScreen() {
                 <Ionicons
                   name="add-circle-outline"
                   size={20}
-                  color={Colors.primary}
+                  color={colors.primary}
                 />
                 <Text style={styles.customItemText}>
                   Add &#34;{searchText.trim()}&#34;
@@ -398,7 +401,7 @@ export default function AddItemsScreen() {
               <Ionicons
                 name="search-outline"
                 size={48}
-                color={Colors.textTertiary}
+                color={colors.textTertiary}
               />
               <Text style={styles.noResultsText}>No {activeTab} found</Text>
               {!canAddCustomItem && (
@@ -434,271 +437,272 @@ export default function AddItemsScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    flex: 1,
-    padding: Spacing.screenPadding,
-  },
+    content: {
+      flex: 1,
+      padding: Spacing.screenPadding,
+    },
 
-  searchContainer: {
-    marginBottom: Spacing.lg,
-  },
+    searchContainer: {
+      marginBottom: Spacing.lg,
+    },
 
-  searchInput: {
-    marginBottom: Spacing.md,
-  },
+    searchInput: {
+      marginBottom: Spacing.md,
+    },
 
-  customItemButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
-    marginBottom: Spacing.sm,
-    ...Shadows.small,
-    borderLeftWidth: 3,
-    borderLeftColor: Colors.primary,
-  },
+    customItemButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      padding: Spacing.md,
+      marginBottom: Spacing.sm,
+      ...Shadows.small,
+      borderLeftWidth: 3,
+      borderLeftColor: colors.primary,
+    },
 
-  customItemContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
+    customItemContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
 
-  customItemText: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    marginLeft: Spacing.sm,
-    flex: 1,
-  },
+    customItemText: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      marginLeft: Spacing.sm,
+      flex: 1,
+    },
 
-  section: {
-    marginBottom: Spacing.lg,
-  },
+    section: {
+      marginBottom: Spacing.lg,
+    },
 
-  sectionTitle: {
-    ...Typography.textStyles.subtitle,
-    color: Colors.text,
-    marginBottom: Spacing.md,
-    fontWeight: Typography.fontWeight.semibold,
-  },
+    sectionTitle: {
+      ...Typography.textStyles.subtitle,
+      color: colors.text,
+      marginBottom: Spacing.md,
+      fontWeight: Typography.fontWeight.semibold,
+    },
 
-  recentContainer: {
-    paddingRight: Spacing.md,
-  },
+    recentContainer: {
+      paddingRight: Spacing.md,
+    },
 
-  recentItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.pill,
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm,
-    marginRight: Spacing.sm,
-    ...Shadows.small,
-  },
+    recentItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.pill,
+      paddingHorizontal: Spacing.md,
+      paddingVertical: Spacing.sm,
+      marginRight: Spacing.sm,
+      ...Shadows.small,
+    },
 
-  recentText: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    marginHorizontal: Spacing.sm,
-  },
+    recentText: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      marginHorizontal: Spacing.sm,
+    },
 
-  quickAddButton: {
-    marginLeft: Spacing.xs,
-  },
+    quickAddButton: {
+      marginLeft: Spacing.xs,
+    },
 
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    padding: 4,
-    marginBottom: Spacing.lg,
-    ...Shadows.small,
-  },
+    tabBar: {
+      flexDirection: 'row',
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      padding: 4,
+      marginBottom: Spacing.lg,
+      ...Shadows.small,
+    },
 
-  tab: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: Spacing.sm,
-    borderRadius: BorderRadius.sm,
-  },
+    tab: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: Spacing.sm,
+      borderRadius: BorderRadius.sm,
+    },
 
-  activeTab: {
-    backgroundColor: Colors.primary,
-  },
+    activeTab: {
+      backgroundColor: colors.primary,
+    },
 
-  tabText: {
-    ...Typography.textStyles.body,
-    color: Colors.textSecondary,
-    fontSize: 14,
-  },
+    tabText: {
+      ...Typography.textStyles.body,
+      color: colors.textSecondary,
+      fontSize: 14,
+    },
 
-  activeTabText: {
-    color: Colors.text,
-    fontWeight: Typography.fontWeight.semibold,
-  },
+    activeTabText: {
+      color: colors.text,
+      fontWeight: Typography.fontWeight.semibold,
+    },
 
-  suggestionsContainer: {
-    paddingBottom: Spacing.xl,
-  },
+    suggestionsContainer: {
+      paddingBottom: Spacing.xl,
+    },
 
-  suggestionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
-    marginBottom: Spacing.sm,
-    ...Shadows.small,
-  },
+    suggestionItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      padding: Spacing.md,
+      marginBottom: Spacing.sm,
+      ...Shadows.small,
+    },
 
-  customItem: {
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    marginBottom: Spacing.sm,
-    ...Shadows.small,
-  },
+    customItem: {
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      marginBottom: Spacing.sm,
+      ...Shadows.small,
+    },
 
-  disabledItem: {
-    opacity: 0.6,
-  },
+    disabledItem: {
+      opacity: 0.6,
+    },
 
-  suggestionContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
+    suggestionContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      flex: 1,
+    },
 
-  suggestionText: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    flex: 1,
-  },
+    suggestionText: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      flex: 1,
+    },
 
-  customItemLeft: {
-    marginRight: Spacing.md,
-  },
+    customItemLeft: {
+      marginRight: Spacing.md,
+    },
 
-  customItemImage: {
-    width: 40,
-    height: 40,
-    borderRadius: BorderRadius.sm,
-  },
+    customItemImage: {
+      width: 40,
+      height: 40,
+      borderRadius: BorderRadius.sm,
+    },
 
-  customItemPlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: BorderRadius.sm,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    customItemPlaceholder: {
+      width: 40,
+      height: 40,
+      borderRadius: BorderRadius.sm,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
 
-  customItemInitial: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    fontWeight: Typography.fontWeight.bold,
-  },
+    customItemInitial: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      fontWeight: Typography.fontWeight.bold,
+    },
 
-  customItemInfo: {
-    flex: 1,
-  },
+    customItemInfo: {
+      flex: 1,
+    },
 
-  customItemName: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    fontWeight: Typography.fontWeight.semibold,
-    marginBottom: 2,
-  },
+    customItemName: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      fontWeight: Typography.fontWeight.semibold,
+      marginBottom: 2,
+    },
 
-  customItemBrand: {
-    ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
-    marginBottom: 2,
-  },
+    customItemBrand: {
+      ...Typography.textStyles.caption,
+      color: colors.textSecondary,
+      marginBottom: 2,
+    },
 
-  customItemCategory: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 2,
-  },
+    customItemCategory: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 2,
+    },
 
-  categoryDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    marginRight: Spacing.xs,
-  },
+    categoryDot: {
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+      marginRight: Spacing.xs,
+    },
 
-  categoryText: {
-    ...Typography.textStyles.caption,
-    color: Colors.textSecondary,
-    fontSize: 11,
-  },
+    categoryText: {
+      ...Typography.textStyles.caption,
+      color: colors.textSecondary,
+      fontSize: 11,
+    },
 
-  usageCount: {
-    ...Typography.textStyles.caption,
-    color: Colors.textTertiary,
-    fontSize: 10,
-  },
+    usageCount: {
+      ...Typography.textStyles.caption,
+      color: colors.textTertiary,
+      fontSize: 10,
+    },
 
-  customItemRight: {
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
+    customItemRight: {
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+    },
 
-  attachment: {
-    marginBottom: Spacing.xs,
-  },
+    attachment: {
+      marginBottom: Spacing.xs,
+    },
 
-  disabledText: {
-    color: Colors.textSecondary,
-  },
+    disabledText: {
+      color: colors.textSecondary,
+    },
 
-  addButton: {
-    backgroundColor: Colors.primary,
-    borderRadius: BorderRadius.sm,
-    paddingVertical: Spacing.xs,
-    paddingHorizontal: Spacing.md,
-    marginLeft: Spacing.md,
-  },
+    addButton: {
+      backgroundColor: colors.primary,
+      borderRadius: BorderRadius.sm,
+      paddingVertical: Spacing.xs,
+      paddingHorizontal: Spacing.md,
+      marginLeft: Spacing.md,
+    },
 
-  addButtonText: {
-    ...Typography.textStyles.caption,
-    color: Colors.text,
-    fontWeight: Typography.fontWeight.semibold,
-  },
+    addButtonText: {
+      ...Typography.textStyles.caption,
+      color: colors.text,
+      fontWeight: Typography.fontWeight.semibold,
+    },
 
-  doneText: {
-    ...Typography.textStyles.body,
-    color: Colors.primary,
-    fontWeight: Typography.fontWeight.semibold,
-  },
+    doneText: {
+      ...Typography.textStyles.body,
+      color: colors.primary,
+      fontWeight: Typography.fontWeight.semibold,
+    },
 
-  noResultsContainer: {
-    alignItems: 'center',
-    paddingVertical: Spacing.xl,
-  },
+    noResultsContainer: {
+      alignItems: 'center',
+      paddingVertical: Spacing.xl,
+    },
 
-  noResultsText: {
-    ...Typography.textStyles.subtitle,
-    color: Colors.textSecondary,
-    marginTop: Spacing.md,
-    textAlign: 'center',
-  },
+    noResultsText: {
+      ...Typography.textStyles.subtitle,
+      color: colors.textSecondary,
+      marginTop: Spacing.md,
+      textAlign: 'center',
+    },
 
-  noResultsSubtext: {
-    ...Typography.textStyles.caption,
-    color: Colors.textTertiary,
-    marginTop: Spacing.xs,
-    textAlign: 'center',
-  },
-})
+    noResultsSubtext: {
+      ...Typography.textStyles.caption,
+      color: colors.textTertiary,
+      marginTop: Spacing.xs,
+      textAlign: 'center',
+    },
+  })
