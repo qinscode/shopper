@@ -9,8 +9,9 @@ import Animated, {
   runOnJS,
 } from 'react-native-reanimated'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Shadows } from '@/constants/Layout'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface FloatingActionButtonProps {
   onPress: () => void
@@ -23,6 +24,8 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
   icon = 'add',
   size = 56,
 }) => {
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
   const scale = useSharedValue(1)
   const rotation = useSharedValue(0)
 
@@ -65,17 +68,18 @@ export const FloatingActionButton: React.FC<FloatingActionButtonProps> = ({
           animatedStyle,
         ]}
       >
-        <Ionicons name={icon} size={size * 0.4} color={Colors.text} />
+        <Ionicons name={icon} size={size * 0.4} color={colors.text} />
       </Animated.View>
     </TouchableOpacity>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...Shadows.large,
-  },
-})
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+      ...Shadows.large,
+    },
+  })

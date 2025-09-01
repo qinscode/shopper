@@ -2,9 +2,9 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import Svg, { Circle } from 'react-native-svg'
 
-import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface ProgressChipProps {
   completed: number
@@ -19,6 +19,7 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
   size,
   variant = 'small',
 }) => {
+  const colors = useThemeColors()
   // 根据变体设置默认大小和线宽
   const defaultSize = variant === 'large' ? 60 : Spacing.progressChipSize
   const actualSize = size || defaultSize
@@ -31,9 +32,8 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
   const strokeDashoffset = circumference - progress * circumference
   const isComplete = completed === total && total > 0
 
-  // Figma颜色规格
-  const completedColor = '#2ECC71' // 完成色
-  const uncompletedColor = '#6F6F6F' // 未完成色
+  const completedColor = colors.success
+  const uncompletedColor = colors.textSecondary
 
   return (
     <View style={[styles.container, { width: actualSize, height: actualSize }]}>
@@ -63,7 +63,12 @@ export const ProgressChip: React.FC<ProgressChipProps> = ({
           />
         )}
       </Svg>
-      <Text style={[styles.text, { fontSize: actualSize * 0.25 }]}>
+      <Text
+        style={[
+          styles.text,
+          { color: colors.text, fontSize: actualSize * 0.25 },
+        ]}
+      >
         {completed}/{total}
       </Text>
     </View>
@@ -83,7 +88,6 @@ const styles = StyleSheet.create({
 
   text: {
     ...Typography.textStyles.caption,
-    color: Colors.text,
     fontWeight: Typography.fontWeight.semibold,
     textAlign: 'center',
   },

@@ -9,9 +9,10 @@ import {
 } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface HeaderProps {
   title: string
@@ -33,6 +34,8 @@ export const Header: React.FC<HeaderProps> = ({
   style,
 }) => {
   const insets = useSafeAreaInsets()
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
 
   return (
     <View style={[styles.container, style]}>
@@ -40,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({
         <View style={styles.leftSection}>
           {showBackButton && onBackPress && (
             <TouchableOpacity onPress={onBackPress} style={styles.backButton}>
-              <Ionicons name="chevron-back" size={24} color={Colors.text} />
+              <Ionicons name="chevron-back" size={24} color={colors.text} />
             </TouchableOpacity>
           )}
           {!showBackButton && leftComponent}
@@ -67,55 +70,56 @@ export const Header: React.FC<HeaderProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 44,
-    paddingHorizontal: Spacing.md,
-  },
+    content: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 44,
+      paddingHorizontal: Spacing.md,
+    },
 
-  leftSection: {
-    minWidth: 44,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
+    leftSection: {
+      minWidth: 44,
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+    },
 
-  centerSection: {
-    flex: 1,
-    alignItems: 'center',
-  },
+    centerSection: {
+      flex: 1,
+      alignItems: 'center',
+    },
 
-  centerSectionLeft: {
-    flex: 1,
-    alignItems: 'flex-start',
-  },
+    centerSectionLeft: {
+      flex: 1,
+      alignItems: 'flex-start',
+    },
 
-  rightSection: {
-    minWidth: 44,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-  },
+    rightSection: {
+      minWidth: 44,
+      alignItems: 'flex-end',
+      justifyContent: 'center',
+    },
 
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: -Spacing.sm, // Adjust for visual balance
-  },
+    backButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: -Spacing.sm, // Adjust for visual balance
+    },
 
-  title: {
-    ...Typography.textStyles.title,
-    color: Colors.text,
-    textAlign: 'center',
-  },
+    title: {
+      ...Typography.textStyles.title,
+      color: colors.text,
+      textAlign: 'center',
+    },
 
-  titleLeft: {
-    textAlign: 'left',
-  },
-})
+    titleLeft: {
+      textAlign: 'left',
+    },
+  })

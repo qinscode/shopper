@@ -8,9 +8,10 @@ import {
   ViewStyle,
 } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 interface InputProps extends TextInputProps {
   label?: string
@@ -25,6 +26,9 @@ export const Input = forwardRef<TextInput, InputProps>(
     { label, error, containerStyle, leftIcon, rightIcon, style, ...props },
     ref
   ) => {
+    const colors = useThemeColors()
+    const styles = React.useMemo(() => createStyles(colors), [colors])
+
     return (
       <View style={[styles.container, containerStyle]}>
         {label && <Text style={styles.label}>{label}</Text>}
@@ -39,7 +43,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               error && styles.inputError,
               style,
             ]}
-            placeholderTextColor={Colors.textTertiary}
+            placeholderTextColor={colors.textTertiary}
             {...props}
           />
           {rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
@@ -52,62 +56,63 @@ export const Input = forwardRef<TextInput, InputProps>(
 
 Input.displayName = 'Input'
 
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      width: '100%',
+    },
 
-  label: {
-    ...Typography.textStyles.body,
-    color: Colors.text,
-    marginBottom: Spacing.xs,
-  },
+    label: {
+      ...Typography.textStyles.body,
+      color: colors.text,
+      marginBottom: Spacing.xs,
+    },
 
-  inputContainer: {
-    position: 'relative',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    inputContainer: {
+      position: 'relative',
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  input: {
-    height: Spacing.inputHeight,
-    backgroundColor: Colors.surface,
-    borderRadius: BorderRadius.md,
-    paddingHorizontal: Spacing.md,
-    color: Colors.text,
-    ...Typography.textStyles.body,
-    flex: 1,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+    input: {
+      height: Spacing.inputHeight,
+      backgroundColor: colors.surface,
+      borderRadius: BorderRadius.md,
+      paddingHorizontal: Spacing.md,
+      color: colors.text,
+      ...Typography.textStyles.body,
+      flex: 1,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
 
-  inputWithLeftIcon: {
-    paddingLeft: Spacing.xxl,
-  },
+    inputWithLeftIcon: {
+      paddingLeft: Spacing.xxl,
+    },
 
-  inputWithRightIcon: {
-    paddingRight: Spacing.xxl,
-  },
+    inputWithRightIcon: {
+      paddingRight: Spacing.xxl,
+    },
 
-  inputError: {
-    borderColor: Colors.error,
-  },
+    inputError: {
+      borderColor: colors.error,
+    },
 
-  leftIcon: {
-    position: 'absolute',
-    left: Spacing.md,
-    zIndex: 1,
-  },
+    leftIcon: {
+      position: 'absolute',
+      left: Spacing.md,
+      zIndex: 1,
+    },
 
-  rightIcon: {
-    position: 'absolute',
-    right: Spacing.md,
-    zIndex: 1,
-  },
+    rightIcon: {
+      position: 'absolute',
+      right: Spacing.md,
+      zIndex: 1,
+    },
 
-  error: {
-    ...Typography.textStyles.caption,
-    color: Colors.error,
-    marginTop: Spacing.xs,
-  },
-})
+    error: {
+      ...Typography.textStyles.caption,
+      color: colors.error,
+      marginTop: Spacing.xs,
+    },
+  })

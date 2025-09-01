@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import {
   View,
   Text,
@@ -22,10 +22,11 @@ import {
   FadeInListItem,
   Input,
 } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { ShoppingList } from '@/types'
 import { HapticFeedback } from '@/utils/haptics'
 
@@ -35,6 +36,8 @@ export default function ListsScreen() {
   const router = useRouter()
   const { getVisibleLists, dispatch } = useApp()
   const allLists = getVisibleLists()
+  const colors = useThemeColors()
+  const styles = useMemo(() => createStyles(colors), [colors])
 
   // Filter lists based on search text
   const filteredLists =
@@ -171,7 +174,7 @@ export default function ListsScreen() {
               <Ionicons
                 name="copy-outline"
                 size={16}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
               />
               <Text style={styles.actionText} numberOfLines={1}>
                 Duplicate
@@ -185,7 +188,7 @@ export default function ListsScreen() {
               <Ionicons
                 name="archive-outline"
                 size={16}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
               />
               <Text style={styles.actionText} numberOfLines={1}>
                 Archive
@@ -199,7 +202,7 @@ export default function ListsScreen() {
               <Ionicons
                 name="trash-outline"
                 size={16}
-                color={Colors.textSecondary}
+                color={colors.textSecondary}
               />
               <Text style={styles.actionText} numberOfLines={1}>
                 Delete
@@ -224,7 +227,7 @@ export default function ListsScreen() {
               <Ionicons
                 name={isSearchVisible ? 'close' : 'search'}
                 size={24}
-                color={Colors.text}
+                color={colors.text}
               />
             </TouchableOpacity>
           }
@@ -233,7 +236,7 @@ export default function ListsScreen() {
               style={styles.headerButton}
               onPress={handleShowSettings}
             >
-              <Ionicons name="settings-outline" size={24} color={Colors.text} />
+              <Ionicons name="settings-outline" size={24} color={colors.text} />
             </TouchableOpacity>
           }
         />
@@ -269,7 +272,7 @@ export default function ListsScreen() {
             <Ionicons
               name={isSearchVisible ? 'close' : 'search'}
               size={24}
-              color={Colors.text}
+              color={colors.text}
             />
           </TouchableOpacity>
         }
@@ -278,7 +281,7 @@ export default function ListsScreen() {
             style={styles.headerButton}
             onPress={handleShowSettings}
           >
-            <Ionicons name="settings-outline" size={24} color={Colors.text} />
+            <Ionicons name="settings-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         }
       />
@@ -291,7 +294,7 @@ export default function ListsScreen() {
             placeholder="Search lists or items..."
             autoFocus
             leftIcon={
-              <Ionicons name="search" size={20} color={Colors.textSecondary} />
+              <Ionicons name="search" size={20} color={colors.textSecondary} />
             }
             rightIcon={
               searchText.length > 0 ? (
@@ -299,7 +302,7 @@ export default function ListsScreen() {
                   <Ionicons
                     name="close-circle"
                     size={20}
-                    color={Colors.textSecondary}
+                    color={colors.textSecondary}
                   />
                 </TouchableOpacity>
               ) : undefined
@@ -317,7 +320,7 @@ export default function ListsScreen() {
               <Ionicons
                 name="search-outline"
                 size={48}
-                color={Colors.textTertiary}
+                color={colors.textTertiary}
               />
             }
             action={
@@ -346,98 +349,99 @@ export default function ListsScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  emptyContainer: {
-    flex: 1,
-  },
+    emptyContainer: {
+      flex: 1,
+    },
 
-  searchContainer: {
-    paddingHorizontal: Spacing.screenPadding,
-    paddingVertical: Spacing.md,
-    backgroundColor: Colors.background,
-  },
+    searchContainer: {
+      paddingHorizontal: Spacing.screenPadding,
+      paddingVertical: Spacing.md,
+      backgroundColor: colors.background,
+    },
 
-  listContainer: {
-    padding: 24, // 24pt页面左右安全间距
-    paddingBottom: 100, // Space for FAB
-  },
+    listContainer: {
+      padding: 24, // 24pt页面左右安全间距
+      paddingBottom: 100, // Space for FAB
+    },
 
-  listCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: 20, // 20-22pt卡片圆角
-    marginBottom: 16, // 16pt卡片垂直间距
-    ...Shadows.medium,
-  },
+    listCard: {
+      backgroundColor: colors.surface,
+      borderRadius: 20, // 20-22pt卡片圆角
+      marginBottom: 16, // 16pt卡片垂直间距
+      ...Shadows.medium,
+    },
 
-  listCardContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20, // 减少内边距，从24pt到20pt
-    paddingBottom: 12, // 减少底部间距
-  },
+    listCardContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 20, // 减少内边距，从24pt到20pt
+      paddingBottom: 12, // 减少底部间距
+    },
 
-  listCardLeft: {
-    flex: 1,
-  },
+    listCardLeft: {
+      flex: 1,
+    },
 
-  listCardRight: {
-    marginLeft: 16,
-  },
+    listCardRight: {
+      marginLeft: 16,
+    },
 
-  listTitle: {
-    ...Typography.textStyles.subtitle,
-    color: Colors.text,
-    marginBottom: 8,
-    fontWeight: Typography.fontWeight.semibold,
-  },
+    listTitle: {
+      ...Typography.textStyles.subtitle,
+      color: colors.text,
+      marginBottom: 8,
+      fontWeight: Typography.fontWeight.semibold,
+    },
 
-  listPreview: {
-    fontSize: 15, // 15-16pt预览文案字号
-    color: '#B5B5B5', // Figma指定的预览文案颜色
-    lineHeight: 20,
-  },
+    listPreview: {
+      fontSize: 15, // 15-16pt预览文案字号
+      color: colors.textSecondary,
+      lineHeight: 20,
+    },
 
-  listActions: {
-    flexDirection: 'row', // 横排
-    paddingHorizontal: 20, // 减少水平padding
-    paddingTop: 8, // 减少顶部间距
-    paddingBottom: 16,
-    justifyContent: 'space-between', // 平均分布
-  },
+    listActions: {
+      flexDirection: 'row', // 横排
+      paddingHorizontal: 20, // 减少水平padding
+      paddingTop: 8, // 减少顶部间距
+      paddingBottom: 16,
+      justifyContent: 'space-between', // 平均分布
+    },
 
-  actionButton: {
-    flexDirection: 'row', // 图标+文字横排
-    alignItems: 'center',
-    flex: 1, // 平均占用空间
-    justifyContent: 'center', // 居中对齐
-    paddingHorizontal: 4, // 增加padding，因为现在只有3个按钮
-    maxWidth: 100, // 增加最大宽度
-  },
+    actionButton: {
+      flexDirection: 'row', // 图标+文字横排
+      alignItems: 'center',
+      flex: 1, // 平均占用空间
+      justifyContent: 'center', // 居中对齐
+      paddingHorizontal: 4, // 增加padding，因为现在只有3个按钮
+      maxWidth: 100, // 增加最大宽度
+    },
 
-  actionText: {
-    fontSize: 11, // 稍微减小字体以适应更多按钮
-    color: Colors.textSecondary,
-    marginLeft: 6, // 减少左边距
-    flexShrink: 1, // 允许文字压缩
-  },
+    actionText: {
+      fontSize: 11, // 稍微减小字体以适应更多按钮
+      color: colors.textSecondary,
+      marginLeft: 6, // 减少左边距
+      flexShrink: 1, // 允许文字压缩
+    },
 
-  fab: {
-    position: 'absolute',
-    right: Spacing.screenPadding,
-    bottom: Spacing.xl,
-  },
+    fab: {
+      position: 'absolute',
+      right: Spacing.screenPadding,
+      bottom: Spacing.xl,
+    },
 
-  emptyImage: {
-    width: 200,
-    height: 150,
-  },
+    emptyImage: {
+      width: 200,
+      height: 150,
+    },
 
-  headerButton: {
-    marginLeft: Spacing.md,
-  },
-})
+    headerButton: {
+      marginLeft: Spacing.md,
+    },
+  })

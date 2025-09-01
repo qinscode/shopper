@@ -3,9 +3,10 @@ import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 import { ProgressChip } from './ProgressChip'
 
@@ -25,12 +26,14 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   onMenuPress,
 }) => {
   const insets = useSafeAreaInsets()
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.content}>
         <TouchableOpacity onPress={onBackPress} style={styles.backButton}>
-          <Ionicons name="chevron-back" size={24} color={Colors.text} />
+          <Ionicons name="chevron-back" size={24} color={colors.text} />
         </TouchableOpacity>
 
         <Text style={styles.title} numberOfLines={1}>
@@ -41,7 +44,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
           <ProgressChip
             completed={completed}
             total={total}
-            size={44} // 44x44 Figma规格
+            size={44}
             variant="small"
           />
           {onMenuPress && (
@@ -49,7 +52,7 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
               <Ionicons
                 name="ellipsis-horizontal"
                 size={24}
-                color={Colors.text}
+                color={colors.text}
               />
             </TouchableOpacity>
           )}
@@ -59,45 +62,46 @@ export const DetailHeader: React.FC<DetailHeaderProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      backgroundColor: colors.background,
+    },
 
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 56, // 增加高度让标题更舒适
-    paddingHorizontal: 24, // 24pt左右内边距
-  },
+    content: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 56, // 增加高度让标题更舒适
+      paddingHorizontal: 24, // 24pt左右内边距
+    },
 
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: -12, // 调整视觉平衡
-  },
+    backButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: -12, // 调整视觉平衡
+    },
 
-  title: {
-    fontSize: 24, // 24-26pt标题字号
-    fontWeight: Typography.fontWeight.semibold, // Semibold
-    color: Colors.text,
-    flex: 1,
-    marginLeft: 12, // 标题与圆环间距12-16pt
-    marginRight: 16,
-  },
+    title: {
+      fontSize: 24, // 24-26pt标题字号
+      fontWeight: Typography.fontWeight.semibold, // Semibold
+      color: colors.text,
+      flex: 1,
+      marginLeft: 12, // 标题与圆环间距12-16pt
+      marginRight: 16,
+    },
 
-  rightSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    rightSection: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  menuButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-  },
-})
+    menuButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: 8,
+    },
+  })

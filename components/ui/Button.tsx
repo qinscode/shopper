@@ -8,9 +8,10 @@ import {
   TextStyle,
 } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { HapticFeedback } from '@/utils/haptics'
 
 interface ButtonProps {
@@ -36,6 +37,9 @@ export const Button: React.FC<ButtonProps> = ({
   textStyle,
   fullWidth = false,
 }) => {
+  const colors = useThemeColors()
+  const styles = React.useMemo(() => createStyles(colors), [colors])
+
   const buttonStyles = [
     styles.base,
     styles[variant],
@@ -70,7 +74,7 @@ export const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === 'primary' ? Colors.text : Colors.primary}
+          color={variant === 'primary' ? colors.text : colors.primary}
         />
       ) : (
         <Text style={textStyles}>{title}</Text>
@@ -79,71 +83,72 @@ export const Button: React.FC<ButtonProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  base: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: BorderRadius.pill,
-    ...Shadows.small,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    base: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: BorderRadius.pill,
+      ...Shadows.small,
+    },
 
-  // Variants
-  primary: {
-    backgroundColor: Colors.primary,
-  },
-  secondary: {
-    backgroundColor: Colors.surface,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+    // Variants
+    primary: {
+      backgroundColor: colors.primary,
+    },
+    secondary: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
 
-  // Sizes
-  small: {
-    height: 36,
-    paddingHorizontal: Spacing.md,
-  },
-  medium: {
-    height: 44,
-    paddingHorizontal: Spacing.lg,
-  },
-  large: {
-    height: Spacing.buttonHeight,
-    paddingHorizontal: Spacing.lg,
-  },
+    // Sizes
+    small: {
+      height: 36,
+      paddingHorizontal: Spacing.md,
+    },
+    medium: {
+      height: 44,
+      paddingHorizontal: Spacing.lg,
+    },
+    large: {
+      height: Spacing.buttonHeight,
+      paddingHorizontal: Spacing.lg,
+    },
 
-  // Full width
-  fullWidth: {
-    width: '100%',
-  },
+    // Full width
+    fullWidth: {
+      width: '100%',
+    },
 
-  // States
-  disabled: {
-    opacity: 0.5,
-  },
+    // States
+    disabled: {
+      opacity: 0.5,
+    },
 
-  // Text styles
-  text: {
-    ...Typography.textStyles.buttonLabel,
-    textAlign: 'center',
-  },
-  primaryText: {
-    color: Colors.text,
-  },
-  secondaryText: {
-    color: Colors.textSecondary,
-  },
+    // Text styles
+    text: {
+      ...Typography.textStyles.buttonLabel,
+      textAlign: 'center',
+    },
+    primaryText: {
+      color: colors.text,
+    },
+    secondaryText: {
+      color: colors.textSecondary,
+    },
 
-  smallText: {
-    fontSize: 14,
-  },
-  mediumText: {
-    fontSize: 15,
-  },
-  largeText: {
-    fontSize: 16,
-  },
+    smallText: {
+      fontSize: 14,
+    },
+    mediumText: {
+      fontSize: 15,
+    },
+    largeText: {
+      fontSize: 16,
+    },
 
-  disabledText: {
-    color: Colors.textTertiary,
-  },
-})
+    disabledText: {
+      color: colors.textTertiary,
+    },
+  })

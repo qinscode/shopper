@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import React from 'react'
 import { TouchableOpacity, StyleSheet, ViewStyle } from 'react-native'
 
-import { Colors } from '@/constants/Colors'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { HapticFeedback } from '@/utils/haptics'
 
 interface CheckboxProps {
@@ -18,6 +18,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   size = 26, // 稍微增大默认尺寸
   style,
 }) => {
+  const colors = useThemeColors()
   const handleToggle = () => {
     if (checked) {
       HapticFeedback.light()
@@ -35,19 +36,15 @@ export const Checkbox: React.FC<CheckboxProps> = ({
           width: size,
           height: size,
           borderRadius: size / 2,
+          borderColor: checked ? colors.success : colors.textSecondary,
         },
-        checked ? styles.checked : styles.unchecked,
         style,
       ]}
       onPress={handleToggle}
       activeOpacity={0.7}
     >
       {checked && (
-        <Ionicons
-          name="checkmark"
-          size={size * 0.5}
-          color="#2ECC71" // Figma规格的绿色
-        />
+        <Ionicons name="checkmark" size={size * 0.5} color={colors.success} />
       )}
     </TouchableOpacity>
   )
@@ -58,15 +55,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3, // 3pt线宽
-  },
-
-  unchecked: {
     backgroundColor: 'transparent',
-    borderColor: '#585858', // Figma规格：灰线 #585858
-  },
-
-  checked: {
-    backgroundColor: 'transparent', // 保持透明，只显示绿色勾选
-    borderColor: '#2ECC71', // 绿色边框
   },
 })
