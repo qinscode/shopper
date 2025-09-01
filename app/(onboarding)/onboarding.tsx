@@ -5,10 +5,10 @@ import PagerView from 'react-native-pager-view'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Button } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 const { width } = Dimensions.get('window')
 
@@ -24,46 +24,60 @@ const OnboardingPage: React.FC<OnboardingPageProps> = ({
   headline,
   body,
   imageSource,
-}) => (
-  <View style={styles.page}>
-    <Text style={styles.title}>{title}</Text>
+}) => {
+  const colors = useThemeColors()
+  return (
+    <View style={styles.page}>
+      <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
 
-    <View style={styles.imageContainer}>
-      <Image
-        source={imageSource}
-        style={styles.illustration}
-        resizeMode="contain"
-      />
-    </View>
+      <View style={styles.imageContainer}>
+        <Image
+          source={imageSource}
+          style={styles.illustration}
+          resizeMode="contain"
+        />
+      </View>
 
-    <View style={styles.textContainer}>
-      <Text style={styles.headline}>{headline}</Text>
-      <Text style={styles.body}>{body}</Text>
+      <View style={styles.textContainer}>
+        <Text style={[styles.headline, { color: colors.text }]}>
+          {headline}
+        </Text>
+        <Text style={[styles.body, { color: colors.textSecondary }]}>
+          {body}
+        </Text>
+      </View>
     </View>
-  </View>
-)
+  )
+}
 
 const CarouselDots: React.FC<{ activeIndex: number; total: number }> = ({
   activeIndex,
   total,
-}) => (
-  <View style={styles.dotsContainer}>
-    {Array.from({ length: total }).map((_, index) => (
-      <View
-        key={index}
-        style={[
-          styles.dot,
-          index === activeIndex ? styles.activeDot : styles.inactiveDot,
-        ]}
-      />
-    ))}
-  </View>
-)
+}) => {
+  const colors = useThemeColors()
+  return (
+    <View style={styles.dotsContainer}>
+      {Array.from({ length: total }).map((_, index) => (
+        <View
+          key={index}
+          style={[
+            styles.dot,
+            {
+              backgroundColor:
+                index === activeIndex ? colors.primary : colors.inactive,
+            },
+          ]}
+        />
+      ))}
+    </View>
+  )
+}
 
 export default function OnboardingScreen() {
   const [currentPage, setCurrentPage] = useState(0)
   const router = useRouter()
   const { dispatch } = useApp()
+  const colors = useThemeColors()
 
   const onboardingData: OnboardingPageProps[] = [
     {
@@ -92,7 +106,9 @@ export default function OnboardingScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <PagerView
         style={styles.pager}
         initialPage={0}
@@ -120,7 +136,6 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
 
   pager: {
@@ -136,7 +151,6 @@ const styles = StyleSheet.create({
 
   title: {
     ...Typography.textStyles.largeTitle,
-    color: Colors.text,
     position: 'absolute',
     top: Spacing.xl,
     fontWeight: Typography.fontWeight.bold,
@@ -161,7 +175,6 @@ const styles = StyleSheet.create({
 
   headline: {
     ...Typography.textStyles.title,
-    color: Colors.text,
     textAlign: 'center',
     marginBottom: Spacing.md,
     fontWeight: Typography.fontWeight.semibold,
@@ -169,7 +182,6 @@ const styles = StyleSheet.create({
 
   body: {
     ...Typography.textStyles.body,
-    color: Colors.textSecondary,
     textAlign: 'center',
   },
 
@@ -192,13 +204,5 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     marginHorizontal: 4,
-  },
-
-  activeDot: {
-    backgroundColor: Colors.primary,
-  },
-
-  inactiveDot: {
-    backgroundColor: Colors.inactive,
   },
 })
