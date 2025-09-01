@@ -337,7 +337,7 @@ export default function ListDetailScreen() {
                 style={styles.renameButton}
                 onPress={handleRenameList}
               >
-                <Ionicons name="create-outline" size={20} color={Colors.text} />
+                <Ionicons name="create-outline" size={24} color={Colors.text} />
               </TouchableOpacity>
             </View>
 
@@ -428,7 +428,7 @@ export default function ListDetailScreen() {
               style={styles.renameButton}
               onPress={handleRenameList}
             >
-              <Ionicons name="create-outline" size={20} color={Colors.text} />
+              <Ionicons name="create-outline" size={24} color={Colors.text} />
             </TouchableOpacity>
           </View>
 
@@ -546,7 +546,11 @@ const styles = StyleSheet.create({
   },
 
   renameButton: {
-    padding: 4,
+    width: 44,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
 
   content: {
