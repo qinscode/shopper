@@ -21,7 +21,7 @@ import {
   ProgressChip,
   Input,
 } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { Colors, ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
