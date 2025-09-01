@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter, useLocalSearchParams, Stack } from 'expo-router'
-import React from 'react'
+import React, { useMemo } from 'react'
 import {
   View,
   Text,
@@ -14,10 +14,11 @@ import { Swipeable } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { EmptyState, Button, Checkbox, ProgressChip } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
+import { type ThemeColors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { ShoppingItem } from '@/types'
 
 export default function ListDetailScreen() {
@@ -27,6 +28,8 @@ export default function ListDetailScreen() {
 
   const { getList, dispatch } = useApp()
   const list = getList(listId)
+  const colors = useThemeColors()
+  const styles = useMemo(() => createStyles(colors), [colors])
 
   const completedCount = list
     ? list.items.filter(item => item.isCompleted).length
@@ -88,7 +91,7 @@ export default function ListDetailScreen() {
               onPress={() => router.back()}
               style={styles.backButton}
             >
-              <Ionicons name="chevron-back" size={24} color={Colors.text} />
+              <Ionicons name="chevron-back" size={24} color={colors.text} />
             </TouchableOpacity>
 
             <Text style={styles.headerTitle} numberOfLines={1}>
@@ -158,7 +161,7 @@ export default function ListDetailScreen() {
           )
         }}
       >
-        <Ionicons name="trash-outline" size={20} color={Colors.text} />
+        <Ionicons name="trash-outline" size={20} color={colors.text} />
       </TouchableOpacity>
     </View>
   )
@@ -185,7 +188,7 @@ export default function ListDetailScreen() {
             <Ionicons
               name="link-outline"
               size={18}
-              color={hasUrl ? Colors.primary : '#585858'}
+              color={hasUrl ? colors.primary : colors.textSecondary}
             />
           </TouchableOpacity>
 
@@ -263,7 +266,7 @@ export default function ListDetailScreen() {
               onPress={() => router.back()}
               style={styles.backButton}
             >
-              <Ionicons name="chevron-back" size={24} color={Colors.text} />
+              <Ionicons name="chevron-back" size={24} color={colors.text} />
             </TouchableOpacity>
 
             <Text style={styles.headerTitle} numberOfLines={1}>
@@ -304,7 +307,7 @@ export default function ListDetailScreen() {
                 <Ionicons
                   name="ellipsis-horizontal"
                   size={24}
-                  color={Colors.text}
+                  color={colors.text}
                 />
               </TouchableOpacity>
             </View>
@@ -341,7 +344,7 @@ export default function ListDetailScreen() {
             onPress={() => router.back()}
             style={styles.backButton}
           >
-            <Ionicons name="chevron-back" size={24} color={Colors.text} />
+            <Ionicons name="chevron-back" size={24} color={colors.text} />
           </TouchableOpacity>
 
           <Text style={styles.headerTitle} numberOfLines={1}>
@@ -378,7 +381,7 @@ export default function ListDetailScreen() {
               <Ionicons
                 name="ellipsis-horizontal"
                 size={24}
-                color={Colors.text}
+                color={colors.text}
               />
             </TouchableOpacity>
           </View>
@@ -406,159 +409,160 @@ export default function ListDetailScreen() {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+const createStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
 
-  customHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 56,
-    paddingHorizontal: 24,
-    backgroundColor: Colors.background,
-  },
+    customHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 56,
+      paddingHorizontal: 24,
+      backgroundColor: colors.background,
+    },
 
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: -12,
-  },
+    backButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: -12,
+    },
 
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.text,
-    flex: 1,
-    marginLeft: 12,
-    marginRight: 16,
-  },
+    headerTitle: {
+      fontSize: 24,
+      fontWeight: Typography.fontWeight.semibold,
+      color: colors.text,
+      flex: 1,
+      marginLeft: 12,
+      marginRight: 16,
+    },
 
-  headerRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    headerRight: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  menuButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 8,
-  },
+    menuButton: {
+      width: 44,
+      height: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: 8,
+    },
 
-  content: {
-    flex: 1,
-    padding: 24, // 24pt页面左右安全间距
-  },
+    content: {
+      flex: 1,
+      padding: 24, // 24pt页面左右安全间距
+    },
 
-  shareSection: {
-    marginBottom: Spacing.lg,
-  },
+    shareSection: {
+      marginBottom: Spacing.lg,
+    },
 
-  shareLabel: {
-    fontSize: 17, // 17pt小节标题
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.text,
-    opacity: 0.7, // #FFF 70%
-  },
+    shareLabel: {
+      fontSize: 17, // 17pt小节标题
+      fontWeight: Typography.fontWeight.semibold,
+      color: colors.text,
+      opacity: 0.7, // #FFF 70%
+    },
 
-  listContainer: {
-    flexGrow: 1,
-    paddingBottom: Spacing.lg,
-  },
+    listContainer: {
+      flexGrow: 1,
+      paddingBottom: Spacing.lg,
+    },
 
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.surface,
-    borderRadius: 20, // 20-22pt卡片圆角
-    marginBottom: 16, // 16pt卡片间距
-    paddingHorizontal: 16, // 水平16pt
-    paddingVertical: 14, // 垂直14pt
-  },
+    itemContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: colors.surface,
+      borderRadius: 20, // 20-22pt卡片圆角
+      marginBottom: 16, // 16pt卡片间距
+      paddingHorizontal: 16, // 水平16pt
+      paddingVertical: 14, // 垂直14pt
+    },
 
-  itemLeftIcons: {
-    width: 36, // 固定宽度
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingRight: 12, // 右侧间距
-  },
+    itemLeftIcons: {
+      width: 36, // 固定宽度
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingRight: 12, // 右侧间距
+    },
 
-  itemContent: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    itemContent: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  emojiIcon: {
-    fontSize: 18,
-    lineHeight: 20,
-    marginRight: 12,
-  },
+    emojiIcon: {
+      fontSize: 18,
+      lineHeight: 20,
+      marginRight: 12,
+    },
 
-  completedEmoji: {
-    opacity: 0.5, // 完成态降低透明度，与completedText一致
-  },
+    completedEmoji: {
+      opacity: 0.5, // 完成态降低透明度，与completedText一致
+    },
 
-  defaultIconContainer: {
-    width: 20,
-    height: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    marginRight: 12,
-  },
+    defaultIconContainer: {
+      width: 20,
+      height: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'transparent',
+      marginRight: 12,
+    },
 
-  defaultIcon: {
-    width: 24,
-    height: 24,
-  },
+    defaultIcon: {
+      width: 24,
+      height: 24,
+    },
 
-  itemTextContainer: {
-    flex: 1,
-  },
+    itemTextContainer: {
+      flex: 1,
+    },
 
-  itemText: {
-    flex: 1,
-    fontSize: 17, // 17pt名称字号
-    fontWeight: Typography.fontWeight.semibold,
-    color: Colors.text,
-  },
+    itemText: {
+      flex: 1,
+      fontSize: 17, // 17pt名称字号
+      fontWeight: Typography.fontWeight.semibold,
+      color: colors.text,
+    },
 
-  completedText: {
-    opacity: 0.5, // 完成态降低透明度
-  },
+    completedText: {
+      opacity: 0.5, // 完成态降低透明度
+    },
 
-  rightActionsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14, // 与itemContainer完全相同的paddingVertical
-    marginBottom: 16, // 与itemContainer完全相同的marginBottom
-  },
+    rightActionsContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 14, // 与itemContainer完全相同的paddingVertical
+      marginBottom: 16, // 与itemContainer完全相同的marginBottom
+    },
 
-  deleteAction: {
-    backgroundColor: Colors.error,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 60,
-    height: 46, // 计算出的纯内容高度（不含padding）
-    borderRadius: 20,
-    marginLeft: 8,
-  },
+    deleteAction: {
+      backgroundColor: colors.error,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: 60,
+      height: 46, // 计算出的纯内容高度（不含padding）
+      borderRadius: 20,
+      marginLeft: 8,
+    },
 
-  hint: {
-    ...Typography.textStyles.caption,
-    color: Colors.textTertiary,
-    textAlign: 'center',
-    marginBottom: Spacing.lg,
-  },
+    hint: {
+      ...Typography.textStyles.caption,
+      color: colors.textTertiary,
+      textAlign: 'center',
+      marginBottom: Spacing.lg,
+    },
 
-  emptyImage: {
-    width: 180,
-    height: 120,
-  },
-})
+    emptyImage: {
+      width: 180,
+      height: 120,
+    },
+  })
