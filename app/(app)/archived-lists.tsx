@@ -1,13 +1,12 @@
-import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { View, FlatList, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { Header, EmptyState, Button, ArchiveListCard } from '@/components/ui'
-import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 import { ShoppingList } from '@/types'
 import { getListPreview, getCompletedCount } from '@/utils/listHelpers'
 
@@ -15,6 +14,7 @@ export default function ArchivedListsScreen() {
   const router = useRouter()
   const { getArchivedLists, dispatch } = useApp()
   const archivedLists = getArchivedLists()
+  const colors = useThemeColors()
 
   const handleRestoreList = (listId: string) => {
     dispatch({ type: 'RESTORE_LIST', payload: { id: listId } })
@@ -44,7 +44,9 @@ export default function ArchivedListsScreen() {
 
   if (archivedLists.length === 0) {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView
+        style={[styles.container, { backgroundColor: colors.background }]}
+      >
         <Header
           title="Archived Lists"
           showBackButton
@@ -71,7 +73,9 @@ export default function ArchivedListsScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
       <Header
         title="Archived Lists"
         showBackButton
@@ -92,7 +96,6 @@ export default function ArchivedListsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
   },
 
   emptyContainer: {

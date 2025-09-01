@@ -6,10 +6,12 @@ import { Colors } from '@/constants/Colors'
 import { Spacing } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
 import { useApp } from '@/context/AppContext'
+import { useThemeColors } from '@/hooks/useThemeColors'
 
 export default function SplashScreen() {
   const router = useRouter()
   const { state } = useApp()
+  const colors = useThemeColors()
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -24,14 +26,14 @@ export default function SplashScreen() {
   }, [state.hasCompletedOnboarding, router])
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         <Image
           source={require('@/assets/images/loading.png')}
           style={styles.illustration}
           resizeMode="contain"
         />
-        <Text style={styles.title}>Shopper</Text>
+        <Text style={[styles.title, { color: colors.text }]}>Shopper</Text>
       </View>
     </View>
   )
@@ -40,7 +42,6 @@ export default function SplashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
 
   title: {
     ...Typography.textStyles.largeTitle,
-    color: Colors.text,
     fontWeight: Typography.fontWeight.bold,
   },
 })
