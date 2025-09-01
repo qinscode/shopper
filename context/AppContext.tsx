@@ -486,7 +486,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
       return state.customItems.filter(item => !item.category)
     }
     const category = state.categories.find(cat => cat.id === categoryId)
-    return state.customItems.filter(item => item.category === category?.name)
+    if (!category) {
+      return []
+    }
+    return state.customItems.filter(item => item.category === category.name)
   }
 
   const getMostUsedCustomItems = (limit = 10): CustomItem[] => {
