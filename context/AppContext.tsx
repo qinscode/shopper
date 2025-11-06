@@ -8,6 +8,7 @@ import {
   CustomItem,
   ItemCategory,
   DEFAULT_CATEGORIES,
+  CompletedItemsPosition,
 } from '@/types'
 
 type Action =
@@ -52,12 +53,17 @@ type Action =
     }
   | { type: 'DELETE_CATEGORY'; payload: { id: string } }
   | { type: 'INITIALIZE_DEFAULT_CATEGORIES' }
+  | {
+      type: 'SET_COMPLETED_ITEMS_POSITION'
+      payload: { position: CompletedItemsPosition }
+    }
 
 const initialState: AppState = {
   lists: [],
   customItems: [],
   categories: [],
   hasCompletedOnboarding: false,
+  completedItemsPosition: 'bottom', // Default: completed items go to bottom
 }
 
 function generateId(): string {
@@ -367,6 +373,12 @@ function appReducer(state: AppState, action: Action): AppState {
         categories: state.categories.filter(
           category => category.id !== action.payload.id
         ),
+      }
+
+    case 'SET_COMPLETED_ITEMS_POSITION':
+      return {
+        ...state,
+        completedItemsPosition: action.payload.position,
       }
 
     default:

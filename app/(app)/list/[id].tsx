@@ -34,7 +34,7 @@ export default function ListDetailScreen() {
   const { id } = useLocalSearchParams()
   const listId = typeof id === 'string' ? id : id?.[0] || ''
 
-  const { getList, dispatch } = useApp()
+  const { getList, dispatch, state } = useApp()
   const list = getList(listId)
   const colors = useThemeColors()
   const styles = useMemo(() => createStyles(colors), [colors])
@@ -67,6 +67,26 @@ export default function ListDetailScreen() {
     ? list.items.filter(item => item.isCompleted).length
     : 0
   const totalCount = list ? list.items.length : 0
+
+  // Sort items based on user preference while preserving original order within each group
+  const sortedItems = useMemo(() => {
+    if (!list) {
+      return []
+    }
+
+    const completedItemsPosition = state.completedItemsPosition || 'bottom'
+
+    // Separate items into completed and uncompleted, preserving order
+    const uncompletedItems = list.items.filter(item => !item.isCompleted)
+    const completedItems = list.items.filter(item => item.isCompleted)
+
+    // Arrange based on user preference
+    if (completedItemsPosition === 'bottom') {
+      return [...uncompletedItems, ...completedItems]
+    } else {
+      return [...completedItems, ...uncompletedItems]
+    }
+  }, [list, state.completedItemsPosition])
 
   const handleArchiveList = () => {
     Alert.alert(
@@ -475,7 +495,7 @@ export default function ListDetailScreen() {
           </View>
 
           <FlatList
-            data={list.items}
+            data={sortedItems}
             renderItem={renderItem}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.listContainer}

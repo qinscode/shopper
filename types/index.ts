@@ -48,12 +48,15 @@ export interface ShoppingList {
   deletedAt?: Date
 }
 
+export type CompletedItemsPosition = 'top' | 'bottom'
+
 export interface AppState {
   lists: ShoppingList[]
   customItems: CustomItem[]
   categories: ItemCategory[]
   hasCompletedOnboarding: boolean
   currentListId?: string
+  completedItemsPosition?: CompletedItemsPosition // 'top' for completed items on top, 'bottom' for completed items on bottom
 }
 
 export const SUGGESTED_ITEMS = [

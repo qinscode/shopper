@@ -15,6 +15,7 @@ import Dialog from '@/components/ui/Dialog'
 import { Colors, ThemeColors } from '@/constants/Colors'
 import { Spacing, BorderRadius, Shadows } from '@/constants/Layout'
 import { Typography } from '@/constants/Typography'
+import { useApp } from '@/context/AppContext'
 import { useTheme } from '@/context/ThemeContext'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { HapticFeedback } from '@/utils/haptics'
@@ -151,11 +152,13 @@ const createStyles = (colors: ThemeColors) =>
 
 export default function SettingsScreen() {
   const router = useRouter()
+  const { state, dispatch } = useApp()
   const { themePreference, setThemePreference } = useTheme()
   const colorScheme = useColorScheme()
   const colors = Colors[colorScheme]
   const styles = useMemo(() => createStyles(colors), [colors])
   const [showThemeSheet, setShowThemeSheet] = useState(false)
+  const [showCompletedItemsSheet, setShowCompletedItemsSheet] = useState(false)
   const [showAboutDialog, setShowAboutDialog] = useState(false)
 
   const SettingsItem = ({
@@ -212,12 +215,20 @@ export default function SettingsScreen() {
     setShowThemeSheet(true)
   }
 
+  const handleCompletedItemsPosition = () => {
+    HapticFeedback.light()
+    setShowCompletedItemsSheet(true)
+  }
+
   const themeLabel =
     themePreference === 'system'
       ? 'System'
       : themePreference === 'light'
         ? 'Light'
         : 'Dark'
+
+  const completedItemsLabel =
+    state.completedItemsPosition === 'bottom' ? 'Bottom' : 'Top'
 
   return (
     <SafeAreaView style={styles.container}>
@@ -242,6 +253,14 @@ export default function SettingsScreen() {
               icon="color-palette-outline"
               onPress={handleTheme}
               rightText={themeLabel}
+            />
+
+            <SettingsItem
+              title="Completed Items"
+              subtitle="Position of completed items"
+              icon="checkmark-done-outline"
+              onPress={handleCompletedItemsPosition}
+              rightText={completedItemsLabel}
               isLast={true}
             />
           </View>
@@ -314,6 +333,44 @@ export default function SettingsScreen() {
             onPress: () => {
               HapticFeedback.light()
               setThemePreference('system')
+            },
+          },
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: () => {
+              HapticFeedback.light()
+            },
+          },
+        ]}
+      />
+
+      <ActionSheet
+        visible={showCompletedItemsSheet}
+        onClose={() => setShowCompletedItemsSheet(false)}
+        title="Completed Items Position"
+        subtitle="Choose where completed items appear in your lists"
+        options={[
+          {
+            text: 'Bottom',
+            icon: 'arrow-down-outline',
+            onPress: () => {
+              HapticFeedback.light()
+              dispatch({
+                type: 'SET_COMPLETED_ITEMS_POSITION',
+                payload: { position: 'bottom' },
+              })
+            },
+          },
+          {
+            text: 'Top',
+            icon: 'arrow-up-outline',
+            onPress: () => {
+              HapticFeedback.light()
+              dispatch({
+                type: 'SET_COMPLETED_ITEMS_POSITION',
+                payload: { position: 'top' },
+              })
             },
           },
           {
